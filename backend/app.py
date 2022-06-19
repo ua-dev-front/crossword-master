@@ -3,11 +3,6 @@ from flask import Flask, jsonify, request
 app = Flask(__name__)
 
 
-@app.route('/')
-def test():
-    return 'Test successful'
-
-
 def request_handler(func: callable):
     def wrapper():
         data = request.get_json()
