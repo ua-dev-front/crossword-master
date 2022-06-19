@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from types import *
 
 app = Flask(__name__)
 
@@ -13,15 +14,14 @@ def request_handler(func: callable):
 
 @app.route('/generate', methods=['POST'], endpoint='generate')
 @request_handler
-def generate(data: dict[str, list[list[int]]]) -> dict[str, dict[list[dict[str, str | int | list[int]]]] | None]:
+def generate(data: GenerateData) -> GenerateResponse:
     table = data['table']
     return {'words': None}
 
 
 @app.route('/solve', methods=['POST'], endpoint='solve')
 @request_handler
-def solve(data: dict[str, list[list[int]] | dict[str, list[dict[str, str | int | list[int]]]]]) -> \
-        dict[str, dict[str, list[dict[str, str | int | list[int]]]] | None]:
+def solve(data: SolveData) -> SolveAnswers:
     table = data['table']
     words = data['words']
     return {'answers': None}
