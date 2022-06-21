@@ -1,6 +1,6 @@
 import requests
 
-API_PATH = 'https://api.datamuse.com/words'
+from app import API_PATH
 
 
 def set_words_id(words):
