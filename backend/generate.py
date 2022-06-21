@@ -79,9 +79,11 @@ def get_word_pattern(word, words):
             other_word = find_word_by_id(relation['id'], words)
 
             if other_word['answer']:
-                char = other_word['answer'][find_coord_index(relation['coord'], other_word['coords'])]
-                coord_index = find_coord_index(relation['coord'], word['coords'])
-                pattern = pattern[:coord_index] + char + pattern[coord_index + 1:]
+                other_word_coord_index = find_coord_index(relation['coord'], other_word['coords'])
+                char = other_word['answer'][other_word_coord_index]
+
+                word_coord_index = find_coord_index(relation['coord'], word['coords'])
+                pattern = pattern[:word_coord_index] + char + pattern[word_coord_index + 1:]
 
     return pattern
 
