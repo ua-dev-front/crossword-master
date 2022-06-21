@@ -33,6 +33,18 @@ def define_words_by_type(word_type, words, coord, is_x=True):
 def filter_words(words):
     return [word for word in words if word['length'] > 1]
 
+def get_relation(word, other_word, coord):
+    if other_word['id'] != word['id'] and coord in other_word['coords']:
+        word['relations'].append({'id': other_word['id'], 'coord': coord})
+
+
+def get_relations(words):
+    for word in words:
+        word['relations'] = []
+        for coord in word['coords']:
+            for other_word in words:
+                get_relation(word, other_word, coord)
+
 
 def define_words(table):
     words = []
@@ -45,21 +57,9 @@ def define_words(table):
 
     words = filter_words(words)
     set_words_id(words)
+    get_relations(words)
 
     return words
-
-
-def get_relation(word, other_word, coord):
-    if other_word['id'] != word['id'] and coord in other_word['coords']:
-        word['relations'].append({'id': other_word['id'], 'coord': coord})
-
-
-def get_relations(words):
-    for word in words:
-        word['relations'] = []
-        for coord in word['coords']:
-            for other_word in words:
-                get_relation(word, other_word, coord)
 
 
 def find_word_by_id(word_id, words):
@@ -153,7 +153,6 @@ def get_response(words):
 
 def generate(table):
     words = define_words(table)
-    get_relations(words)
 
     while not is_words_valid(words) and not is_no_solution(words):
         get_answers_and_questions(words)
