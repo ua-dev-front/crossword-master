@@ -11,6 +11,11 @@ def set_words_id(words):
     return words
 
 
+def modify_existing_word(word, coord):
+    word['length'] += 1
+    word['coords'].append(coord)
+
+
 def define_words_by_type(word_type, words, coord, is_x=True):
     is_new_word = True
 
@@ -19,11 +24,9 @@ def define_words_by_type(word_type, words, coord, is_x=True):
     for current_axis_coord in range(axis_coord - 1, axis_coord + 2):
         for word in words:
             current_coord = [current_axis_coord, coord[1]] if is_x else [coord[0], current_axis_coord]
-
             if current_coord in word['coords'] and coord not in word['coords'] and word['type'] == word_type:
                 is_new_word = False
-                word['length'] += 1
-                word['coords'].append(coord)
+                modify_existing_word(word, coord, current_coord, word_type)
 
     if is_new_word:
         word = {'length': 1, 'coords': [coord], 'type': word_type, 'answer': None, 'api_attempts': 0}
@@ -32,6 +35,7 @@ def define_words_by_type(word_type, words, coord, is_x=True):
 
 def filter_words(words):
     return [word for word in words if word['length'] > 1]
+
 
 def get_relation(word, other_word, coord):
     if other_word['id'] != word['id'] and coord in other_word['coords']:
