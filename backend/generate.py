@@ -49,13 +49,17 @@ def define_words(table):
     return words
 
 
+def get_relation(word, other_word, coord):
+    if other_word['id'] != word['id'] and coord in other_word['coords']:
+        word['relations'].append({'id': other_word['id'], 'coord': coord})
+
+
 def get_relations(words):
     for word in words:
         word['relations'] = []
         for coord in word['coords']:
             for other_word in words:
-                if other_word['id'] != word['id'] and coord in other_word['coords']:
-                    word['relations'].append({'id': other_word['id'], 'coord': coord})
+                get_relation(word, other_word, coord)
 
 
 def find_word_by_id(word_id, words):
