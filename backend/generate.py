@@ -69,9 +69,7 @@ def find_word_by_id(word_id, words):
 
 
 def find_coord_index(coord, coords):
-    for i in range(len(coords)):
-        if coord == coords[i]:
-            return i
+    return coords.index(coord)
 
 
 def get_word_pattern(word, words):
