@@ -11,7 +11,7 @@ def set_words_id(words):
     return words
 
 
-def check_word_by_type(word_type, words, coord, is_x=True):
+def define_words_by_type(word_type, words, coord, is_x=True):
     is_new_word = True
 
     axis_coord = coord[0] if is_x else coord[1]
@@ -40,8 +40,8 @@ def define_words(table):
     for i in range(len(table)):
         for j in range(len(table[i])):
             if table[i][j] == 1:
-                check_word_by_type(word_type='across', words=words, coord=[i, j])
-                check_word_by_type(word_type='down', words=words, coord=[i, j], is_x=False)
+                define_words_by_type(word_type='across', words=words, coord=[i, j])
+                define_words_by_type(word_type='down', words=words, coord=[i, j], is_x=False)
 
     words = filter_words(words)
     set_words_id(words)
