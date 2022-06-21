@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
-from app_types import *
+
+from app_types import GenerateData, GenerateResponse, SolveData, SolveResponse
 
 app = Flask(__name__)
 
@@ -21,7 +22,7 @@ def generate(data: GenerateData) -> GenerateResponse:
 
 @app.route('/solve', methods=['POST'], endpoint='solve')
 @request_handler
-def solve(data: SolveData) -> SolveAnswers:
+def solve(data: SolveData) -> SolveResponse:
     table = data['table']
     words = data['words']
     return {'answers': None}
