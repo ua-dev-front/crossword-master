@@ -1,7 +1,7 @@
 from typing import TypedDict
 
 Table = list[list[int]]
-StartPosition = list[int]  # length - 2
+StartPosition = list[int]  # length = 2
 Id = int
 Answer = str
 Question = str
