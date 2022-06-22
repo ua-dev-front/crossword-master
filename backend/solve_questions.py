@@ -19,8 +19,10 @@ def parse_question(question: Question) -> str:
 def api_get_answers(question: Question, length: int) -> Word:
     answers_path = f'{API_PATH}ml={question}&sp='+'?'*length
     res = requests.get(answers_path)
-
-    return res.json()
+    if res.status_code == 200:
+        return res.json()
+    else:
+        raise Exception('API responded with code: ', res.status_code)
 
 
 def get_possible_word_answers(question: Question, length: int) -> list[str]:
