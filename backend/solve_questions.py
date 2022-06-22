@@ -51,11 +51,15 @@ def increase_position(prev_pos: list[int], direction: str) -> None:
     return position
 
 
+def is_correct_cell(position: list[int], table: Table) -> bool:
+    return all(coord < len(table) for coord in position) and table[position[0]][position[1]]
+
+
 def get_word_length(startPosition: StartPosition, table: Table, direction: str) -> int:
     position = deepcopy(startPosition)
     length = 0
 
-    while all(coord < len(table) for coord in position) and table[position[0]][position[1]]:
+    while is_correct_cell(position, table):
         length += 1
         position = increase_position(position, direction)
 
@@ -66,9 +70,9 @@ def get_word_pattern(table: Table, start_pos: StartPosition, direction: str) -> 
     position = deepcopy(start_pos)
     pattern = ''
 
-    while all(coord < len(table) for coord in position) and table[position[0]][position[1]]:
+    while is_correct_cell(position, table):
         if table[position[0]][position[1]] == 1:
-            pattern += '[\s\S]?'
+            pattern += '[a-zA-Z]?'
         elif isinstance(table[position[0]][position[1]], str):
             pattern += table[position[0]][position[1]]
 
@@ -95,53 +99,51 @@ def get_direction(words: SolveWords, id: int) -> str | None:
     return None
 
 
-def update_table(answer, table, word, direction):
+def update_table(answer: str, table: Table, word: Word, direction: str) -> None:
     position = deepcopy(word['startPosition'])
-    ind = 0
-    while all(coord < len(table) for coord in position) and table[position[0]][position[1]]:
-        table[position[0]][position[1]] = answer[ind]
-        ind+=1
-        position = increase_position(position, direction)
+    for letter in answer:
+        if is_correct_cell(position, table):
+            table[position[0]][position[1]] = letter
+            position = increase_position(position, direction)
 
 
-def solve_word(words: SolveWords, table: Table, possible_answers: list[list[str]], word_id: int, answer={'across': [], 'down': []}) -> SolveAnswer:
+def update_answers(answers: SolveAnswers, answer: str, id: int, direction: str) -> None:
+    for value in answers.values():
+        for word in value:
+            if word['id'] == id:
+                word['answer'] = answer
+                return None
+
+    answers[direction].append({ 'id': id, 'answer': answer })
+
+
+def solve_word(words: SolveWords,
+               table: Table,
+               possible_answers: list[list[str]],
+               word_id: int, answers: SolveAnswers) -> SolveAnswer:
     word = get_word(words, word_id)
     direction = get_direction(words, word_id)
 
     if not word:
-        return None
+        return answers
 
     pattern = get_word_pattern(table, word['startPosition'], direction)
 
-    for direction, value in words.items():
-        for word in value:
-            for ind in range(len(possible_answers[word['id']])):
-                if re.match(pattern, possible_answers[word['id']][ind]):
-                    answer[direction].append({'id': word['id'], 'answer': possible_answers[word['id']][ind]})
-                    update_table(possible_answers[word['id']][ind], table, word, direction)
-                    solve_word(words, table, possible_answers, word_id=word_id+1, answer=answer)
 
-    return answer
-
-
-def get_last_by_id(answers):
-    new_ans = {
-        'down': [],
-        'across': [],
-    }
-    used_ids = []
-    for direction, value in reversed(answers.items()):
-        for ans in value:
-            if ans['id'] in used_ids:
-                continue
-            new_ans[direction].append(ans)
-            used_ids.append(ans['id'])
-    return new_ans
+    for possible_answer in possible_answers[word_id]:
+        if re.match(pattern, possible_answer):
+            update_table(possible_answer, table, word, direction)
+            next_ans = solve_word(words, table, possible_answers, word_id=word_id + 1, answers=answers)
+            if next_ans:
+                update_answers(answers, possible_answer, word_id, direction)
+                return answers
 
 
 def solve_questions(table: Table, words: SolveWords) -> SolveResponse:
     possible_answers = get_possible_answers(words, table)
 
-    answers = solve_word(words, table, possible_answers, word_id=1)
-    real_ans = get_last_by_id(answers)
-    return { 'answers': real_ans }
+    answers = {'across': [], 'down': []}
+
+    answers = solve_word(words, table, possible_answers, word_id=1, answers=answers)
+
+    return { 'answers': answers }
