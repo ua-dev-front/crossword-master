@@ -51,7 +51,7 @@ NormalizedWords = list[NormalizedWord]
 def set_words_id(words: list[StartWord]) -> Words:
     new_words = copy.deepcopy(words)
 
-    word_id = 0
+    word_id = 1
     for word in new_words:
         word['id'] = word_id
         word_id += 1
