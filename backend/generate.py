@@ -3,53 +3,65 @@ import requests
 import random
 from typing import TypedDict
 
+from app_types import Answer, GenerateResponse, GenerateWord, GenerateWords, Id, Question, StartPosition, Table
+
 API_PATH = 'https://api.datamuse.com/words'
 MAX_API_ATTEMPTS = 1000
 
 
-Answer = str | None
 Coord = list[int]
 Coords = list[Coord]
-Id = int
 Length = int
 Pattern = str
-Question = str | None
+Patterns = list[Pattern]
 WordType = str
 
 
 class Relation(TypedDict):
-    id: Id
+    id: Id | None
     coord: Coord
 
 
-class StartWord(TypedDict):
-    answer: Answer
+Relations = list[Relation]
+
+
+class Word(TypedDict):
+    answer: Answer | None
     api_attempts: int
     coords: Coords
+    id: Id | None
     length: int
-    question: Question
-    relations: list[Relation]
+    question: Question | None
+    relations: Relations
     type: WordType
 
 
-class Word(StartWord):
+class StableWord(TypedDict):
+    answer: Answer
+    api_attempts: int
+    coords: Coords
     id: Id
+    length: int
+    question: Question
+    relations: Relations
+    type: WordType
 
 
 Words = list[Word]
+StableWords = list[StableWord]
 
 
 class NormalizedWord(TypedDict):
     answer: Answer
     id: Id
     question: Question
-    startPosition: Coord
+    startPosition: StartPosition
 
 
 NormalizedWords = list[NormalizedWord]
 
 
-def set_words_id(words: list[StartWord]) -> Words:
+def set_words_id(words: Words) -> Words:
     new_words = copy.deepcopy(words)
 
     word_id = 1
@@ -60,13 +72,14 @@ def set_words_id(words: list[StartWord]) -> Words:
     return new_words
 
 
-def modify_existing_word(word: StartWord, coord: Coord) -> None:
+def modify_existing_word(word: Word, coord: Coord) -> None:
     word['length'] += 1
     word['coords'].append(coord)
 
 
-def get_new_word(coord: Coord, word_type: WordType) -> StartWord:
+def get_new_word(coord: Coord, word_type: WordType) -> Word:
     word = {
+        'id': None,
         'length': 1,
         'coords': [coord],
         'type': word_type,
@@ -83,18 +96,20 @@ def get_current_coord(current_axis_coord: int, coord: Coord, is_x: bool) -> Coor
     return [current_axis_coord, coord[1]] if is_x else [coord[0], current_axis_coord]
 
 
-def define_words_by_type(word_type: WordType, words: list[StartWord], coord: Coord, is_x: bool = True) -> \
-        list[StartWord]:
+def is_existing_word(current_coord: Coord, word: Word, coord: Coord, word_type: WordType) -> bool:
+    return current_coord in word['coords'] and coord not in word['coords'] and word['type'] == word_type
+
+
+def define_words_by_type(word_type: WordType, words: Words, coord: Coord, is_x: bool = True) -> Words:
     new_words = copy.deepcopy(words)
 
     is_new_word = True
-
     axis_coord = coord[0] if is_x else coord[1]
 
     for current_axis_coord in range(axis_coord - 1, axis_coord + 2):
         for word in new_words:
             current_coord = get_current_coord(current_axis_coord, coord, is_x)
-            if current_coord in word['coords'] and coord not in word['coords'] and word['type'] == word_type:
+            if is_existing_word(current_coord, word, coord, word_type):
                 is_new_word = False
                 modify_existing_word(word, coord)
 
@@ -108,7 +123,7 @@ def filter_words(words: Words) -> Words:
     return [word for word in words if word['length'] > 1]
 
 
-def get_relation(word, other_word, coord) -> None:
+def get_relation(word: Word, other_word: Word, coord) -> None:
     if other_word['id'] != word['id'] and coord in other_word['coords']:
         word['relations'].append({'id': other_word['id'], 'coord': coord})
 
@@ -124,7 +139,7 @@ def get_relations(words: Words) -> Words:
     return new_words
 
 
-def define_words(table) -> Words:
+def define_words(table: Table) -> Words:
     words = []
 
     for i in range(len(table)):
@@ -175,7 +190,7 @@ def filter_api_response(response):
     return [item for item in response if 'defs' in item]
 
 
-def get_random_word_from_words(words) -> dict:
+def get_random_word_from_words(words: Words) -> dict:
     return words[random.randint(0, len(words) - 1)]
 
 
@@ -193,9 +208,12 @@ def get_api_url(pattern: Pattern) -> str:
     return f'{API_PATH}?sp={pattern}&md=d&max={MAX_API_ATTEMPTS}'
 
 
-def get_answers_and_questions(words: Words, patterns) -> None:
-    for word in words:
-        pattern = get_word_pattern(word, words)
+def get_answers_and_questions(words: Words, patterns) -> [Words, Patterns]:
+    new_words = copy.deepcopy(words)
+    new_patterns = copy.deepcopy(patterns)
+
+    for word in new_words:
+        pattern = get_word_pattern(word, new_words)
 
         if pattern in patterns:
             add_answer_and_question_to_word(word, patterns[pattern])
@@ -205,32 +223,34 @@ def get_answers_and_questions(words: Words, patterns) -> None:
             if response:
                 response = filter_api_response(response)
                 add_answer_and_question_to_word(word, response)
-                patterns[pattern] = response
+                new_patterns[pattern] = response
+
+    return [new_words, new_patterns]
 
 
-def divide_words_by_type(word_type: WordType, words: Words) -> Words:
+def divide_words_by_type(word_type: WordType, words: StableWords) -> StableWords:
     return [word for word in words if word['type'] == word_type]
 
 
-def is_words_valid(words) -> bool:
+def is_words_valid(words: Words | StableWords) -> bool:
     for word in words:
         if word['answer'] is None or word['question'] is None:
             return False
     return True
 
 
-def is_no_solution(words) -> bool:
+def is_no_solution(words: StableWords) -> bool:
     for word in words:
         if word['api_attempts'] >= MAX_API_ATTEMPTS:
             return True
     return False
 
 
-def normalize_words(words) -> NormalizedWords:
+def normalize_words(words: StableWords) -> NormalizedWords:
     new_words = []
 
     for word in words:
-        new_word = {
+        new_word: GenerateWord = {
             'id': word['id'],
             'question': word['question'],
             'answer': word['answer'],
@@ -242,21 +262,23 @@ def normalize_words(words) -> NormalizedWords:
     return new_words
 
 
-def get_response(words):
-    response = {'words': None if is_no_solution(words) and not is_words_valid(words) else {
+def get_response(words: StableWords) -> GenerateResponse:
+    normalized_words: GenerateWords = None if is_no_solution(words) and not is_words_valid(words) else {
         'across': normalize_words(divide_words_by_type('across', words)),
         'down': normalize_words(divide_words_by_type('down', words))
-    }}
+    }
+
+    response = {'words': normalized_words}
 
     return response
 
 
-def generate_words(table):
+def generate_words(table: Table) -> GenerateResponse:
     words = define_words(table)
 
     patterns = {}
 
     while not is_words_valid(words) and not is_no_solution(words):
-        get_answers_and_questions(words, patterns)
+        [words, patterns] = get_answers_and_questions(words, patterns)
 
     return get_response(words)
