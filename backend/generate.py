@@ -193,7 +193,7 @@ def get_word_pattern(word: Word, words: Words) -> Pattern:
 
 
 def normalize_question(question: Question) -> Question:
-    return question[2:].capitalize()
+    return question.split('\t')[1]
 
 
 def filter_api_response(response):
