@@ -1,7 +1,7 @@
 from typing import TypedDict
 
 Table = list[list[int]]
-StartPosition = list[int]
+StartPosition = list[int]  # length = 2
 Id = int
 Answer = str
 Question = str
@@ -37,7 +37,7 @@ class SolveWords(TypedDict):
 
 class SolveData(TypedDict):
     table: Table
-    words: SolveWords | None
+    words: SolveWords
 
 
 class SolveAnswer(TypedDict):

@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
-from app_types import *
+from app_types import GenerateData, GenerateResponse, SolveData, SolveResponse
 from solve_questions import solve_questions
+
 
 app = Flask(__name__)
 
