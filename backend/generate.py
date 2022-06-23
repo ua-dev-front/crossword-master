@@ -1,3 +1,4 @@
+import copy
 import requests
 import random
 from typing import TypedDict
@@ -47,11 +48,15 @@ class NormalizedWord(TypedDict):
 NormalizedWords = list[NormalizedWord]
 
 
-def set_words_id(words: Words) -> None:
-    word_id = 1
-    for word in words:
+def set_words_id(words: list[StartWord]) -> Words:
+    new_words = copy.deepcopy(words)
+
+    word_id = 0
+    for word in new_words:
         word['id'] = word_id
         word_id += 1
+
+    return new_words
 
 
 def modify_existing_word(word: StartWord, coord: Coord) -> None:
@@ -59,13 +64,16 @@ def modify_existing_word(word: StartWord, coord: Coord) -> None:
     word['coords'].append(coord)
 
 
-def define_words_by_type(word_type: WordType, words: list[StartWord], coord: Coord, is_x: bool = True) -> None:
+def define_words_by_type(word_type: WordType, words: list[StartWord], coord: Coord, is_x: bool = True) -> \
+        list[StartWord]:
+    new_words = copy.deepcopy(words)
+
     is_new_word = True
 
     axis_coord = coord[0] if is_x else coord[1]
 
     for current_axis_coord in range(axis_coord - 1, axis_coord + 2):
-        for word in words:
+        for word in new_words:
             current_coord = [current_axis_coord, coord[1]] if is_x else [coord[0], current_axis_coord]
             if current_coord in word['coords'] and coord not in word['coords'] and word['type'] == word_type:
                 is_new_word = False
@@ -82,7 +90,9 @@ def define_words_by_type(word_type: WordType, words: list[StartWord], coord: Coo
             'relations': []
         }
 
-        words.append(word)
+        new_words.append(word)
+
+    return new_words
 
 
 def filter_words(words: Words) -> Words:
@@ -94,11 +104,15 @@ def get_relation(word, other_word, coord):
         word['relations'].append({'id': other_word['id'], 'coord': coord})
 
 
-def get_relations(words: Words) -> None:
-    for word in words:
-        for coord in word['coords']:
-            for other_word in words:
+def get_relations(words: Words) -> Words:
+    new_words = copy.deepcopy(words)
+
+    for word in new_words:
+        for other_word in new_words:
+            for coord in word['coords']:
                 get_relation(word, other_word, coord)
+
+    return new_words
 
 
 def define_words(table) -> Words:
@@ -107,12 +121,12 @@ def define_words(table) -> Words:
     for i in range(len(table)):
         for j in range(len(table[i])):
             if table[i][j] == 1:
-                define_words_by_type(word_type='across', words=words, coord=[i, j])
-                define_words_by_type(word_type='down', words=words, coord=[i, j], is_x=False)
+                words = define_words_by_type(word_type='across', words=words, coord=[i, j])
+                words = define_words_by_type(word_type='down', words=words, coord=[i, j], is_x=False)
 
     words = filter_words(words)
-    set_words_id(words)
-    get_relations(words)
+    words = set_words_id(words)
+    words = get_relations(words)
 
     return words
 
