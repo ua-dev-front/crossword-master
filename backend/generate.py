@@ -13,7 +13,6 @@ Coord = list[int]
 Coords = list[Coord]
 Length = int
 Pattern = str
-Patterns = list[Pattern]
 WordType = str
 
 
@@ -59,6 +58,15 @@ class NormalizedWord(TypedDict):
 
 
 NormalizedWords = list[NormalizedWord]
+
+
+class ApiResponseDict(TypedDict):
+    word: str
+    defs: list[str]
+    score: int
+
+
+ApiResponse = list[ApiResponseDict]
 
 
 def set_words_id(words: Words) -> Words:
@@ -190,12 +198,12 @@ def filter_api_response(response):
     return [item for item in response if 'defs' in item]
 
 
-def get_random_word_from_words(words: Words) -> dict:
-    return words[random.randint(0, len(words) - 1)]
+def get_random_word_from_patterns_list(patterns: ApiResponse) -> ApiResponseDict:
+    return patterns[random.randint(0, len(patterns) - 1)]
 
 
-def add_answer_and_question_to_word(word, response):
-    random_word = get_random_word_from_words(response)
+def add_answer_and_question_to_word(word: Word, response: ApiResponse) -> None:
+    random_word = get_random_word_from_patterns_list(response)
 
     word.update({
         'answer': random_word['word'],
@@ -208,7 +216,7 @@ def get_api_url(pattern: Pattern) -> str:
     return f'{API_PATH}?sp={pattern}&md=d&max={MAX_API_ATTEMPTS}'
 
 
-def get_answers_and_questions(words: Words, patterns) -> [Words, Patterns]:
+def get_answers_and_questions(words: Words, patterns) -> [Words, ApiResponse]:
     new_words = copy.deepcopy(words)
     new_patterns = copy.deepcopy(patterns)
 
