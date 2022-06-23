@@ -1,11 +1,17 @@
 import re
 import requests
-from app_types import *
 import string
 from copy import deepcopy
 
+from app_types import Answer, Question, Word, SolveAnswers, SolveWords, \
+    SolveAnswer, SolveResponse, SolveData, Table, StartPosition, Id
+
+
+__all__ = ['solve_questions']
 
 API_PATH = 'https://api.datamuse.com/words?'
+
+PossibleAnswers = dict[int, list[str]]
 
 
 def remove_punctuation(raw_str: str) -> str:
@@ -31,7 +37,7 @@ def get_possible_word_answers(question: Question, length: int) -> list[str]:
     return [answer['word'] for answer in answers]
 
 
-def get_possible_answers(words: SolveWords, table: Table) -> dict[int, list[str]]:
+def get_possible_answers(words: SolveWords, table: Table) -> PossibleAnswers:
     possible_ans = {}
     for direction, value in words.items():
         for word in value:
@@ -122,7 +128,7 @@ def update_answers(answers: SolveAnswers, answer: str, id: int, direction: str) 
 def solve_word(words: SolveWords,
                table: Table,
                possible_answers: list[list[str]],
-               word_id: int, answers: SolveAnswers) -> SolveAnswer:
+               word_id: int, answers: SolveAnswers) -> SolveAnswers:
     word = get_word(words, word_id)
     direction = get_direction(words, word_id)
 
@@ -141,11 +147,15 @@ def solve_word(words: SolveWords,
                 return answers
 
 
+def get_answers(words: SolveWords, table: Table, possible_answers: PossibleAnswers) -> SolveAnswers:
+    answers = solve_word(words, table, possible_answers, word_id=1, answers={'across': [], 'down': []})
+
+    return answers
+
+
 def solve_questions(table: Table, words: SolveWords) -> SolveResponse:
     possible_answers = get_possible_answers(words, table)
 
-    answers = {'across': [], 'down': []}
-
-    answers = solve_word(words, table, possible_answers, word_id=1, answers=answers)
+    answers = get_answers(words, table, possible_answers)
 
     return { 'answers': answers }
