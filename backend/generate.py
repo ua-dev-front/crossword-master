@@ -155,8 +155,10 @@ def define_words(table: Table) -> Words:
     for i in range(len(table)):
         for j in range(len(table[i])):
             if table[i][j] == 1:
-                words = define_words_by_type(word_type='across', words=words, coord=[i, j])
-                words = define_words_by_type(word_type='down', words=words, coord=[i, j], is_x=False)
+                words = define_words_by_type(
+                    word_type='across', words=words, coord=[i, j])
+                words = define_words_by_type(
+                    word_type='down', words=words, coord=[i, j], is_x=False)
 
     words = filter_words(words)
     words = set_words_id(words)
@@ -183,11 +185,14 @@ def get_word_pattern(word: Word, words: Words) -> Pattern:
             other_word = find_word_by_id(relation['id'], words)
 
             if other_word['answer']:
-                other_word_coord_index = find_coord_index(relation['coord'], other_word['coords'])
+                other_word_coord_index = find_coord_index(
+                    relation['coord'], other_word['coords'])
                 char = other_word['answer'][other_word_coord_index]
 
-                word_coord_index = find_coord_index(relation['coord'], word['coords'])
-                pattern = pattern[:word_coord_index] + char + pattern[word_coord_index + 1:]
+                word_coord_index = find_coord_index(
+                    relation['coord'], word['coords'])
+                pattern = pattern[:word_coord_index] + \
+                    char + pattern[word_coord_index + 1:]
 
     return pattern
 
