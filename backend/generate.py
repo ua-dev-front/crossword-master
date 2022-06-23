@@ -5,6 +5,8 @@ from typing import TypedDict
 
 from app_types import Answer, GenerateResponse, GenerateWord, GenerateWords, Id, Question, StartPosition, Table
 
+__all__ = ['generate_words']
+
 API_PATH = 'https://api.datamuse.com/words'
 MAX_API_ATTEMPTS = 1000
 
