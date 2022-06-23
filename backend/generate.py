@@ -4,6 +4,7 @@ import random
 from typing import TypedDict
 
 API_PATH = 'https://api.datamuse.com/words'
+MAX_API_ATTEMPTS = 1000
 
 
 Answer = str | None
@@ -64,6 +65,24 @@ def modify_existing_word(word: StartWord, coord: Coord) -> None:
     word['coords'].append(coord)
 
 
+def get_new_word(coord: Coord, word_type: WordType) -> StartWord:
+    word = {
+        'length': 1,
+        'coords': [coord],
+        'type': word_type,
+        'answer': None,
+        'question': None,
+        'api_attempts': 0,
+        'relations': []
+    }
+
+    return word
+
+
+def get_current_coord(current_axis_coord: int, coord: Coord, is_x: bool) -> Coord:
+    return [current_axis_coord, coord[1]] if is_x else [coord[0], current_axis_coord]
+
+
 def define_words_by_type(word_type: WordType, words: list[StartWord], coord: Coord, is_x: bool = True) -> \
         list[StartWord]:
     new_words = copy.deepcopy(words)
@@ -74,23 +93,13 @@ def define_words_by_type(word_type: WordType, words: list[StartWord], coord: Coo
 
     for current_axis_coord in range(axis_coord - 1, axis_coord + 2):
         for word in new_words:
-            current_coord = [current_axis_coord, coord[1]] if is_x else [coord[0], current_axis_coord]
+            current_coord = get_current_coord(current_axis_coord, coord, is_x)
             if current_coord in word['coords'] and coord not in word['coords'] and word['type'] == word_type:
                 is_new_word = False
                 modify_existing_word(word, coord)
 
     if is_new_word:
-        word: StartWord = {
-            'length': 1,
-            'coords': [coord],
-            'type': word_type,
-            'answer': None,
-            'question': None,
-            'api_attempts': 0,
-            'relations': []
-        }
-
-        new_words.append(word)
+        new_words.append(get_new_word(coord, word_type))
 
     return new_words
 
@@ -99,7 +108,7 @@ def filter_words(words: Words) -> Words:
     return [word for word in words if word['length'] > 1]
 
 
-def get_relation(word, other_word, coord):
+def get_relation(word, other_word, coord) -> None:
     if other_word['id'] != word['id'] and coord in other_word['coords']:
         word['relations'].append({'id': other_word['id'], 'coord': coord})
 
@@ -143,6 +152,7 @@ def find_coord_index(coord: Coord, coords: Coords) -> int:
 
 def get_word_pattern(word: Word, words: Words) -> Pattern:
     pattern = '?' * word['length']
+
     if word['relations']:
         for relation in word['relations']:
             other_word = find_word_by_id(relation['id'], words)
@@ -162,21 +172,25 @@ def normalize_question(question: Question) -> Question:
 
 
 def filter_api_response(response):
-    result = []
-    for item in response:
-        if 'defs' in item:
-            result.append(item)
-    return result
+    return [item for item in response if 'defs' in item]
 
 
-def get_random_word_from_pattern(pattern) -> dict:
-    return pattern[random.randint(0, len(pattern) - 1)]
+def get_random_word_from_words(words) -> dict:
+    return words[random.randint(0, len(words) - 1)]
 
 
-def add_answer_and_question_to_word(word, random_response):
-    word['answer'] = random_response['word']
-    word['question'] = normalize_question(random_response['defs'][0])
-    word['api_attempts'] += 1
+def add_answer_and_question_to_word(word, response):
+    random_word = get_random_word_from_words(response)
+
+    word.update({
+        'answer': random_word['word'],
+        'question': normalize_question(random_word['defs'][0]),
+        'api_attempts': word['api_attempts'] + 1
+    })
+
+
+def get_api_url(pattern: Pattern) -> str:
+    return f'{API_PATH}?sp={pattern}&md=d&max={MAX_API_ATTEMPTS}'
 
 
 def get_answers_and_questions(words: Words, patterns) -> None:
@@ -184,20 +198,14 @@ def get_answers_and_questions(words: Words, patterns) -> None:
         pattern = get_word_pattern(word, words)
 
         if pattern in patterns:
-            random_word = get_random_word_from_pattern(patterns[pattern])
-            add_answer_and_question_to_word(word, random_word)
+            add_answer_and_question_to_word(word, patterns[pattern])
         else:
-            url = API_PATH + '?sp=' + pattern + '&md=d&max=1000'
-            response = requests.get(url)
+            response = requests.get(get_api_url(pattern)).json()
 
-            if response.status_code == 200:
-                response_json = filter_api_response(response.json())
-                if response_json:
-                    random_word = get_random_word_from_pattern(response_json)
-                    add_answer_and_question_to_word(word, random_word)
-                    patterns[pattern] = response_json
-            else:
-                print('Error:', response.status_code)
+            if response:
+                response = filter_api_response(response)
+                add_answer_and_question_to_word(word, response)
+                patterns[pattern] = response
 
 
 def divide_words_by_type(word_type: WordType, words: Words) -> Words:
@@ -213,7 +221,7 @@ def is_words_valid(words) -> bool:
 
 def is_no_solution(words) -> bool:
     for word in words:
-        if word['api_attempts'] >= 1000:
+        if word['api_attempts'] >= MAX_API_ATTEMPTS:
             return True
     return False
 
