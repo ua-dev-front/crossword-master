@@ -1,7 +1,9 @@
 import requests
+import random
 from typing import TypedDict
 
-from app import API_PATH
+API_PATH = 'https://api.datamuse.com/words'
+
 
 Answer = str | None
 Coord = list[int]
@@ -145,20 +147,43 @@ def normalize_question(question: Question) -> Question:
     return question[2:].capitalize()
 
 
-def get_answers_and_questions(words: Words) -> None:
+def filter_api_response(response):
+    result = []
+    for item in response:
+        if 'defs' in item:
+            result.append(item)
+    return result
+
+
+def get_random_word_from_pattern(pattern) -> dict:
+    return pattern[random.randint(0, len(pattern) - 1)]
+
+
+def add_answer_and_question_to_word(word, random_response):
+    word['answer'] = random_response['word']
+    word['question'] = normalize_question(random_response['defs'][0])
+    word['api_attempts'] += 1
+
+
+def get_answers_and_questions(words: Words, patterns) -> None:
     for word in words:
         pattern = get_word_pattern(word, words)
-        url = API_PATH + '?sp=' + pattern + '&md=d&max=1000'
 
-        response = requests.get(url)
-        if response.status_code == 200:
-            response_json = response.json()
-            if response_json:
-                word['answer'] = response_json[word['api_attempts']]['word']
-                word['question'] = normalize_question(response_json[word['api_attempts']]['defs'][0])
-                word['api_attempts'] += 1
+        if pattern in patterns:
+            random_word = get_random_word_from_pattern(patterns[pattern])
+            add_answer_and_question_to_word(word, random_word)
         else:
-            print('Error:', response.status_code)
+            url = API_PATH + '?sp=' + pattern + '&md=d&max=1000'
+            response = requests.get(url)
+
+            if response.status_code == 200:
+                response_json = filter_api_response(response.json())
+                if response_json:
+                    random_word = get_random_word_from_pattern(response_json)
+                    add_answer_and_question_to_word(word, random_word)
+                    patterns[pattern] = response_json
+            else:
+                print('Error:', response.status_code)
 
 
 def divide_words_by_type(word_type: WordType, words: Words) -> Words:
@@ -204,10 +229,12 @@ def get_response(words):
     return response
 
 
-def generate(table):
+def generate_words(table):
     words = define_words(table)
 
+    patterns = {}
+
     while not is_words_valid(words) and not is_no_solution(words):
-        get_answers_and_questions(words)
+        get_answers_and_questions(words, patterns)
 
     return get_response(words)
