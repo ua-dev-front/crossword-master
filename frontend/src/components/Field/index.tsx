@@ -1,10 +1,10 @@
 import './styles.scss';
 
 type Props = {
-  mode: 'draw' | 'erase' | 'answer';
   matrix: Array<Array<number | string>>;
+  mode: 'draw' | 'erase' | 'answer';
 };
 
-export default function Field({ mode, matrix }: Props) {
-  return <div>Field</div>;
+export default function Field({ matrix, mode }: Props) {
+  return <div className='field'>Field</div>;
 }

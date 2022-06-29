@@ -1,15 +1,11 @@
 import './styles.scss';
 
 type Props = {
+  isLoading: boolean;
   label: string;
   onClick: () => void;
-  isLoading: boolean;
 };
 
-export default function Button({ label, onClick, isLoading }: Props) {
-  return (
-    <button className="button" onClick={onClick} disabled={isLoading}>
-      {label}
-    </button>
-  );
+export default function Button({ isLoading, label, onClick }: Props) {
+  return <button className='button'>Button</button>;
 }
