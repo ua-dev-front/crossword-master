@@ -1,10 +1,25 @@
 from typing import TypedDict
 
 Table = list[list[int]]
-StartPosition = list[int]  # length = 2
+Position = list[int]  # length = 2
 Id = int
 Answer = str
 Question = str
+
+
+class PossibleAnswers(TypedDict):
+    across: dict[int, list[str]]
+    down: dict[int, list[str]]
+
+
+class RawWord(TypedDict):
+    id: Id
+    startPosition: Position
+
+
+class RawWords(TypedDict):
+    across: list[RawWord]
+    down: list[RawWord]
 
 
 class GenerateData(TypedDict):
@@ -14,7 +29,7 @@ class GenerateData(TypedDict):
 class Word(TypedDict):
     id: Id
     question: Question
-    startPosition: StartPosition
+    startPosition: Position
 
 
 class GenerateWord(Word):
