@@ -3,6 +3,9 @@ import re
 from app_types import Position, PossibleAnswers, RawWord, RawWords, SolveAnswers, Table
 
 
+__all__ = ['solve_crossword']
+
+
 def increase_position(prev_pos: Position, direction: str) -> list[int]:
     position = [*prev_pos]
 
