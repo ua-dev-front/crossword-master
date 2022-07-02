@@ -1,11 +1,21 @@
 import './styles.scss';
 
 type Props = {
-  content: string | null; // string - char or empty string
-  number: number | null;
+  cell:
+    | {
+        editable: true;
+        filled: boolean;
+      }
+    | {
+        editable: false;
+        content: {
+          letter: string | null;
+          number: number | null;
+        } | null;
+      };
   onClick: () => void;
 };
 
-export default function Cell({ content, number, onClick }: Props) {
+export default function Cell({ cell, onClick }: Props) {
   return <div className='cell'>Cell</div>;
 }
