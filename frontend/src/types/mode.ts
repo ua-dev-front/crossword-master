@@ -1,7 +1,8 @@
 enum Mode {
+  Answer = 'answer',
   Draw = 'draw',
   Erase = 'erase',
-  Answer = 'answer',
+  Puzzle = 'puzzle',
 }
 
 export default Mode;
