@@ -1,7 +1,7 @@
 import './styles.scss';
 
 type Props = {
-  cell:
+  data:
     | {
         editable: true;
         filled: boolean;
@@ -13,9 +13,9 @@ type Props = {
           number: number | null;
         } | null;
       };
-  onClick: () => void;
+  onEdited: (filled: boolean) => void;
 };
 
-export default function Cell({ cell, onClick }: Props) {
+export default function Cell({ data, onEdited }: Props) {
   return <div className='cell'>Cell</div>;
 }

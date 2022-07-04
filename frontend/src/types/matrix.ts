@@ -1,6 +1,8 @@
-type Matrix = {
+type MatrixItem = {
   letter: string | null;
   number: number | null;
-}[][];
+};
 
-export default Matrix;
+type Matrix = MatrixItem[][];
+
+export type { Matrix, MatrixItem };
