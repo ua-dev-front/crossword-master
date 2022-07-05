@@ -2,7 +2,6 @@ import re
 
 from app_types import Position, PossibleAnswers, RawWord, RawWords, SolveAnswers, Table
 
-
 __all__ = ['solve_crossword']
 
 
@@ -24,9 +23,8 @@ def is_correct_cell(position: Position, table: Table) -> bool:
 def update_table(answer: str, table: Table, start_position: Position, direction: str) -> None:
     position = [*start_position]
     for letter in answer:
-        if is_correct_cell(position, table):
-            table[position[0]][position[1]] = letter
-            position = increase_position(position, direction)
+        table[position[0]][position[1]] = letter
+        position = increase_position(position, direction)
 
 
 def get_word_pattern(table: Table, start_pos: Position, direction: str) -> str:
@@ -72,8 +70,8 @@ def update_answers(answers, answer: str, word_id: int, direction: str) -> None:
     answers[direction].append({'id': word_id, 'answer': answer})
 
 
-def solve_crossword(words: RawWords, table: Table, possible_answers: PossibleAnswers, word_id: int = 1,
-                    answers: SolveAnswers = None) -> SolveAnswers:
+def backtracking(words: RawWords, table: Table, possible_answers: PossibleAnswers, word_id: int = 1,
+                 answers: SolveAnswers = None):
     if answers is None:
         answers = {'across': [], 'down': []}
 
@@ -94,3 +92,7 @@ def solve_crossword(words: RawWords, table: Table, possible_answers: PossibleAns
             if next_ans:
                 update_answers(answers, possible_answer, word_id, direction)
                 return answers
+
+
+def solve_crossword(words: RawWords, table: Table, possible_answers: PossibleAnswers) -> SolveAnswers:
+    return backtracking(words, table, possible_answers)
