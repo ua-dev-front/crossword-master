@@ -4,28 +4,28 @@ import './styles.scss';
 
 type Props =
   | {
-      matrix: Boolean[][];
       mode: Mode.Draw | Mode.Erase;
+      matrix: boolean[][];
       onChange: (row: number, column: number) => void;
     }
   | {
+      mode: Mode.Puzzle;
       matrix:
         | {
             number: number | null;
-          }
+          }[][]
         | null[][];
-      mode: Mode.Puzzle;
     }
   | {
+      mode: Mode.Answer;
       matrix:
         | {
             letter: string;
             number: number | null;
-          }
+          }[][]
         | null[][];
-      mode: Mode.Answer;
     };
 
-export default function Grid({ matrix, mode }: Props) {
+export default function Grid({ mode, matrix }: Props) {
   return <div className='grid'>Grid</div>;
 }
