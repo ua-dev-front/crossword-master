@@ -1,11 +1,11 @@
 import re
 
-from app_types import Position, PossibleAnswers, RawWord, RawWords, SolveAnswers, Table
+from app_types import ParsedWord, ParsedWords, Position, PossibleAnswers, RawWords, SolveAnswers, Table
 
 __all__ = ['solve_crossword']
 
 
-def increase_position(prev_pos: Position, direction: str) -> list[int]:
+def increase_position(prev_pos: list[Position], direction: str) -> list[int]:
     position = [*prev_pos]
 
     if direction == 'across':
@@ -16,19 +16,19 @@ def increase_position(prev_pos: Position, direction: str) -> list[int]:
     return position
 
 
-def is_correct_cell(position: Position, table: Table) -> bool:
+def is_correct_cell(position: list[Position], table: Table) -> bool:
     return all(coord < len(table) for coord in position) and table[position[0]][position[1]]
 
 
-def update_table(answer: str, table: Table, start_position: Position, direction: str) -> None:
-    position = [*start_position]
+def update_table(answer: str, table: Table, direction: str, start_row: Position, start_column: Position) -> None:
+    position = [start_row, start_column]
     for letter in answer:
         table[position[0]][position[1]] = letter
         position = increase_position(position, direction)
 
 
-def get_word_pattern(table: Table, start_pos: Position, direction: str) -> str:
-    position = [*start_pos]
+def get_word_pattern(table: Table, direction: str, start_row: Position, start_column: Position) -> str:
+    position = [start_row, start_column]
     pattern = ''
 
     while is_correct_cell(position, table):
@@ -42,24 +42,6 @@ def get_word_pattern(table: Table, start_pos: Position, direction: str) -> str:
     return pattern
 
 
-def get_word(words: RawWords, word_id: int) -> RawWord | None:
-    for direction in words.values():
-        for word in direction:
-            if word['id'] == word_id:
-                return word
-
-    return None
-
-
-def get_direction(words: RawWords, word_id: int) -> str | None:
-    for direction, value in words.items():
-        for word in value:
-            if word['id'] == word_id:
-                return direction
-
-    return None
-
-
 def update_answers(answers, answer: str, word_id: int, direction: str) -> None:
     for value in answers.values():
         for word in value:
@@ -70,29 +52,45 @@ def update_answers(answers, answer: str, word_id: int, direction: str) -> None:
     answers[direction].append({'id': word_id, 'answer': answer})
 
 
-def backtracking(words: RawWords, table: Table, possible_answers: PossibleAnswers, word_id: int = 1,
+def get_all_words(words: RawWords) -> ParsedWords:
+    return [{**word, 'direction': direction} for direction, items in words.items() for word in items]
+
+
+def get_word(words: ParsedWords, word_id: int, direction: str) -> ParsedWord | None:
+    return next((word for word in words if word['id'] == word_id and word['direction'] == direction), None)
+
+
+def backtracking(words: ParsedWords, table: Table, possible_answers: PossibleAnswers, current_id: int = 0,
                  answers: SolveAnswers = None):
     if answers is None:
         answers = {'across': [], 'down': []}
 
-    word = get_word(words, word_id)
-    direction = get_direction(words, word_id)
-
-    if not word:
+    if current_id >= len(words):
         return answers
 
-    start_position = word['startPosition']
+    word = words[current_id]
+    direction = word['direction']
+    start_row = word['startRow']
+    start_column = word['startColumn']
+    word_id = word['id']
 
-    pattern = get_word_pattern(table, start_position, direction)
+    pattern = get_word_pattern(table, direction, start_row, start_column)
 
     for possible_answer in possible_answers[direction][word_id]:
         if re.match(pattern, possible_answer):
-            update_table(possible_answer, table, start_position, direction)
-            next_ans = solve_crossword(words, table, possible_answers, word_id=word_id + 1, answers=answers)
+            update_table(possible_answer, table, direction, start_row, start_column)
+            next_ans = backtracking(words, table, possible_answers, current_id=current_id + 1, answers=answers)
             if next_ans:
                 update_answers(answers, possible_answer, word_id, direction)
                 return answers
 
 
-def solve_crossword(words: RawWords, table: Table, possible_answers: PossibleAnswers) -> SolveAnswers:
-    return backtracking(words, table, possible_answers)
+def solve_crossword(words: RawWords, table: Table, possible_answers: PossibleAnswers) -> SolveAnswers | None:
+    parsed_words = get_all_words(words)
+
+    answers = backtracking(parsed_words, table, possible_answers)
+
+    if not any(answers.values()):
+        return None
+
+    return answers
