@@ -6,5 +6,9 @@ type Props = {
 };
 
 export default function Button({ label, onClick }: Props) {
-  return <button className='button'>Button</button>;
+  return (
+    <div className='button' onClick={onClick} role='button'>
+      {label}
+    </div>
+  );
 }
