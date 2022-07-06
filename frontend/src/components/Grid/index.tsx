@@ -10,20 +10,16 @@ type Props =
     }
   | {
       mode: Mode.Puzzle;
-      matrix:
-        | {
-            number: number | null;
-          }[][]
-        | null[][];
+      matrix: ({
+        number: number | null;
+      } | null)[][];
     }
   | {
       mode: Mode.Answer;
-      matrix:
-        | {
-            letter: string;
-            number: number | null;
-          }[][]
-        | null[][];
+      matrix: ({
+        letter: string;
+        number: number | null;
+      } | null)[][];
     };
 
 export default function Grid({ mode, matrix }: Props) {
