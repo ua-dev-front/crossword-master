@@ -8,10 +8,7 @@ type Props = {
       }
     | {
         editable: false;
-        content:
-          | { letter: string; number: number | null }
-          | { number: number | null }
-          | null;
+        content: { letter: string | null; number: number | null } | null;
       };
   onEdited: (filled: boolean) => void;
 };
