@@ -1,7 +1,7 @@
-from typing import TypedDict
+from typing import TypedDict, Callable
 
 Table = list[list[int | str]]
-Position = int  # length = 2
+Position = int
 Id = int
 Answer = str
 Question = str
@@ -12,6 +12,9 @@ Pattern = list[str | None]
 class PossibleAnswers(TypedDict):
     across: DirectionPossibleAnswers
     down: DirectionPossibleAnswers
+
+
+LoadMore = Callable[[Pattern, str, int], PossibleAnswers]
 
 
 class RawWord(TypedDict):

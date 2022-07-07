@@ -1,4 +1,5 @@
-from app_types import ParsedWord, ParsedWords, Position, PossibleAnswers, RawWords, SolveAnswers, Table, Pattern
+from app_types import LoadMore, ParsedWord, ParsedWords, Position, PossibleAnswers, Pattern, RawWords, SolveAnswers, \
+    Table
 
 __all__ = ['solve_crossword']
 
@@ -33,7 +34,7 @@ def get_word_pattern(table: Table, direction: str, start_row: Position, start_co
         if table[position[0]][position[1]] == 1:
             pattern.append(None)
         elif isinstance(table[position[0]][position[1]], str):
-            pattern.append([position[0]][position[1]])
+            pattern.append(table[position[0]][position[1]])
 
         position = increase_position(position, direction)
 
@@ -41,7 +42,11 @@ def get_word_pattern(table: Table, direction: str, start_row: Position, start_co
 
 
 def word_fits_pattern(pattern: Pattern, word: str) -> bool:
-    return all(pattern[ind] is None or letter == pattern[ind] for letter, ind in enumerate(word))
+    return all(pattern[ind] is None or letter == pattern[ind] for ind, letter in enumerate(word))
+
+
+def get_api_pattern(pattern: Pattern) -> str:
+    return ''.join(letter if isinstance(letter, str) else '?' for letter in pattern)
 
 
 def update_answers(answers, answer: str, word_id: int, direction: str) -> None:
@@ -51,7 +56,7 @@ def update_answers(answers, answer: str, word_id: int, direction: str) -> None:
                 word['answer'] = answer
                 return None
 
-    answers[direction].append({'id': word_id, 'answer': answer})
+    answers[direction] = [*answers[direction], {'id': word_id, 'answer': answer}]
 
 
 def get_all_words(words: RawWords) -> ParsedWords:
@@ -62,8 +67,8 @@ def get_word(words: ParsedWords, word_id: int, direction: str) -> ParsedWord | N
     return next((word for word in words if word['id'] == word_id and word['direction'] == direction), None)
 
 
-def backtrack(words: ParsedWords, table: Table, possible_answers: PossibleAnswers, current_id: int = 0,
-              answers: SolveAnswers = None) -> SolveAnswers:
+def backtrack(words: ParsedWords, table: Table, possible_answers: PossibleAnswers, load_more_answers: LoadMore,
+              current_id: int, answers: SolveAnswers, loaded_more_answers) -> SolveAnswers | None:
     if answers is None:
         answers = {'across': [], 'down': []}
 
@@ -78,19 +83,29 @@ def backtrack(words: ParsedWords, table: Table, possible_answers: PossibleAnswer
 
     pattern = get_word_pattern(table, direction, start_row, start_column)
 
-    for possible_answer in possible_answers[direction][word_id]:
-        if word_fits_pattern(pattern, possible_answer):
-            update_table(possible_answer, table, direction, start_row, start_column)
-            next_ans = backtrack(words, table, possible_answers, current_id=current_id + 1, answers=answers)
-            if next_ans:
-                update_answers(answers, possible_answer, word_id, direction)
-                return answers
+    while True:
+        for possible_answer in possible_answers[direction][word_id]:
+            if word_fits_pattern(pattern, possible_answer):
+                update_table(possible_answer, table, direction, start_row, start_column)
+                next_ans = backtrack(words, table, possible_answers, load_more_answers, current_id=current_id + 1,
+                                     answers=answers, loaded_more_answers=loaded_more_answers)
+                if next_ans:
+                    update_answers(answers, possible_answer, word_id, direction)
+                    return answers
+
+        if loaded_more_answers[current_id]:
+            return None
+
+        possible_answers = load_more_answers(get_api_pattern(pattern), direction, word_id)
+        loaded_more_answers[current_id] = True
 
 
-def solve_crossword(words: RawWords, table: Table, possible_answers: PossibleAnswers) -> SolveAnswers | None:
+def solve_crossword(words: RawWords, table: Table, possible_answers: PossibleAnswers, load_more_answers: LoadMore) -> \
+        SolveAnswers | None:
     parsed_words = get_all_words(words)
 
-    answers = backtrack(parsed_words, table, possible_answers)
+    answers = backtrack(parsed_words, table, possible_answers, load_more_answers, current_id=0,
+                        answers={'across': [], 'down': []}, loaded_more_answers=[False]*len(parsed_words))
 
     if not any(answers.values()):
         return None
