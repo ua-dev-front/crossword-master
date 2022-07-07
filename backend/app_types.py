@@ -1,11 +1,12 @@
 from typing import TypedDict
 
-Table = list[list[int]]
+Table = list[list[int | str]]
 Position = int  # length = 2
 Id = int
 Answer = str
 Question = str
 DirectionPossibleAnswers = dict[int, list[str]]
+Pattern = list[str | None]
 
 
 class PossibleAnswers(TypedDict):

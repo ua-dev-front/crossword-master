@@ -1,6 +1,4 @@
-import re
-
-from app_types import ParsedWord, ParsedWords, Position, PossibleAnswers, RawWords, SolveAnswers, Table
+from app_types import ParsedWord, ParsedWords, Position, PossibleAnswers, RawWords, SolveAnswers, Table, Pattern
 
 __all__ = ['solve_crossword']
 
@@ -27,19 +25,23 @@ def update_table(answer: str, table: Table, direction: str, start_row: Position,
         position = increase_position(position, direction)
 
 
-def get_word_pattern(table: Table, direction: str, start_row: Position, start_column: Position) -> str:
+def get_word_pattern(table: Table, direction: str, start_row: Position, start_column: Position) -> Pattern:
     position = [start_row, start_column]
-    pattern = ''
+    pattern = []
 
     while is_correct_cell(position, table):
         if table[position[0]][position[1]] == 1:
-            pattern += '[a-zA-Z]?'
+            pattern.append(None)
         elif isinstance(table[position[0]][position[1]], str):
-            pattern += table[position[0]][position[1]]
+            pattern.append([position[0]][position[1]])
 
         position = increase_position(position, direction)
 
     return pattern
+
+
+def word_fits_pattern(pattern: Pattern, word: str) -> bool:
+    return all(pattern[ind] is None or letter == pattern[ind] for letter, ind in enumerate(word))
 
 
 def update_answers(answers, answer: str, word_id: int, direction: str) -> None:
@@ -60,8 +62,8 @@ def get_word(words: ParsedWords, word_id: int, direction: str) -> ParsedWord | N
     return next((word for word in words if word['id'] == word_id and word['direction'] == direction), None)
 
 
-def backtracking(words: ParsedWords, table: Table, possible_answers: PossibleAnswers, current_id: int = 0,
-                 answers: SolveAnswers = None):
+def backtrack(words: ParsedWords, table: Table, possible_answers: PossibleAnswers, current_id: int = 0,
+              answers: SolveAnswers = None) -> SolveAnswers:
     if answers is None:
         answers = {'across': [], 'down': []}
 
@@ -77,9 +79,9 @@ def backtracking(words: ParsedWords, table: Table, possible_answers: PossibleAns
     pattern = get_word_pattern(table, direction, start_row, start_column)
 
     for possible_answer in possible_answers[direction][word_id]:
-        if re.match(pattern, possible_answer):
+        if word_fits_pattern(pattern, possible_answer):
             update_table(possible_answer, table, direction, start_row, start_column)
-            next_ans = backtracking(words, table, possible_answers, current_id=current_id + 1, answers=answers)
+            next_ans = backtrack(words, table, possible_answers, current_id=current_id + 1, answers=answers)
             if next_ans:
                 update_answers(answers, possible_answer, word_id, direction)
                 return answers
@@ -88,7 +90,7 @@ def backtracking(words: ParsedWords, table: Table, possible_answers: PossibleAns
 def solve_crossword(words: RawWords, table: Table, possible_answers: PossibleAnswers) -> SolveAnswers | None:
     parsed_words = get_all_words(words)
 
-    answers = backtracking(parsed_words, table, possible_answers)
+    answers = backtrack(parsed_words, table, possible_answers)
 
     if not any(answers.values()):
         return None
