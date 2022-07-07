@@ -4,37 +4,37 @@ from app_types import LoadMore, ParsedWord, ParsedWords, Position, PossibleAnswe
 __all__ = ['solve_crossword']
 
 
-def increase_position(prev_pos: list[Position], direction: str) -> list[int]:
-    position = [*prev_pos]
+def increase_position(prev_pos: Position, direction: str) -> Position:
+    position = {**prev_pos}
 
     if direction == 'across':
-        position[1] += 1
+        position['column'] += 1
     elif direction == 'down':
-        position[0] += 1
+        position['row'] += 1
 
     return position
 
 
-def is_correct_cell(position: list[Position], table: Table) -> bool:
-    return all(coord < len(table) for coord in position) and table[position[0]][position[1]]
+def is_correct_cell(position: Position, table: Table) -> bool:
+    return all(coord < len(table) for coord in position.values()) and table[position['row']][position['column']]
 
 
-def update_table(answer: str, table: Table, direction: str, start_row: Position, start_column: Position) -> None:
-    position = [start_row, start_column]
+def update_table(answer: str, table: Table, direction: str, start_position: Position) -> None:
+    position = {**start_position}
     for letter in answer:
-        table[position[0]][position[1]] = letter
+        table[position['row']][position['column']] = letter
         position = increase_position(position, direction)
 
 
-def get_word_pattern(table: Table, direction: str, start_row: Position, start_column: Position) -> Pattern:
-    position = [start_row, start_column]
+def get_word_pattern(table: Table, direction: str, start_position: Position) -> Pattern:
+    position = {**start_position}
     pattern = []
 
     while is_correct_cell(position, table):
-        if table[position[0]][position[1]] == 1:
+        if table[position['row']][position['column']] == 1:
             pattern.append(None)
-        elif isinstance(table[position[0]][position[1]], str):
-            pattern.append(table[position[0]][position[1]])
+        elif isinstance(table[position['row']][position['column']], str):
+            pattern.append(table[position['row']][position['column']])
 
         position = increase_position(position, direction)
 
@@ -68,25 +68,21 @@ def get_word(words: ParsedWords, word_id: int, direction: str) -> ParsedWord | N
 
 
 def backtrack(words: ParsedWords, table: Table, possible_answers: PossibleAnswers, load_more_answers: LoadMore,
-              current_id: int, answers: SolveAnswers, loaded_more_answers) -> SolveAnswers | None:
-    if answers is None:
-        answers = {'across': [], 'down': []}
-
+              current_id: int, answers: SolveAnswers, loaded_more_answers: list[bool]) -> SolveAnswers | None:
     if current_id >= len(words):
         return answers
 
     word = words[current_id]
     direction = word['direction']
-    start_row = word['startRow']
-    start_column = word['startColumn']
+    start_position = word['startPosition']
     word_id = word['id']
 
-    pattern = get_word_pattern(table, direction, start_row, start_column)
+    pattern = get_word_pattern(table, direction, start_position)
 
     while True:
         for possible_answer in possible_answers[direction][word_id]:
             if word_fits_pattern(pattern, possible_answer):
-                update_table(possible_answer, table, direction, start_row, start_column)
+                update_table(possible_answer, table, direction, start_position)
                 next_ans = backtrack(words, table, possible_answers, load_more_answers, current_id=current_id + 1,
                                      answers=answers, loaded_more_answers=loaded_more_answers)
                 if next_ans:

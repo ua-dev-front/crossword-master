@@ -1,12 +1,16 @@
 from typing import TypedDict, Callable
 
 Table = list[list[int | str]]
-Position = int
 Id = int
 Answer = str
 Question = str
 DirectionPossibleAnswers = dict[int, list[str]]
 Pattern = list[str | None]
+
+
+class Position(TypedDict):
+    row: int
+    column: int
 
 
 class PossibleAnswers(TypedDict):
@@ -19,8 +23,7 @@ LoadMore = Callable[[Pattern, str, int], PossibleAnswers]
 
 class RawWord(TypedDict):
     id: Id
-    startRow: Position
-    startColumn: Position
+    startPosition: Position
 
 
 class RawWords(TypedDict):
@@ -30,8 +33,7 @@ class RawWords(TypedDict):
 
 class ParsedWord(TypedDict):
     id: Id
-    startRow: Position
-    startColumn: Position
+    startPosition: Position
     direction: str
 
 
@@ -45,8 +47,7 @@ class GenerateData(TypedDict):
 class Word(TypedDict):
     id: Id
     question: Question
-    startRow: Position
-    startColumn: Position
+    startPosition: Position
 
 
 class GenerateWord(Word):
