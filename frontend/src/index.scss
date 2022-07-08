@@ -3,12 +3,11 @@
 :root {
   --color-primary: #dddddd;
   --color-hover: rgba(177, 179, 181, 0.25);
-  --color-click: #caced0;
+  --color-click: rgba(177, 179, 181, 0.5);
   --color-border: #666666;
   --color-selected: #9e896d;
 }
 
 body {
   background-color: var(--color-primary);
-  font-family: "Gloria Hallelujah", cursive;
 }
