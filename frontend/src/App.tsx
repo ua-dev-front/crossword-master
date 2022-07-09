@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from './components/Button';
 
 import Cell from './components/Cell';
 import Corner from './types/corner';
@@ -34,6 +35,8 @@ function App() {
         }}
         corner={Corner.TopLeft}
       />
+      <p>Button example:</p>
+      <Button label='Click me' onClick={() => console.log('clicked')} />
     </>
   );
 }
