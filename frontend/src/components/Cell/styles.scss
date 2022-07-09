@@ -1,2 +1,53 @@
 .cell {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    position: relative;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+
+    &__letter {
+        font-size: 21px;
+    }
+
+    &__number {
+        position: absolute;
+        font-size: 14px;
+        left: 4px;
+        top: 0;
+    }
+
+    &:hover,
+    &:focus:not(:focus-visible),
+    &:focus-visible {
+        background-color: #b1b3b580;
+        outline: none;
+    }
+
+    &--empty {
+        background-color: #b1b3b5;
+    }
+
+    &--filled {
+        background-color: transparent;
+        border: 2px solid #301f0f;
+    }
+
+    &--top-left {
+        border-top-left-radius: 10px;
+    }
+
+    &--top-right {
+        border-top-right-radius: 10px;
+    }
+
+    &--bottom-left {
+        border-bottom-left-radius: 10px;
+    }
+
+    &--bottom-right {
+        border-bottom-right-radius: 10px;
+    }
 }
