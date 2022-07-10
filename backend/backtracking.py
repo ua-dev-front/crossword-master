@@ -1,40 +1,36 @@
-from app_types import LoadMore, ParsedWord, ParsedWords, Position, PossibleAnswers, Pattern, RawWords, SolveAnswers, \
-    Table
+from app_types import LoadOptions, Position, PossibleAnswers, Pattern, Table, WordLocation, Direction
 
-__all__ = ['solve_crossword']
+__all__ = ['solve']
 
 
-def increase_position(prev_pos: Position, direction: str) -> Position:
-    position = {**prev_pos}
+def increase_position(prev_pos: Position, direction: Direction) -> Position:
+    position = Position(prev_pos.row, prev_pos.column)
 
-    if direction == 'across':
-        position['column'] += 1
-    elif direction == 'down':
-        position['row'] += 1
+    if direction.value == 'across':
+        position.column += 1
+    elif direction.value == 'down':
+        position.row += 1
 
     return position
 
 
-def is_correct_cell(position: Position, table: Table) -> bool:
-    return all(coord < len(table) for coord in position.values()) and table[position['row']][position['column']]
+def update_table(answer: str, table: Table, direction: Direction, start_position: Position) -> None:
+    position = Position(start_position.row, start_position.column)
 
-
-def update_table(answer: str, table: Table, direction: str, start_position: Position) -> None:
-    position = {**start_position}
     for letter in answer:
-        table[position['row']][position['column']] = letter
+        table[position.row][position.column] = letter
         position = increase_position(position, direction)
 
 
-def get_word_pattern(table: Table, direction: str, start_position: Position) -> Pattern:
-    position = {**start_position}
+def get_word_pattern(table: Table, direction: Direction, start_position: Position, word_len: int) -> Pattern:
+    position = Position(start_position.row, start_position.column)
     pattern = []
 
-    while is_correct_cell(position, table):
-        if table[position['row']][position['column']] == 1:
+    for _ in range(word_len):
+        if isinstance(table[position.row][position.column], str):
+            pattern.append(table[position.row][position.column])
+        else:
             pattern.append(None)
-        elif isinstance(table[position['row']][position['column']], str):
-            pattern.append(table[position['row']][position['column']])
 
         position = increase_position(position, direction)
 
@@ -49,61 +45,40 @@ def get_api_pattern(pattern: Pattern) -> str:
     return ''.join(letter if isinstance(letter, str) else '?' for letter in pattern)
 
 
-def update_answers(answers, answer: str, word_id: int, direction: str) -> None:
-    for value in answers.values():
-        for word in value:
-            if word['id'] == word_id:
-                word['answer'] = answer
-                return None
-
-    answers[direction] = [*answers[direction], {'id': word_id, 'answer': answer}]
-
-
-def get_all_words(words: RawWords) -> ParsedWords:
-    return [{**word, 'direction': direction} for direction, items in words.items() for word in items]
-
-
-def get_word(words: ParsedWords, word_id: int, direction: str) -> ParsedWord | None:
-    return next((word for word in words if word['id'] == word_id and word['direction'] == direction), None)
-
-
-def backtrack(words: ParsedWords, table: Table, possible_answers: PossibleAnswers, load_more_answers: LoadMore,
-              current_id: int, answers: SolveAnswers, loaded_more_answers: list[bool]) -> SolveAnswers | None:
-    if current_id >= len(words):
+def backtrack(locations: list[WordLocation], table: Table, possible_answers: PossibleAnswers, load_options: LoadOptions,
+              current_id: int, answers: list[str], loaded_more_answers: list[bool]) -> list[str] | None:
+    if current_id >= len(locations):
         return answers
 
-    word = words[current_id]
-    direction = word['direction']
-    start_position = word['startPosition']
-    word_id = word['id']
+    word = locations[current_id]
+    direction = word.type
+    start_position = word.first_letter
+    word_len = word.length
 
-    pattern = get_word_pattern(table, direction, start_position)
+    pattern = get_word_pattern(table, direction, start_position, word_len)
 
     while True:
-        for possible_answer in possible_answers[direction][word_id]:
+        for possible_answer in possible_answers[current_id]:
             if word_fits_pattern(pattern, possible_answer):
                 update_table(possible_answer, table, direction, start_position)
-                next_ans = backtrack(words, table, possible_answers, load_more_answers, current_id=current_id + 1,
+                next_ans = backtrack(locations, table, possible_answers, load_options, current_id=current_id + 1,
                                      answers=answers, loaded_more_answers=loaded_more_answers)
                 if next_ans:
-                    update_answers(answers, possible_answer, word_id, direction)
+                    answers[current_id] = possible_answer
                     return answers
 
         if loaded_more_answers[current_id]:
             return None
 
-        possible_answers = load_more_answers(get_api_pattern(pattern), direction, word_id)
+        possible_answers = load_options(get_api_pattern(pattern), current_id)
         loaded_more_answers[current_id] = True
 
 
-def solve_crossword(words: RawWords, table: Table, possible_answers: PossibleAnswers, load_more_answers: LoadMore) -> \
-        SolveAnswers | None:
-    parsed_words = get_all_words(words)
+def solve(locations: list[WordLocation], table_size: int, load_options: LoadOptions) -> list[str] | None:
+    possible_answers = load_options()
+    table = [[0 for _ in range(table_size)] for _ in range(table_size)]
 
-    answers = backtrack(parsed_words, table, possible_answers, load_more_answers, current_id=0,
-                        answers={'across': [], 'down': []}, loaded_more_answers=[False]*len(parsed_words))
-
-    if not any(answers.values()):
-        return None
+    answers = backtrack(locations, table, possible_answers, load_options, current_id=0,
+                        answers=[''] * len(locations), loaded_more_answers=[False] * len(locations))
 
     return answers

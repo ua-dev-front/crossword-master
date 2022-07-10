@@ -1,24 +1,36 @@
+from dataclasses import dataclass
+from enum import Enum
 from typing import TypedDict, Callable
 
 Table = list[list[int | str]]
 Id = int
 Answer = str
 Question = str
-DirectionPossibleAnswers = dict[int, list[str]]
-Pattern = list[str | None]
+PossibleAnswers = list[list[str]]
+Pattern = list[str | None]  # Each element represents either a letter on its respective position or a wildcard(None)
 
 
-class Position(TypedDict):
+class Direction(Enum):
+    ACROSS = "across"
+    DOWN = "down"
+
+
+@dataclass
+class Position:
     row: int
     column: int
 
 
-class PossibleAnswers(TypedDict):
-    across: DirectionPossibleAnswers
-    down: DirectionPossibleAnswers
+@dataclass
+class WordLocation:
+    first_letter: Position
+    length: int
+    type: Direction
 
 
-LoadMore = Callable[[Pattern, str, int], PossibleAnswers]
+# Function that receives word pattern, its id and returns PossibleAnswers with modified possible answers for passed
+# word. If no pattern is passed returns not modified PossibleAnswers
+LoadOptions = Callable[[str, Id], PossibleAnswers]
 
 
 class RawWord(TypedDict):
