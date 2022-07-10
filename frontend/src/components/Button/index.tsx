@@ -17,7 +17,7 @@ export default function Button({ label, onClick }: Props) {
         event.preventDefault();
         onClick();
 
-        event.currentTarget.style.backgroundColor = 'var(--color-click)';
+        event.currentTarget.style.backgroundColor = '#b1b3b580';
       }
     }
   };
