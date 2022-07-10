@@ -17,7 +17,7 @@
     }
 
     &:active {
-        background-color: #b1b3b580;
+        background-color: var(--color-medium-dark);
     }
 
     &:focus:not(:focus-visible),
