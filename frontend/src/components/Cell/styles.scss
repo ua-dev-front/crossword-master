@@ -7,9 +7,11 @@
     box-sizing: border-box;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
+    user-select: none;
 
     &__letter {
         font-size: 21px;
+        font-family: "Gloria Hallelujah", cursive;
     }
 
     &__number {
@@ -22,17 +24,17 @@
     &:hover,
     &:focus:not(:focus-visible),
     &:focus-visible {
-        background-color: #b1b3b580;
+        background-color: var(--color-medium-dark);
         outline: none;
     }
 
     &--empty {
-        background-color: #b1b3b5;
+        background-color: var(--color-light-dark);
     }
 
     &--filled {
         background-color: transparent;
-        border: 2px solid #301f0f;
+        border: 2px solid var(--color-near-black);
     }
 
     &--top-left {
