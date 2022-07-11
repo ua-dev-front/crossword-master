@@ -1,3 +1,5 @@
+import classnames from 'classnames';
+
 import Corner from '../../types/corner';
 
 import './styles.scss';
@@ -21,15 +23,15 @@ export default function Cell({ data, corner }: Props) {
   const content = !editable ? data.content : null;
   const filled = (editable && data.filled) || (!editable && content);
 
-  const classes = [
+  const classes = classnames(
     'cell',
     `cell--${filled ? 'filled' : 'empty'}`,
-    corner && `cell--${corner}`,
-  ];
+    corner && `cell--${corner}`
+  );
 
   return (
     <div
-      className={classes.join(' ')}
+      className={classes}
       onClick={() => editable && data.onEdited(!filled)}
       tabIndex={0}
     >
