@@ -42,39 +42,39 @@ def word_fits_pattern(pattern: Pattern, word: str) -> bool:
 
 
 def backtrack(locations: list[WordLocation], table: Table, load_options: LoadOptions,
-              current_id: int, answers: list[str], loaded_more_answers: list[bool]) -> list[str] | None:
-    if current_id >= len(locations):
+              current_ind: int, answers: list[str], loaded_more_answers: list[bool]) -> list[str] | None:
+    if current_ind >= len(locations):
         return answers
 
-    word = locations[current_id]
+    word = locations[current_ind]
     direction = word.type
     start_position = word.first_letter
     word_len = word.length
 
     pattern = get_word_pattern(table, direction, start_position, word_len)
-    possible_answers = load_options(pattern, current_id)
+    possible_answers = load_options(pattern, current_ind)
 
     while True:
         for possible_answer in possible_answers:
             if word_fits_pattern(pattern, possible_answer):
                 update_table(possible_answer, table, direction, start_position)
-                next_ans = backtrack(locations, table, load_options, current_id=current_id + 1,
-                                     answers=answers, loaded_more_answers=loaded_more_answers)
+                next_ans = backtrack(locations, table, load_options, current_ind=current_ind + 1, answers=answers,
+                                     loaded_more_answers=loaded_more_answers)
                 if next_ans:
-                    answers[current_id] = possible_answer
+                    answers[current_ind] = possible_answer
                     return answers
 
-        if loaded_more_answers[current_id]:
+        if loaded_more_answers[current_ind]:
             return None
 
-        possible_answers = load_options(pattern, current_id)
-        loaded_more_answers[current_id] = True
+        possible_answers = load_options(pattern, current_ind)
+        loaded_more_answers[current_ind] = True
 
 
 def solve(locations: list[WordLocation], table_size: int, load_options: LoadOptions) -> list[str] | None:
     table = [[0 for _ in range(table_size)] for _ in range(table_size)]
 
-    answers = backtrack(locations, table, load_options, current_id=0,
-                        answers=[''] * len(locations), loaded_more_answers=[False] * len(locations))
+    answers = backtrack(locations, table, load_options, current_ind=0, answers=[''] * len(locations),
+                        loaded_more_answers=[False] * len(locations))
 
     return answers
