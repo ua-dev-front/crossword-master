@@ -1,0 +1,3 @@
+@function cl($name, $opacity: 1) {
+    @return rgba(var(--color-#{unquote($name)}), $opacity);
+}
