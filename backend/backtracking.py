@@ -1,4 +1,4 @@
-from app_types import LoadOptions, Position, Pattern, Table, WordLocation, Direction
+from app_types import Direction, LoadOptions, Pattern, Position, Table, WordLocation
 
 __all__ = ['solve']
 

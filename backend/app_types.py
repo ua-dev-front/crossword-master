@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import TypedDict, Callable
+from typing import Callable, TypedDict
 
 Table = list[list[int | str]]
 Id = int
