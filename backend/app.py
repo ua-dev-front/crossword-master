@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from typing import TypedDict
 
-from app_types import GenerateResponse, SolveResponse, Table, SolveWords, Word, Position
+from app_types import GenerateResponse, Position, SolveResponse, SolveWords, Table, Word
 
 
 # types

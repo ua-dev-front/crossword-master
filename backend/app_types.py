@@ -9,6 +9,7 @@ Question = str
 WordOptions = list[str]
 Pattern = list[str | None]  # Each element represents either a letter on its respective position or a wildcard(None)
 LoadOptions = Callable[[Pattern, Id], WordOptions]
+BackTrackTable = list[list[str | None]]
 
 
 class Direction(Enum):
