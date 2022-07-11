@@ -1,13 +1,14 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Callable, TypedDict
+from typing import Callable
 
-Table = list[list[int | str]]
+Table = list[list[int]]
 Id = int
 Answer = str
 Question = str
-PossibleAnswers = list[list[str]]
+WordOptions = list[str]
 Pattern = list[str | None]  # Each element represents either a letter on its respective position or a wildcard(None)
+LoadOptions = Callable[[Pattern, Id], WordOptions]
 
 
 class Direction(Enum):
@@ -28,22 +29,8 @@ class WordLocation:
     type: Direction
 
 
-# Function that receives word pattern, its id and returns PossibleAnswers with modified possible answers for passed
-# word. If no pattern is passed returns not modified PossibleAnswers
-LoadOptions = Callable[[Pattern, Id], list[str]]
-
-
-class RawWord(TypedDict):
-    id: Id
-    startPosition: Position
-
-
-class RawWords(TypedDict):
-    across: list[RawWord]
-    down: list[RawWord]
-
-
-class ParsedWord(TypedDict):
+@dataclass
+class ParsedWord:
     id: Id
     startPosition: Position
     direction: str
@@ -52,48 +39,47 @@ class ParsedWord(TypedDict):
 ParsedWords = list[ParsedWord]
 
 
-class GenerateData(TypedDict):
-    table: Table
-
-
-class Word(TypedDict):
+@dataclass
+class Word:
     id: Id
     question: Question
     startPosition: Position
 
 
+@dataclass
 class GenerateWord(Word):
     answer: Answer
 
 
-class GenerateWords(TypedDict):
+@dataclass
+class GenerateWords:
     across: list[GenerateWord]
     down: list[GenerateWord]
 
 
-class GenerateResponse(TypedDict):
+@dataclass
+class GenerateResponse:
     words: GenerateWords | None
 
 
-class SolveWords(TypedDict):
+@dataclass
+class SolveWords:
     across: list[Word]
     down: list[Word]
 
 
-class SolveData(TypedDict):
-    table: Table
-    words: SolveWords
-
-
-class SolveAnswer(TypedDict):
+@dataclass
+class SolveAnswer:
     id: Id
     answer: Answer
 
 
-class SolveAnswers(TypedDict):
+@dataclass
+class SolveAnswers:
     across: list[SolveAnswer]
     down: list[SolveAnswer]
 
 
-class SolveResponse(TypedDict):
+@dataclass
+class SolveResponse:
     answers: SolveAnswers | None
