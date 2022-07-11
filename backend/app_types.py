@@ -30,7 +30,7 @@ class WordLocation:
 
 # Function that receives word pattern, its id and returns PossibleAnswers with modified possible answers for passed
 # word. If no pattern is passed returns not modified PossibleAnswers
-LoadOptions = Callable[[str, Id], PossibleAnswers]
+LoadOptions = Callable[[Pattern, Id], list[str]]
 
 
 class RawWord(TypedDict):
