@@ -1,3 +1,5 @@
+@import "../../functions.scss";
+
 .cell {
     width: 44px;
     height: 44px;
@@ -11,7 +13,7 @@
 
     &__letter {
         font-size: 21px;
-        font-family: "Gloria Hallelujah", cursive;
+        font-family: var(--font-cursive);
     }
 
     &__number {
@@ -22,19 +24,18 @@
     }
 
     &:hover,
-    &:focus:not(:focus-visible),
     &:focus-visible {
-        background-color: var(--color-medium-dark);
+        background-color: cl(light-dark, 0.5);
         outline: none;
     }
 
     &--empty {
-        background-color: var(--color-light-dark);
+        background-color: cl(light-dark);
     }
 
     &--filled {
         background-color: transparent;
-        border: 2px solid var(--color-near-black);
+        border: 2px solid cl(near-black);
     }
 
     &--top-left {
