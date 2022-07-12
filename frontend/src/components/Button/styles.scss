@@ -1,4 +1,4 @@
-@import "../../functions.scss";
+@import '../../styles/functions.scss';
 
 .button {
     background-color: transparent;
@@ -17,11 +17,11 @@
 
     &:hover,
     &:focus-visible {
-        background-color: cl("light-dark", 0.25);
+        background-color: cl(light-dark, 0.25);
     }
 
     &:active {
-        background-color: cl("light-dark", 0.5);
+        background-color: cl(light-dark, 0.5);
     }
 
     &:focus-visible {
