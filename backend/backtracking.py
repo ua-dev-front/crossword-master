@@ -1,6 +1,8 @@
-from app_types import BackTrackTable, Direction, LoadOptions, Pattern, Position, WordLocation
+from app_types import Direction, LoadOptions, Pattern, Position, WordLocation
 
 __all__ = ['solve']
+
+BackTrackTable = list[list[str | None]]
 
 
 def increase_position(prev_pos: Position, direction: Direction) -> Position:
@@ -27,10 +29,9 @@ def get_word_pattern(table: BackTrackTable, direction: Direction, start_position
     pattern = []
 
     for _ in range(word_len):
-        if isinstance(table[position.row][position.column], str):
-            pattern.append(table[position.row][position.column])
-        else:
-            pattern.append(None)
+        current_cell = table[position.row][position.column]
+
+        pattern = [*pattern, current_cell if isinstance(current_cell, str) else None]
 
         position = increase_position(position, direction)
 
@@ -60,39 +61,39 @@ def get_table(locations: list[WordLocation]) -> BackTrackTable:
 
 
 def backtrack(locations: list[WordLocation], table: BackTrackTable, load_options: LoadOptions,
-              current_ind: int, answers: list[str], loaded_more_answers: list[bool]) -> list[str] | None:
-    if current_ind >= len(locations):
+              current_index: int, answers: list[str], loaded_more_answers: list[bool]) -> list[str] | None:
+    if current_index >= len(locations):
         return answers
 
-    word = locations[current_ind]
+    word = locations[current_index]
     direction = word.type
     start_position = word.first_letter
     word_len = word.length
 
     pattern = get_word_pattern(table, direction, start_position, word_len)
-    possible_answers = load_options(pattern, current_ind)
+    possible_answers = load_options(pattern, current_index)
 
     while True:
         for possible_answer in possible_answers:
             if word_fits_pattern(pattern, possible_answer):
                 update_table(possible_answer, table, direction, start_position)
-                next_ans = backtrack(locations, table, load_options, current_ind=current_ind + 1, answers=answers,
+                next_ans = backtrack(locations, table, load_options, current_index=current_index + 1, answers=answers,
                                      loaded_more_answers=loaded_more_answers)
                 if next_ans:
-                    answers[current_ind] = possible_answer
+                    answers[current_index] = possible_answer
                     return answers
 
-        if loaded_more_answers[current_ind]:
+        if loaded_more_answers[current_index]:
             return None
 
-        possible_answers = load_options(pattern, current_ind)
-        loaded_more_answers[current_ind] = True
+        possible_answers = load_options(pattern, current_index)
+        loaded_more_answers[current_index] = True
 
 
 def solve(locations: list[WordLocation], load_options: LoadOptions) -> list[str] | None:
     table = get_table(locations)
 
-    answers = backtrack(locations, table, load_options, current_ind=0, answers=[''] * len(locations),
+    answers = backtrack(locations, table, load_options, current_index=0, answers=[''] * len(locations),
                         loaded_more_answers=[False] * len(locations))
 
     return answers

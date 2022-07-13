@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from typing import TypedDict
 
-from app_types import GenerateResponse, Position, SolveResponse, SolveWords, Table, Word
+from app_types import Direction, GenerateResponse, Position, SolveResponse, SolveWord, Table
 
 
 # types
@@ -57,11 +57,8 @@ def solve(data: SolveData) -> SolveResponse:
     table = data['table']
     words = data['words']
 
-    parsed_words = {'across': [], 'down': []}
-    for direction, value in words.items():
-        for word in value:
-            parsed_words[direction] = Word(word['id'], word['question'], Position(word['startPosition']['row'],
-                                                                                  word['startPosition']['column']))
+    solve_words = [SolveWord(word['question'],
+                             Position(word['startPosition']['row'], word['startPosition']['column']),
+                             Direction[direction]) for direction, value in words.items() for word in value]
 
-    solve_words = SolveWords(parsed_words['across'], parsed_words['down'])
     return {'answers': None}

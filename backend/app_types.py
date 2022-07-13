@@ -3,18 +3,18 @@ from enum import Enum
 from typing import Callable
 
 Table = list[list[int]]
-Id = int
 Answer = str
 Question = str
 WordOptions = list[str]
-Pattern = list[str | None]  # Each element represents either a letter on its respective position or a wildcard(None)
-LoadOptions = Callable[[Pattern, Id], WordOptions]
-BackTrackTable = list[list[str | None]]
+Pattern = list[str | None]  # Each element represents either a letter on its respective position or a wildcard (None)
+
+# accepts word pattern and index, returns word options that fit pattern
+LoadOptions = Callable[[Pattern, int], WordOptions]
 
 
 class Direction(Enum):
-    ACROSS = "across"
-    DOWN = "down"
+    ACROSS = 'across'
+    DOWN = 'down'
 
 
 @dataclass
@@ -31,20 +31,10 @@ class WordLocation:
 
 
 @dataclass
-class ParsedWord:
-    id: Id
-    startPosition: Position
-    direction: str
-
-
-ParsedWords = list[ParsedWord]
-
-
-@dataclass
 class Word:
-    id: Id
+    id: int
     question: Question
-    startPosition: Position
+    start_position: Position
 
 
 @dataclass
@@ -64,14 +54,18 @@ class GenerateResponse:
 
 
 @dataclass
-class SolveWords:
-    across: list[Word]
-    down: list[Word]
+class SolveWord:
+    question: Question
+    start_position: Position
+    direction: Direction
+
+
+SolveWords = list[SolveWord]
 
 
 @dataclass
 class SolveAnswer:
-    id: Id
+    id: int
     answer: Answer
 
 
