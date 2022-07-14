@@ -31,7 +31,7 @@ def get_word_pattern(table: BackTrackTable, direction: Direction, start_position
     for _ in range(word_len):
         current_cell = table[position.row][position.column]
 
-        pattern = [*pattern, current_cell if isinstance(current_cell, str) else None]
+        pattern.append(current_cell if isinstance(current_cell, str) else None)
 
         position = increase_position(position, direction)
 

@@ -8,7 +8,7 @@ Question = str
 WordOptions = list[str]
 Pattern = list[str | None]  # Each element represents either a letter on its respective position or a wildcard (None)
 
-# accepts word pattern and index, returns word options that fit pattern
+# Accepts word pattern and index of word, returns word options that fit pattern
 LoadOptions = Callable[[Pattern, int], WordOptions]
 
 
