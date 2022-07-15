@@ -1,7 +1,5 @@
 import classnames from 'classnames';
-
 import Corner from '../../types/corner';
-
 import './styles.scss';
 
 type Props = {
@@ -15,24 +13,35 @@ type Props = {
         editable: false;
         content: { letter: string | null; number: number | null } | null;
       };
-  corner?: Corner;
+  roundedCorners?: Corner[];
 };
 
-export default function Cell({ data, corner }: Props) {
+export default function Cell({ data, roundedCorners }: Props) {
   const { editable } = data;
   const content = !editable ? data.content : null;
-  const filled = (editable && data.filled) || (!editable && content);
+  const filled: boolean = (editable && data.filled) || (!editable && !!content);
+
+  const handleClick = () => {
+    editable && data.onEdited(!filled);
+  };
+
+  const handleKeyDown = ({ code }: React.KeyboardEvent<HTMLDivElement>) => {
+    if (code === 'Enter' || code === 'Space') {
+      handleClick();
+    }
+  };
 
   const classes = classnames(
     'cell',
     `cell--${filled ? 'filled' : 'empty'}`,
-    corner && `cell--${corner}`
+    roundedCorners?.map((corner) => `cell--${corner}`)
   );
 
   return (
     <div
       className={classes}
-      onClick={() => editable && data.onEdited(!filled)}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
       tabIndex={0}
     >
       {!editable && content?.letter && (

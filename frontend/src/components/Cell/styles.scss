@@ -1,24 +1,30 @@
 @import '../../styles/functions.scss';
 
 .cell {
-    width: 44px;
-    height: 44px;
+    $cell-size: 44px;
+    $cell-border-radius: 10px;
+    $cell-transition: 0.2s ease-in-out;
+
+    width: $cell-size;
+    height: $cell-size;
     display: grid;
     place-items: center;
     position: relative;
     box-sizing: border-box;
     cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
+    transition: background-color $cell-transition, box-shadow $cell-transition;
     user-select: none;
 
     &__letter {
         font-size: 21px;
         font-family: var(--font-cursive);
+        color: cl(dark);
     }
 
     &__number {
         position: absolute;
         font-size: 14px;
+        font-family: var(--font-straight);
         left: 4px;
         top: 0;
     }
@@ -35,22 +41,22 @@
 
     &--filled {
         background-color: transparent;
-        border: 2px solid cl(near-black);
+        box-shadow: 0px 0px 0px 2px cl(near-black);
     }
 
     &--top-left {
-        border-top-left-radius: 10px;
+        border-top-left-radius: $cell-border-radius;
     }
 
     &--top-right {
-        border-top-right-radius: 10px;
+        border-top-right-radius: $cell-border-radius;
     }
 
     &--bottom-left {
-        border-bottom-left-radius: 10px;
+        border-bottom-left-radius: $cell-border-radius;
     }
 
     &--bottom-right {
-        border-bottom-right-radius: 10px;
+        border-bottom-right-radius: $cell-border-radius;
     }
 }

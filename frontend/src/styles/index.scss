@@ -14,8 +14,10 @@ $rgb_colors: (
     --color-#{$key}: #{unquote($value)};
   }
   --font-cursive: 'Gloria Hallelujah', cursive;
+  --font-straight: 'Roboto', sans-serif;
 }
 
 body {
   background-color: cl(primary);
+  font-family: var(--font-straight);
 }

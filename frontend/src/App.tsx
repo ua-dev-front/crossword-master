@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from './components/Button';
-
 import Cell from './components/Cell';
 import Corner from './types/corner';
 
 function App() {
+  const [filled, setFilled] = useState(false);
+
   return (
     <>
       <p>Under development</p>
@@ -12,16 +13,8 @@ function App() {
       <Cell
         data={{
           editable: true,
-          filled: false,
-          onEdited: (filled) => console.log(filled),
-        }}
-      />
-      <hr />
-      <Cell
-        data={{
-          editable: true,
-          filled: true,
-          onEdited: (filled) => console.log(filled),
+          filled,
+          onEdited: (filled: boolean) => setFilled(filled),
         }}
       />
       <hr />
@@ -33,7 +26,7 @@ function App() {
             number: 1,
           },
         }}
-        corner={Corner.TopLeft}
+        roundedCorners={[Corner.TopLeft]}
       />
       <p>Button example:</p>
       <Button label='Click me' onClick={() => console.log('clicked')} />
