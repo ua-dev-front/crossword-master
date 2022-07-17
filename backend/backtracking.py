@@ -5,15 +5,15 @@ __all__ = ['solve']
 BackTrackTable = list[list[str | None]]
 
 
-def increase_position(prev_pos: Position, direction: Direction) -> Position:
-    position = Position(prev_pos.row, prev_pos.column)
+def increase_position(previous_position: Position, direction: Direction, times: int = 1) -> Position:
+    row, column = previous_position
 
     if direction == Direction.ACROSS:
-        position.column += 1
+        column += times
     elif direction == Direction.DOWN:
-        position.row += 1
+        row += times
 
-    return position
+    return Position(row, column)
 
 
 def update_table(answer: str, table: BackTrackTable, direction: Direction, start_position: Position) -> None:
@@ -43,16 +43,12 @@ def word_fits_pattern(pattern: Pattern, word: str) -> bool:
 
 
 def get_table(locations: list[WordLocation]) -> BackTrackTable:
-    def get_last_position(location: WordLocation):
-        row = location.first_letter.row
-        column = location.first_letter.column
+    def get_last_position(location: WordLocation) -> Position:
+        position = Position(location.first_letter.row, location.first_letter.column)
 
-        if location.type == Direction.ACROSS:
-            column += location.length
-        elif location.type == Direction.DOWN:
-            row += location.length
+        position = increase_position(position, location.type, location.length)
 
-        return [row, column]
+        return position
 
     def get_table_size() -> int:
         return max(coord for location in locations for coord in get_last_position(location))
@@ -68,18 +64,19 @@ def backtrack(locations: list[WordLocation], table: BackTrackTable, load_options
     word = locations[current_index]
     direction = word.type
     start_position = word.first_letter
-    word_len = word.length
+    word_length = word.length
 
-    pattern = get_word_pattern(table, direction, start_position, word_len)
+    pattern = get_word_pattern(table, direction, start_position, word_length)
     possible_answers = load_options(pattern, current_index)
 
     while True:
         for possible_answer in possible_answers:
             if word_fits_pattern(pattern, possible_answer):
                 update_table(possible_answer, table, direction, start_position)
-                next_ans = backtrack(locations, table, load_options, current_index=current_index + 1, answers=answers,
-                                     loaded_more_answers=loaded_more_answers)
-                if next_ans:
+                next_answer = backtrack(locations, table, load_options, current_index=current_index + 1,
+                                        answers=answers,
+                                        loaded_more_answers=loaded_more_answers)
+                if next_answer:
                     answers[current_index] = possible_answer
                     return answers
 

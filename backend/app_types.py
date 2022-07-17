@@ -22,6 +22,9 @@ class Position:
     row: int
     column: int
 
+    def __iter__(self):
+        return iter((self.row, self.column))
+
 
 @dataclass
 class WordLocation:
