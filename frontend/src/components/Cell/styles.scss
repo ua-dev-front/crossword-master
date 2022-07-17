@@ -1,18 +1,19 @@
 @import '../../styles/functions.scss';
 
 .cell {
-    $cell-size: 44px;
-    $cell-border-radius: 10px;
-    $cell-transition: 0.2s ease-in-out;
+    --cell-size: 44px;
+    --cell-border-radius: 10px;
+    --cell-transition: 0.2s ease-in-out;
 
-    width: $cell-size;
-    height: $cell-size;
+    width: var(--cell-size);
+    height: var(--cell-size);
     display: grid;
     place-items: center;
     position: relative;
     box-sizing: border-box;
     cursor: pointer;
-    transition: background-color $cell-transition, box-shadow $cell-transition;
+    border: 2px solid transparent;
+    transition: background-color var(--cell-transition), border-color var(--cell-transition);
     user-select: none;
 
     &__letter {
@@ -26,7 +27,7 @@
         font-size: 14px;
         font-family: var(--font-straight);
         left: 4px;
-        top: 0;
+        top: 2px;
     }
 
     &:hover,
@@ -41,22 +42,22 @@
 
     &--filled {
         background-color: transparent;
-        box-shadow: 0px 0px 0px 2px cl(near-black);
+        border-color: cl(near-black);
     }
 
     &--top-left {
-        border-top-left-radius: $cell-border-radius;
+        border-top-left-radius: var(--cell-border-radius);
     }
 
     &--top-right {
-        border-top-right-radius: $cell-border-radius;
+        border-top-right-radius: var(--cell-border-radius);
     }
 
     &--bottom-left {
-        border-bottom-left-radius: $cell-border-radius;
+        border-bottom-left-radius: var(--cell-border-radius);
     }
 
     &--bottom-right {
-        border-bottom-right-radius: $cell-border-radius;
+        border-bottom-right-radius: var(--cell-border-radius);
     }
 }

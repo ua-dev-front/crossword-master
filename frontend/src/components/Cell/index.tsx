@@ -1,6 +1,9 @@
+import React, { KeyboardEvent } from 'react';
 import classnames from 'classnames';
 import Corner from '../../types/corner';
 import './styles.scss';
+
+const ACCESSIBILITY_KEYS = ['Enter', 'Space'];
 
 type Props = {
   data:
@@ -21,13 +24,19 @@ export default function Cell({ data, roundedCorners }: Props) {
   const content = !editable ? data.content : null;
   const filled: boolean = (editable && data.filled) || (!editable && !!content);
 
-  const handleClick = () => {
-    editable && data.onEdited(!filled);
+  const handleEdited = () => {
+    if (editable) {
+      data.onEdited(!filled);
+    }
   };
 
-  const handleKeyDown = ({ code }: React.KeyboardEvent<HTMLDivElement>) => {
-    if (code === 'Enter' || code === 'Space') {
-      handleClick();
+  const handleClick = () => {
+    handleEdited();
+  };
+
+  const handleKeyDown = ({ code }: KeyboardEvent<HTMLElement>) => {
+    if (ACCESSIBILITY_KEYS.includes(code)) {
+      handleEdited();
     }
   };
 
@@ -40,15 +49,19 @@ export default function Cell({ data, roundedCorners }: Props) {
   return (
     <div
       className={classes}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
+      onClick={() => handleClick()}
+      onKeyDown={(event) => handleKeyDown(event)}
       tabIndex={0}
     >
-      {!editable && content?.letter && (
-        <span className='cell__letter'>{content.letter}</span>
-      )}
-      {!editable && content?.number && (
-        <span className='cell__number'>{content.number}</span>
+      {!editable && (
+        <>
+          {content?.letter && (
+            <span className='cell__letter'>{content.letter}</span>
+          )}
+          {content?.number && (
+            <span className='cell__number'>{content.number}</span>
+          )}
+        </>
       )}
     </div>
   );

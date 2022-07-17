@@ -1,5 +1,7 @@
-@import './functions.scss';
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap');
+
+@import './functions.scss';
 
 $rgb_colors: (
   'primary': '229, 229, 229',
@@ -13,8 +15,8 @@ $rgb_colors: (
   @each $key, $value in $rgb_colors {
     --color-#{$key}: #{unquote($value)};
   }
-  --font-cursive: 'Gloria Hallelujah', cursive;
   --font-straight: 'Roboto', sans-serif;
+  --font-cursive: 'Gloria Hallelujah', cursive;
 }
 
 body {
