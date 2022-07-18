@@ -43,8 +43,8 @@ export default function Cell({ data, roundedCorners }: Props) {
 
   const classes = classnames(
     'cell',
-    `cell--${filled ? 'filled' : 'empty'}`,
-    roundedCorners?.map((corner) => `cell--${corner}`)
+    `cell_${filled ? 'filled' : 'empty'}`,
+    roundedCorners?.map((corner) => `cell_${corner}`)
   );
 
   return (

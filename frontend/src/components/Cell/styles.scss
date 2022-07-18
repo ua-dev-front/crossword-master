@@ -38,28 +38,28 @@
         outline: none;
     }
 
-    &--empty {
+    &_empty {
         background-color: cl(light-dark);
     }
 
-    &--filled {
+    &_filled {
         background-color: transparent;
         border-color: cl(near-black);
     }
 
-    &--top-left {
+    &_top-left {
         border-top-left-radius: var(--cell-border-radius);
     }
 
-    &--top-right {
+    &_top-right {
         border-top-right-radius: var(--cell-border-radius);
     }
 
-    &--bottom-left {
+    &_bottom-left {
         border-bottom-left-radius: var(--cell-border-radius);
     }
 
-    &--bottom-right {
+    &_bottom-right {
         border-bottom-right-radius: var(--cell-border-radius);
     }
 }
