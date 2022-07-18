@@ -34,9 +34,9 @@ export default function Cell({ data, roundedCorners }: Props) {
     handleEdited();
   };
 
-  const handleKeyDown = ({ code, preventDefault }: KeyboardEvent<HTMLElement>) => {
-    if (ACCESSIBILITY_KEYS.includes(code)) {
-      preventDefault();
+  const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+    if (ACCESSIBILITY_KEYS.includes(event.code)) {
+      event.preventDefault();
       handleEdited();
     }
   };
