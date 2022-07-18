@@ -3,7 +3,6 @@
 .cell {
     --cell-size: 44px;
     --cell-border-radius: 10px;
-    --cell-transition: 0.2s ease-in-out;
 
     width: var(--cell-size);
     height: var(--cell-size);
@@ -13,7 +12,9 @@
     box-sizing: border-box;
     cursor: pointer;
     border: 2px solid transparent;
-    transition: background-color var(--cell-transition), border-color var(--cell-transition);
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
+    transition-property: background-color, border-color;
     user-select: none;
 
     &__letter {
