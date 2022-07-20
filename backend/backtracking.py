@@ -64,7 +64,7 @@ def backtrack(locations: list[WordLocation], table: BackTrackTable, load_options
     possible_answers = load_options(pattern, current_index)
 
     if len(possible_answers):
-        answers = [*answers, possible_answers[0]]
+        answers.append(possible_answers[0])
 
     for possible_answer in possible_answers:
         update_table(possible_answer, table, direction, start_position)
