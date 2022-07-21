@@ -1,54 +1,83 @@
-from typing import TypedDict
+from dataclasses import dataclass
+from enum import Enum
+from typing import Callable
 
 Table = list[list[int]]
-StartPosition = list[int]  # length = 2
-Id = int
 Answer = str
 Question = str
+WordOptions = list[str]
+Pattern = list[str | None]  # Each element represents either a letter on its respective position or a wildcard (None)
+
+# Accepts word pattern and index of word, returns word options that fit pattern
+LoadOptions = Callable[[Pattern, int], WordOptions]
 
 
-class GenerateData(TypedDict):
-    table: Table
+class Direction(Enum):
+    ACROSS = 'across'
+    DOWN = 'down'
 
 
-class Word(TypedDict):
-    id: Id
+@dataclass
+class Position:
+    row: int
+    column: int
+
+    def __iter__(self):
+        return iter((self.row, self.column))
+
+
+@dataclass
+class WordLocation:
+    first_letter: Position
+    length: int
+    type: Direction
+
+
+@dataclass
+class Word:
+    id: int
     question: Question
-    startPosition: StartPosition
+    start_position: Position
 
 
+@dataclass
 class GenerateWord(Word):
     answer: Answer
 
 
-class GenerateWords(TypedDict):
+@dataclass
+class GenerateWords:
     across: list[GenerateWord]
     down: list[GenerateWord]
 
 
-class GenerateResponse(TypedDict):
+@dataclass
+class GenerateResponse:
     words: GenerateWords | None
 
 
-class SolveWords(TypedDict):
-    across: list[Word]
-    down: list[Word]
+@dataclass
+class SolveWord:
+    question: Question
+    start_position: Position
+    direction: Direction
 
 
-class SolveData(TypedDict):
-    table: Table
-    words: SolveWords
+SolveWords = list[SolveWord]
 
 
-class SolveAnswer(TypedDict):
-    id: Id
+@dataclass
+class SolveAnswer:
+    id: int
     answer: Answer
 
 
-class SolveAnswers(TypedDict):
+@dataclass
+class SolveAnswers:
     across: list[SolveAnswer]
     down: list[SolveAnswer]
 
 
-class SolveResponse(TypedDict):
+@dataclass
+class SolveResponse:
     answers: SolveAnswers | None
