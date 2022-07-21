@@ -1,2 +1,65 @@
+@import '../../styles/functions.scss';
+
 .cell {
+    --cell-size: 44px;
+    --cell-border-radius: 10px;
+
+    width: var(--cell-size);
+    height: var(--cell-size);
+    display: grid;
+    place-items: center;
+    position: relative;
+    box-sizing: border-box;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
+    transition-property: background-color, border-color;
+    user-select: none;
+
+    &__letter {
+        font-size: 21px;
+        font-family: var(--font-cursive);
+        color: cl(dark);
+    }
+
+    &__number {
+        position: absolute;
+        font-size: 14px;
+        font-family: var(--font-straight);
+        color: cl(near-black);
+        left: 4px;
+        top: 2px;
+    }
+
+    &:hover,
+    &:focus-visible {
+        background-color: cl(light-dark, 0.5);
+        outline: none;
+    }
+
+    &_empty {
+        background-color: cl(light-dark);
+    }
+
+    &_filled {
+        background-color: transparent;
+        border-color: cl(near-black);
+    }
+
+    &_top-left {
+        border-top-left-radius: var(--cell-border-radius);
+    }
+
+    &_top-right {
+        border-top-right-radius: var(--cell-border-radius);
+    }
+
+    &_bottom-left {
+        border-bottom-left-radius: var(--cell-border-radius);
+    }
+
+    &_bottom-right {
+        border-bottom-right-radius: var(--cell-border-radius);
+    }
 }
