@@ -1,0 +1,30 @@
+@import '../../styles/functions.scss';
+
+.button {
+    background-color: transparent;
+    border-radius: 4px;
+    border: 1px solid cl(dark);
+    color: cl(dark);
+    cursor: pointer;
+    font-family: var(--font-cursive);
+    font-size: 18px;
+    line-height: 36px;
+    min-width: 100px;
+    padding: 1px 24px;
+    transition: background-color 0.2s ease-in-out;
+    user-select: none;
+    width: max-content;
+
+    &:hover,
+    &:focus-visible {
+        background-color: cl(light-dark, 0.25);
+    }
+
+    &:active {
+        background-color: cl(light-dark, 0.5);
+    }
+
+    &:focus-visible {
+        outline-color: cl(selected);
+    }
+}
