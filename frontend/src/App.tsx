@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Button from './components/Button';
 import Cell from './components/Cell';
-import Corner from './types/corner';
 import Grid from './components/Grid';
+import Corner from './types/corner';
 import Mode from './types/mode';
 
 const answerMatrix = [
