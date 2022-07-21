@@ -1,19 +1,9 @@
 from app_types import Direction, LoadOptions, Pattern, Position, WordLocation
+from increase_position import increase_position
 
 __all__ = ['solve']
 
 BackTrackTable = list[list[str | None]]
-
-
-def increase_position(previous_position: Position, direction: Direction, delta: int = 1) -> Position:
-    row, column = previous_position
-
-    if direction == Direction.ACROSS:
-        column += delta
-    elif direction == Direction.DOWN:
-        row += delta
-
-    return Position(row, column)
 
 
 def update_table(answer: str, table: BackTrackTable, direction: Direction, start_position: Position) -> None:
