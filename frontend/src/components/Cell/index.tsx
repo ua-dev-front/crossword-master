@@ -1,21 +1,13 @@
 import React, { KeyboardEvent } from 'react';
 import classnames from 'classnames';
+import CellData from '../../types/cellData';
 import Corner from '../../types/corner';
 import './styles.scss';
 
 const ACCESSIBILITY_KEYS = ['Enter', 'Space'];
 
 type Props = {
-  data:
-    | {
-        editable: true;
-        filled: boolean;
-        onEdited: (filled: boolean) => void;
-      }
-    | {
-        editable: false;
-        content: { letter: string | null; number: number | null } | null;
-      };
+  data: CellData;
   roundedCorners?: Corner[];
 };
 
@@ -26,7 +18,7 @@ export default function Cell({ data, roundedCorners }: Props) {
 
   const handleEdited = () => {
     if (editable) {
-      data.onEdited(!filled);
+      data.onEdited();
     }
   };
 
