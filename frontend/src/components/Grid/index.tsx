@@ -35,9 +35,7 @@ export default function Grid(props: Props) {
         return {
           editable: true,
           filled: matrix[row][column],
-          onEdited: () => {
-            props.onChange(row, column);
-          },
+          onEdited: () => props.onChange(row, column),
         };
       case Mode.Puzzle:
         return {
@@ -54,16 +52,25 @@ export default function Grid(props: Props) {
     }
   };
 
-  const getRoundedCorners = (row: number, column: number): Corner[] => [
-    ...(row === 0 && column === 0 ? [Corner.TopLeft] : []),
-    ...(row === 0 && column === matrix[row].length - 1
-      ? [Corner.TopRight]
-      : []),
-    ...(row === matrix.length - 1 && column === 0 ? [Corner.BottomLeft] : []),
-    ...(row === matrix.length - 1 && column === matrix[row].length - 1
-      ? [Corner.BottomRight]
-      : []),
-  ];
+  const getRoundedCorners = (row: number, column: number): Corner[] => {
+    const matrixHeight = matrix.length - 1;
+    const matrixWidth = matrix[0].length - 1;
+
+    return Object.values(Corner).filter((corner) => {
+      switch (corner) {
+        case Corner.TopLeft:
+          return row === 0 && column === 0;
+        case Corner.TopRight:
+          return row === 0 && column === matrixWidth;
+        case Corner.BottomLeft:
+          return row === matrixHeight && column === 0;
+        case Corner.BottomRight:
+          return row === matrixHeight && column === matrixWidth;
+        default:
+          return false;
+      }
+    });
+  };
 
   return (
     <div className='grid'>

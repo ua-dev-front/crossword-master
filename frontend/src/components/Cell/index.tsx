@@ -33,10 +33,13 @@ export default function Cell({ data, roundedCorners }: Props) {
     }
   };
 
+  const className = 'cell';
+
   const classes = classnames(
-    'cell',
-    `cell_${filled ? 'filled' : 'empty'}`,
-    roundedCorners?.map((corner) => `cell_${corner}`)
+    className,
+    `${className}_${filled ? 'filled' : 'empty'}`,
+    editable && `${className}_editable`,
+    roundedCorners?.map((corner) => `${className}_${corner}`)
   );
 
   return (
@@ -44,7 +47,7 @@ export default function Cell({ data, roundedCorners }: Props) {
       className={classes}
       onClick={() => handleClick()}
       onKeyDown={(event) => handleKeyDown(event)}
-      tabIndex={0}
+      tabIndex={editable ? 0 : -1}
     >
       {!editable && (
         <>
