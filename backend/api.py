@@ -2,6 +2,8 @@ import requests
 
 from app_types import Pattern, Question
 
+__all__ = ['get_possible_word_answers']
+
 API_PATH = 'https://api.datamuse.com/words'
 WILD_CARD_CHARACTER = '?'
 
