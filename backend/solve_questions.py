@@ -1,15 +1,12 @@
-import requests
-
-from app_types import Direction, Pattern, Position, Question, SolveAnswers, SolveWords, Table, WordLocation
+from app_types import Direction, Pattern, Position, SolveAnswers, SolveWords, Table, WordLocation
+from api import get_possible_word_answers
 from backtracking import solve
-from increase_position import increase_position
+from helpers import increase_position
 
 __all__ = ['solve_questions']
 
-API_PATH = 'https://api.datamuse.com/words'
 
-
-def is_correct_cell(position: Position, table: Table) -> bool:
+def is_filled_cell(position: Position, table: Table) -> bool:
     return position.row < len(table) and position.column < len(table) and table[position.row][position.column]
 
 
@@ -17,27 +14,11 @@ def get_word_length(start_position: Position, table: Table, direction: Direction
     position = Position(start_position.row, start_position.column)
     length = 0
 
-    while is_correct_cell(position, table):
+    while is_filled_cell(position, table):
         length += 1
         position = increase_position(position, direction)
 
     return length
-
-
-def get_api_pattern(pattern: Pattern) -> str:
-    return ''.join(letter if isinstance(letter, str) else '?' for letter in pattern)
-
-
-def get_possible_word_answers(question: Question, length: int, pattern=None) -> list[str]:
-    if pattern is None:
-        pattern = "?" * length
-
-    answers_path = f'{API_PATH}?ml={question}&sp={pattern}'
-    res = requests.get(answers_path)
-    if res.status_code == 200:
-        return [answer['word'] for answer in res.json()]
-    else:
-        raise Exception(f'API responded with code: {res.status_code} \nPath: {res.url}')
 
 
 def get_locations(words: SolveWords, table: Table) -> list[WordLocation]:
@@ -52,23 +33,21 @@ def get_parsed_answers(raw_answers: list[str] | None, words: SolveWords) -> Solv
     if raw_answers is None:
         return None
 
-    parsed_answers = {'across': [], 'down': []}
+    parsed_answers = {Direction.ACROSS: [], Direction.DOWN: []}
 
-    for ind, answer in enumerate(raw_answers):
-        word_direction = words[ind].direction.value
+    for index, answer in enumerate(raw_answers):
+        word_direction = words[index].direction
 
         parsed_answers[word_direction].append(answer)
 
-    return SolveAnswers(parsed_answers['across'], parsed_answers['down'])
+    return SolveAnswers(parsed_answers[Direction.ACROSS], parsed_answers[Direction.DOWN])
 
 
 def solve_questions(table: Table, words: SolveWords) -> SolveAnswers:
-    def load_more_answers(pattern, word_id):
-        word = words[word_id]
-        return get_possible_word_answers(word.question, len(pattern), get_api_pattern(pattern))
+    def load_word_answers(pattern: Pattern, word_id: int) -> list[str]:
+        return get_possible_word_answers(words[word_id].question, pattern)
 
     locations = get_locations(words, table)
-
-    answers = solve(locations, load_more_answers)
+    answers = solve(locations, load_word_answers)
 
     return get_parsed_answers(answers, words)

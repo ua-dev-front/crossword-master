@@ -1,5 +1,5 @@
 from app_types import Direction, LoadOptions, Pattern, Position, WordLocation
-from increase_position import increase_position
+from helpers import increase_position
 
 __all__ = ['solve']
 
