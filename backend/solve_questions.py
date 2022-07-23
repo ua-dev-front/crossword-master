@@ -7,7 +7,7 @@ __all__ = ['solve_questions']
 
 
 def is_filled_cell(position: Position, table: Table) -> bool:
-    return position.row < len(table) and position.column < len(table) and table[position.row][position.column]
+    return position.row in range(len(table)) and position.column in range(len(table)) and table[position.row][position.column]
 
 
 def get_word_length(start_position: Position, table: Table, direction: Direction) -> int:
