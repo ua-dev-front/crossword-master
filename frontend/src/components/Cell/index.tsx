@@ -47,7 +47,7 @@ export default function Cell({ data, roundedCorners }: Props) {
       className={classes}
       onClick={() => handleClick()}
       onKeyDown={(event) => handleKeyDown(event)}
-      tabIndex={editable ? 0 : -1}
+      tabIndex={editable ? 0 : undefined}
     >
       {!editable && (
         <>
