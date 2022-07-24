@@ -1,5 +1,5 @@
-from app_types import Direction, Pattern, Position, SolveAnswers, SolveWords, Table, WordLocation
 from api import get_possible_word_answers
+from app_types import Direction, Pattern, Position, SolveAnswers, SolveWords, Table, WordLocation
 from backtracking import solve
 from helpers import increase_position
 
@@ -7,7 +7,8 @@ __all__ = ['solve_questions']
 
 
 def is_filled_cell(position: Position, table: Table) -> bool:
-    return position.row in range(len(table)) and position.column in range(len(table)) and table[position.row][position.column]
+    return position.row in range(len(table)) and position.column in range(len(table[0])) \
+           and table[position.row][position.column]
 
 
 def get_word_length(start_position: Position, table: Table, direction: Direction) -> int:
@@ -44,8 +45,8 @@ def get_parsed_answers(raw_answers: list[str] | None, words: SolveWords) -> Solv
 
 
 def solve_questions(table: Table, words: SolveWords) -> SolveAnswers:
-    def load_word_answers(pattern: Pattern, word_id: int) -> list[str]:
-        return get_possible_word_answers(words[word_id].question, pattern)
+    def load_word_answers(pattern: Pattern, word_index: int) -> list[str]:
+        return get_possible_word_answers(words[word_index].question, pattern)
 
     locations = get_locations(words, table)
     answers = solve(locations, load_word_answers)
