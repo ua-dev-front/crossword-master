@@ -53,23 +53,27 @@ export default function Grid(props: Props) {
   };
 
   const getRoundedCorners = (row: number, column: number): Corner[] => {
-    const matrixHeight = matrix.length - 1;
-    const matrixWidth = matrix[0].length - 1;
+    const height = matrix.length - 1;
+    const width = matrix[0].length - 1;
 
-    return Object.values(Corner).filter((corner) => {
-      switch (corner) {
-        case Corner.TopLeft:
-          return row === 0 && column === 0;
-        case Corner.TopRight:
-          return row === 0 && column === matrixWidth;
-        case Corner.BottomLeft:
-          return row === matrixHeight && column === 0;
-        case Corner.BottomRight:
-          return row === matrixHeight && column === matrixWidth;
-        default:
-          return false;
+    const dimensions: {
+      [values in Corner]: [number, number];
+    } = {
+      [Corner.TopLeft]: [0, 0],
+      [Corner.TopRight]: [0, width],
+      [Corner.BottomLeft]: [height, 0],
+      [Corner.BottomRight]: [height, width],
+    };
+
+    const corners = Object.entries(dimensions).flatMap(
+      ([key, [dimensionRow, dimensionColumn]]) => {
+        return row === dimensionRow && column === dimensionColumn
+          ? [key as Corner]
+          : [];
       }
-    });
+    );
+
+    return corners;
   };
 
   return (
