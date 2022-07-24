@@ -65,15 +65,13 @@ export default function Grid(props: Props) {
       [Corner.BottomRight]: [height, width],
     };
 
-    const corners = Object.entries(dimensions).flatMap(
+    return Object.entries(dimensions).flatMap(
       ([key, [dimensionRow, dimensionColumn]]) => {
         return row === dimensionRow && column === dimensionColumn
           ? [key as Corner]
           : [];
       }
     );
-
-    return corners;
   };
 
   return (
