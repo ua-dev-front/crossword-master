@@ -10,11 +10,7 @@
     place-items: center;
     position: relative;
     box-sizing: border-box;
-    cursor: pointer;
     border: 2px solid transparent;
-    transition-duration: 0.2s;
-    transition-timing-function: ease-in-out;
-    transition-property: background-color, border-color;
     user-select: none;
 
     &__letter {
@@ -32,10 +28,17 @@
         top: 2px;
     }
 
-    &:hover,
-    &:focus-visible {
-        background-color: cl(light-dark, 0.5);
-        outline: none;
+    &_editable {
+        cursor: pointer;
+        transition-duration: 0.2s;
+        transition-timing-function: ease-in-out;
+        transition-property: background-color, border-color;
+
+        &:hover,
+        &:focus-visible {
+            background-color: cl(light-dark, 0.5);
+            outline: none;
+        }
     }
 
     &_empty {

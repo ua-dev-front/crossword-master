@@ -1,2 +1,9 @@
 .grid {
+    --grid-size: 10;
+    --grid-gap: 4px;
+
+    display: grid;
+    grid-template-columns: repeat(var(--grid-size), 1fr);
+    gap: var(--grid-gap);
+    width: min-content;
 }
