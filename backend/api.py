@@ -5,11 +5,11 @@ from app_types import Pattern, Question
 __all__ = ['get_possible_word_answers']
 
 API_PATH = 'https://api.datamuse.com/words'
-WILD_CARD_CHARACTER = '?'
+WILDCARD_CHARACTER = '?'
 
 
 def get_api_pattern(raw_pattern: Pattern) -> str:
-    return ''.join(letter if isinstance(letter, str) else WILD_CARD_CHARACTER for letter in raw_pattern)
+    return ''.join(letter if isinstance(letter, str) else WILDCARD_CHARACTER for letter in raw_pattern)
 
 
 def get_possible_word_answers(question: Question, pattern: Pattern) -> list[str]:
