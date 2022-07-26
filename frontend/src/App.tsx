@@ -109,6 +109,7 @@ function App() {
       <TabulatorItem
         label='Puzzle'
         isSelected={false}
+        onClick={() => console.log('clicked tabulator item')}
         icon={
           <Cell
             data={{
@@ -128,11 +129,17 @@ function App() {
         }
       />
       <hr />
-      <TabulatorItem label='Puzzle' isSelected={false} icon={<BackIcon />} />
+      <TabulatorItem
+        label='Puzzle'
+        isSelected={false}
+        onClick={() => console.log('clicked tabulator item')}
+        icon={<BackIcon />}
+      />
       <p>Selected:</p>
       <TabulatorItem
         label='Answer'
         isSelected={true}
+        onClick={() => console.log('clicked tabulator item')}
         icon={
           <Cell
             data={{
