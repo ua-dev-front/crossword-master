@@ -3,6 +3,7 @@ from typing import TypedDict
 
 from app_types import Direction, GenerateResponse, Position, SolveResponse, SolveWord, Table
 from solve_questions import solve_questions
+from generate import generate_questions_and_words
 
 
 # types
@@ -48,8 +49,7 @@ def request_handler(func: callable):
 @request_handler
 def generate(data: GenerateData) -> GenerateResponse:
     table = data['table']
-
-    return {'words': None}
+    return GenerateResponse(generate_questions_and_words(table))
 
 
 @app.route('/solve', methods=['POST'], endpoint='solve')
