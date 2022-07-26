@@ -36,10 +36,10 @@ def get_parsed_answers(raw_answers: list[str] | None, words: SolveWords) -> Solv
 
     parsed_answers = {Direction.ACROSS: [], Direction.DOWN: []}
 
-    for index, answer in enumerate(raw_answers):
+    for index, item in enumerate(raw_answers):
         word_direction = words[index].direction
 
-        parsed_answers[word_direction].append(answer)
+        parsed_answers[word_direction].append(item['answer'])
 
     return SolveAnswers(parsed_answers[Direction.ACROSS], parsed_answers[Direction.DOWN])
 
