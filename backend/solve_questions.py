@@ -45,7 +45,7 @@ def get_parsed_answers(raw_answers: list[str] | None, words: SolveWords) -> Solv
 
 
 def solve_questions(table: Table, words: SolveWords) -> SolveAnswers:
-    def load_word_answers(pattern: Pattern, word_index: int) -> list[str]:
+    def load_word_answers(pattern: Pattern, word_index: int) -> list[dict[str, str]]:
         return get_possible_word_answers(words[word_index].question, pattern)
 
     locations = get_locations(words, table)

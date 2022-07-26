@@ -12,7 +12,7 @@ def get_api_pattern(raw_pattern: Pattern) -> str:
     return ''.join(letter if isinstance(letter, str) else WILDCARD_CHARACTER for letter in raw_pattern)
 
 
-def api_request(path: str):
+def api_request(path: str) -> list[dict]:
     res = requests.get(path)
     if res.status_code == 200:
         return res.json()

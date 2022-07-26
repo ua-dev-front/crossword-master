@@ -1,4 +1,4 @@
-from app_types import Table, GenerateResponse, GenerateWords, GenerateWord, WordLocation, Position, Direction, Pattern
+from app_types import Direction, GenerateResponse, GenerateWord, GenerateWords, Pattern, Position, Table, WordLocation
 from api import get_possible_word_answers_and_questions
 from backtracking import solve
 
@@ -68,10 +68,10 @@ def get_parsed_response(raw_response: list[dict[str, str]] | None, words: list[W
 
 
 def generate_questions_and_words(table: Table) -> GenerateResponse | None:
-    def load_word_answers(pattern: Pattern, word_index: int) -> list[dict[str, str]]:
+    def load_word_answers_and_questions(pattern: Pattern, word_index: int) -> list[dict[str, str]]:
         return get_possible_word_answers_and_questions(pattern)
 
     locations = define_words(table)
-    answers = solve(locations, load_word_answers)
+    answers = solve(locations, load_word_answers_and_questions)
 
     return get_parsed_response(answers, locations)
