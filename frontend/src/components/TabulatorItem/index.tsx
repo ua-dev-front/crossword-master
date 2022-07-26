@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import classNames from 'classnames';
 import './styles.scss';
 
 type Props = {
   label: string;
   isSelected: boolean;
-  icon: React.ReactNode;
+  icon: ReactNode;
 };
 
 export default function TabulatorItem(props: Props) {

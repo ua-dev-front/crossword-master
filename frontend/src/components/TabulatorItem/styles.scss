@@ -9,7 +9,7 @@
   background: none;
   border: none;
   outline: none;
-  gap: 7px;
+  gap: 4px;
   cursor: pointer;
   box-sizing: border-box;
   border: 1px solid transparent;
@@ -40,6 +40,8 @@
   }
 
   &_selected {
+    gap: 7px;
+
     & > span {
       font-weight: 600;
       font-size: 18px;
@@ -55,15 +57,17 @@
     }
   }
 
-  &:hover:not(&_selected),
-  &:active:not(&_selected) {
-    & > span {
-      color: cl(near-black);
-      border-color: cl(near-black);
-    }
+  &:not(&_selected) {
+    &:hover,
+    &:active {
+      & > span {
+        color: cl(near-black);
+        border-color: cl(near-black);
+      }
 
-    .back-icon {
-      --icon-colour: rgb(var(--color-near-black));
+      .back-icon {
+        --icon-colour: rgb(var(--color-near-black));
+      }
     }
   }
 
