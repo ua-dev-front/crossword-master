@@ -1,0 +1,73 @@
+@import '../../styles/functions.scss';
+
+.tabulator-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: fit-content;
+  height: fit-content;
+  background: none;
+  border: none;
+  outline: none;
+  gap: 7px;
+  cursor: pointer;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  border-radius: 2px;
+
+  &__label {
+    font-family: var(--font-straight);
+    font-size: 16px;
+    line-height: 19px;
+    color: cl(dark);
+    border-width: 0 0 1px 0;
+    border-style: dashed;
+    border-color: cl(dark);
+  }
+
+  &__icon {
+    .cell {
+      --cell-size: 16px;
+      --cell-border-radius: 2px;
+      
+      border-color: cl(near-black, 0.67);
+
+      &__letter {
+        font-size: 12px;
+        line-height: 16px;
+      }
+    }
+  }
+
+  &_selected {
+    & > span {
+      font-weight: 600;
+      font-size: 18px;
+      line-height: 21px;
+      color: cl(near-black);
+      border: 0;
+    }
+
+    .cell {
+      --cell-size: 18px;
+
+      border-color: cl(near-black);
+    }
+  }
+
+  &:hover:not(&_selected),
+  &:active:not(&_selected) {
+    & > span {
+      color: cl(near-black);
+      border-color: cl(near-black);
+    }
+
+    .back-icon {
+      --icon-colour: rgb(var(--color-near-black));
+    }
+  }
+
+  &:focus-visible {
+    border-color: cl(selected);
+  }
+}

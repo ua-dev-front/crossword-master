@@ -1,0 +1,30 @@
+@import '../../styles/functions.scss';
+
+.back-icon {
+    --icon-colour: rgba(var(--color-near-black), 0.67);
+
+    position: relative;
+    display: block;
+    width: 16px;
+    height: 1px;
+    background-color: var(--icon-colour);
+
+    &::before, &::after {
+      content: "";
+      display: block;
+      position: absolute;
+      width: 5px;
+      left: 0;
+      top: 50%;
+      transform-origin: 0 0;
+      border-bottom: 1px solid var(--icon-colour);
+    }
+
+    &::after {
+      transform: rotate(45deg) translateY(-50%);
+    }
+
+    &::before {
+      transform: rotate(-45deg) translateY(-50%);
+    }
+}

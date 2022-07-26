@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import BackIcon from './components/BackIcon';
 import Button from './components/Button';
 import Cell from './components/Cell';
 import Grid from './components/Grid';
+import TabulatorItem from './components/TabulatorItem';
 import Corner from './types/corner';
 import Mode from './types/mode';
 
@@ -102,6 +104,54 @@ function App() {
   return (
     <>
       <p>Under development</p>
+      <h3>Pictogram example:</h3>
+      <p>Normal:</p>
+      <TabulatorItem
+        label='Puzzle'
+        isSelected={false}
+        icon={
+          <Cell
+            data={{
+              editable: false,
+              content: {
+                letter: null,
+                number: null,
+              },
+            }}
+            roundedCorners={[
+              Corner.TopLeft,
+              Corner.TopRight,
+              Corner.BottomLeft,
+              Corner.BottomRight,
+            ]}
+          />
+        }
+      />
+      <hr />
+      <TabulatorItem label='Puzzle' isSelected={false} icon={<BackIcon />} />
+      <p>Selected:</p>
+      <TabulatorItem
+        label='Answer'
+        isSelected={true}
+        icon={
+          <Cell
+            data={{
+              editable: false,
+              content: {
+                letter: 'A',
+                number: null,
+              },
+            }}
+            roundedCorners={[
+              Corner.TopLeft,
+              Corner.TopRight,
+              Corner.BottomLeft,
+              Corner.BottomRight,
+            ]}
+          />
+        }
+      />
+      <hr />
       <p>Cell example:</p>
       <Cell
         data={{
