@@ -9,7 +9,7 @@ type Props = {
   icon: ReactNode;
 };
 
-export default function TabulatorItem(props: Props) {
+export default function Tab(props: Props) {
   const { onClick, label, isSelected, icon } = props;
 
   const classes = classNames(

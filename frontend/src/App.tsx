@@ -3,7 +3,7 @@ import BackIcon from './components/BackIcon';
 import Button from './components/Button';
 import Cell from './components/Cell';
 import Grid from './components/Grid';
-import TabulatorItem from './components/TabulatorItem';
+import Tab from './components/Tab';
 import Corner from './types/corner';
 import Mode from './types/mode';
 
@@ -106,7 +106,7 @@ function App() {
       <p>Under development</p>
       <h3>Pictogram example:</h3>
       <p>Normal:</p>
-      <TabulatorItem
+      <Tab
         label='Puzzle'
         isSelected={false}
         onClick={() => console.log('clicked tabulator item')}
@@ -129,14 +129,14 @@ function App() {
         }
       />
       <hr />
-      <TabulatorItem
+      <Tab
         label='Puzzle'
         isSelected={false}
         onClick={() => console.log('clicked tabulator item')}
         icon={<BackIcon />}
       />
       <p>Selected:</p>
-      <TabulatorItem
+      <Tab
         label='Answer'
         isSelected={true}
         onClick={() => console.log('clicked tabulator item')}
