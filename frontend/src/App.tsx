@@ -7,7 +7,8 @@ import Corner from './types/corner';
 import Mode from './types/mode';
 import LeftArrow from './icons/LeftArrow';
 import SquareFilled from './icons/SquareFilled';
-import Square from './icons/SquareLetter';
+import SquareLetter from './icons/SquareLetter';
+import Square from './icons/Square';
 
 const answerMatrix = [
   [
@@ -110,23 +111,37 @@ function App() {
       <p>Normal:</p>
       <Tab
         label='Puzzle'
-        isSelected={false}
-        onClick={() => console.log('clicked tabulator item')}
+        data={{
+          isSelected: false,
+          onClick: () => console.log('clicked tab'),
+        }}
         icon={<SquareFilled />}
       />
       <hr />
       <Tab
         label='Puzzle'
-        isSelected={false}
-        onClick={() => console.log('clicked tabulator item')}
+        data={{
+          isSelected: false,
+          onClick: () => console.log('clicked tab'),
+        }}
         icon={<LeftArrow />}
+      />
+      <hr />
+      <Tab
+        label='Puzzle'
+        data={{
+          isSelected: false,
+          onClick: () => console.log('clicked tab'),
+        }}
+        icon={<Square />}
       />
       <p>Selected:</p>
       <Tab
         label='Answer'
-        isSelected={true}
-        onClick={() => console.log('clicked tabulator item')}
-        icon={<Square />}
+        data={{
+          isSelected: true,
+        }}
+        icon={<SquareLetter />}
       />
       <hr />
       <p>Cell example:</p>

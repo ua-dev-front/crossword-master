@@ -8,13 +8,18 @@
   width: fit-content;
   height: fit-content;
   gap: 4px;
+  box-sizing: border-box;
+  padding: 2px 3px;
 
   background: none;
   outline: none;
-  box-sizing: border-box;
   border: 1px solid transparent;
   border-radius: 2px;
-  cursor: pointer;
+
+  &__icon {
+    display: flex;
+    align-items: center;
+  }
 
   &__label {
     font-family: var(--font-straight);
@@ -48,6 +53,8 @@
   }
 
   &:not(&_selected) {
+    cursor: pointer;
+
     &:hover,
     &:active,
     &:focus-visible {
@@ -55,7 +62,13 @@
         color: cl(near-black);
         border-color: cl(near-black);
       }
+
+      svg * {
+        fill-opacity: 1;
+        stroke-opacity: 1;
+      }
     }
+
     &:focus-visible {
       border-color: cl(selected);
     }

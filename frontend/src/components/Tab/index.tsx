@@ -1,23 +1,28 @@
 import React, { ReactNode } from 'react';
 import classNames from 'classnames';
 import './styles.scss';
+import tabData from '../../types/tabData';
 
 type Props = {
-  onClick: () => void;
-  label: string;
-  isSelected: boolean;
+  data: tabData;
   icon: ReactNode;
+  label: string;
 };
 
 export default function Tab(props: Props) {
-  const { onClick, label, isSelected, icon } = props;
+  const { data, label, icon } = props;
+  const { isSelected } = data;
 
   const classes = classNames('tab', isSelected && 'tab_selected');
 
   return (
-    <button tabIndex={0} className={classes} onClick={onClick}>
+    <div
+      tabIndex={isSelected ? undefined : 0}
+      className={classes}
+      onClick={isSelected ? undefined : data.onClick}
+    >
       <div className='tab__icon'>{icon}</div>
       <span className='tab__label'>{label}</span>
-    </button>
+    </div>
   );
 }
