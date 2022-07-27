@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import BackIcon from './components/BackIcon';
 import Button from './components/Button';
 import Cell from './components/Cell';
 import Grid from './components/Grid';
 import Tab from './components/Tab';
 import Corner from './types/corner';
 import Mode from './types/mode';
+import LeftArrow from './icons/LeftArrow';
+import SquareFilled from './icons/SquareFilled';
+import Square from './icons/SquareLetter';
 
 const answerMatrix = [
   [
@@ -83,8 +85,8 @@ const answerMatrix = [
   ...[...Array(4)].map(() => [...Array(10)].map(() => null)),
 ];
 
-const puzzleMatrix = answerMatrix.map((row) =>
-  row.map((cell) => (cell ? { number: cell.number } : null))
+const puzzleMatrix = answerMatrix.map(row =>
+  row.map(cell => (cell ? { number: cell.number } : null))
 );
 
 const emptyMatrix = [...Array(10)].map(() => [...Array(10)].map(() => false));
@@ -110,53 +112,21 @@ function App() {
         label='Puzzle'
         isSelected={false}
         onClick={() => console.log('clicked tabulator item')}
-        icon={
-          <Cell
-            data={{
-              editable: false,
-              content: {
-                letter: null,
-                number: null,
-              },
-            }}
-            roundedCorners={[
-              Corner.TopLeft,
-              Corner.TopRight,
-              Corner.BottomLeft,
-              Corner.BottomRight,
-            ]}
-          />
-        }
+        icon={<SquareFilled />}
       />
       <hr />
       <Tab
         label='Puzzle'
         isSelected={false}
         onClick={() => console.log('clicked tabulator item')}
-        icon={<BackIcon />}
+        icon={<LeftArrow />}
       />
       <p>Selected:</p>
       <Tab
         label='Answer'
         isSelected={true}
         onClick={() => console.log('clicked tabulator item')}
-        icon={
-          <Cell
-            data={{
-              editable: false,
-              content: {
-                letter: 'A',
-                number: null,
-              },
-            }}
-            roundedCorners={[
-              Corner.TopLeft,
-              Corner.TopRight,
-              Corner.BottomLeft,
-              Corner.BottomRight,
-            ]}
-          />
-        }
+        icon={<Square />}
       />
       <hr />
       <p>Cell example:</p>

@@ -1,19 +1,20 @@
 @import '../../styles/functions.scss';
 
-.tabulator-item {
+.tab {
   display: flex;
   flex-direction: row;
   align-items: center;
+
   width: fit-content;
   height: fit-content;
-  background: none;
-  border: none;
-  outline: none;
   gap: 4px;
-  cursor: pointer;
+
+  background: none;
+  outline: none;
   box-sizing: border-box;
   border: 1px solid transparent;
   border-radius: 2px;
+  cursor: pointer;
 
   &__label {
     font-family: var(--font-straight);
@@ -23,20 +24,6 @@
     border-width: 0 0 1px 0;
     border-style: dashed;
     border-color: cl(dark);
-  }
-
-  &__icon {
-    .cell {
-      --cell-size: 16px;
-      --cell-border-radius: 2px;
-      
-      border-color: cl(near-black, 0.67);
-
-      &__letter {
-        font-size: 12px;
-        line-height: 16px;
-      }
-    }
   }
 
   &_selected {
@@ -50,28 +37,27 @@
       border: 0;
     }
 
-    .cell {
-      --cell-size: 18px;
+    svg {
+      transform: scale(1.125);
 
-      border-color: cl(near-black);
+      * {
+        fill-opacity: 1;
+        stroke-opacity: 1;
+      }
     }
   }
 
   &:not(&_selected) {
     &:hover,
-    &:active {
+    &:active,
+    &:focus-visible {
       & > span {
         color: cl(near-black);
         border-color: cl(near-black);
       }
-
-      .back-icon {
-        --icon-colour: rgb(var(--color-near-black));
-      }
     }
-  }
-
-  &:focus-visible {
-    border-color: cl(selected);
+    &:focus-visible {
+      border-color: cl(selected);
+    }
   }
 }

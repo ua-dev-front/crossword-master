@@ -12,15 +12,12 @@ type Props = {
 export default function Tab(props: Props) {
   const { onClick, label, isSelected, icon } = props;
 
-  const classes = classNames(
-    'tabulator-item',
-    isSelected && 'tabulator-item_selected'
-  );
+  const classes = classNames('tab', isSelected && 'tab_selected');
 
   return (
     <button tabIndex={0} className={classes} onClick={onClick}>
-      <div className='tabulator-item__icon'>{icon}</div>
-      <span className='tabulator-item__label'>{label}</span>
+      <div className='tab__icon'>{icon}</div>
+      <span className='tab__label'>{label}</span>
     </button>
   );
 }
