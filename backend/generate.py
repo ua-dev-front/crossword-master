@@ -51,7 +51,9 @@ def get_parsed_response(raw_response: list[str] | None, words: list[WordLocation
         return question.split('\t')[1]
 
     def get_id(response: list[dict[str, str | int]]) -> int:
-        return response[len(response) - 1].id + 1 if len(response) > 0 else 1
+        if len(response) == 0:
+            return 1
+        return max(response, key=lambda item: item.id).id + 1
 
     parsed_response = {Direction.ACROSS: [], Direction.DOWN: []}
 
@@ -59,7 +61,7 @@ def get_parsed_response(raw_response: list[str] | None, words: list[WordLocation
         word_direction = words[index].type
 
         parsed_response[word_direction].append(GenerateWord(
-            get_id(parsed_response[word_direction]),
+            get_id([*parsed_response[Direction.ACROSS], *parsed_response[Direction.DOWN]]),
             normalize_question(list(filter(lambda item: item[0] == answer, cache))[0][1]),
             words[index].first_letter,
             answer
