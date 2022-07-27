@@ -20,18 +20,17 @@ def api_request(path: str) -> list[dict]:
         raise Exception(f'API responded with code: {res.status_code} \nPath: {res.url}')
 
 
-def get_possible_word_answers(question: Question, pattern: Pattern) -> list[dict[str, str]]:
+def get_possible_word_answers(question: Question, pattern: Pattern) -> list[str]:
     api_pattern = get_api_pattern(pattern)
     answers_path = f'{API_PATH}?ml={question}&sp={api_pattern}'
-    res = api_request(answers_path)
+    response = api_request(answers_path)
 
-    return [{'answer': item['word']} for item in res]
+    return [answer['word'] for answer in response]
 
 
-def get_possible_word_answers_and_questions(pattern: Pattern) -> list[dict[str, str]]:
+def get_possible_word_answers_and_questions(pattern: Pattern) -> list[tuple[str, str]]:
     api_pattern = get_api_pattern(pattern)
     generate_path = f'{API_PATH}?sp={api_pattern}&md=d'
-    res = api_request(generate_path)
+    response = filter(lambda item: item.get('defs') is not None, api_request(generate_path))
 
-    return [{'answer': item['word'], 'question': item['defs'][0] if 'defs' in item else ''} for item in res]
-
+    return [(item['word'], item['defs'][0]) for item in response]

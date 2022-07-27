@@ -5,7 +5,7 @@ from typing import Callable
 Table = list[list[int]]
 Answer = str
 Question = str
-WordOptions = list[dict[str, str]]
+WordOptions = list[str]
 Pattern = list[str | None]  # Each element represents either a letter on its respective position or a wildcard (None)
 
 # Accepts word pattern and index of word, returns word options that fit pattern

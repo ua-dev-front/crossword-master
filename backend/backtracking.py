@@ -39,11 +39,11 @@ def get_table(locations: list[WordLocation]) -> BackTrackTable:
 
 
 def backtrack(locations: list[WordLocation], table: BackTrackTable, load_options: LoadOptions,
-              current_index: int = 0, response: list[dict[str, str]] = None) -> list[dict[str, str]] | None:
-    if response is None:
-        response = []
+              current_index: int = 0, answers: list[str] = None) -> list[str] | None:
+    if answers is None:
+        answers = []
     if current_index == len(locations):
-        return response
+        return answers
 
     word = locations[current_index]
     direction = word.type
@@ -51,19 +51,19 @@ def backtrack(locations: list[WordLocation], table: BackTrackTable, load_options
     word_length = word.length
 
     pattern = get_word_pattern(table, direction, start_position, word_length)
-    possible_response = load_options(pattern, current_index)
+    possible_answers = load_options(pattern, current_index)
 
-    if len(possible_response):
-        response.append(possible_response[0])
+    if len(possible_answers):
+        answers.append(possible_answers[0])
 
-    for item in possible_response:
-        update_table(item['answer'], table, direction, start_position)
-        response = backtrack(locations, table, load_options,
-                             current_index=current_index + 1,
-                             response=response)
-        if response is not None:
-            response[current_index] = item
-            return response
+    for possible_answer in possible_answers:
+        update_table(possible_answer, table, direction, start_position)
+        answers = backtrack(locations, table, load_options,
+                            current_index=current_index + 1,
+                            answers=answers)
+        if answers is not None:
+            answers[current_index] = possible_answer
+            return answers
 
 
 def solve(locations: list[WordLocation], load_options: LoadOptions) -> list[str] | None:

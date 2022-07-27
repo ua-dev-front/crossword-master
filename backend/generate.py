@@ -1,8 +1,8 @@
-from app_types import Direction, GenerateResponse, GenerateWord, GenerateWords, Pattern, Position, Table, WordLocation
 from api import get_possible_word_answers_and_questions
+from app_types import Direction, GenerateResponse, GenerateWord, GenerateWords, Pattern, Position, Table, WordLocation
 from backtracking import solve
 
-__all__ = ['generate_questions_and_words']
+__all__ = ['generate_words_and_questions']
 
 
 def get_existed_word(position: Position, direction: Direction, words: list[WordLocation]) -> WordLocation | None:
@@ -42,7 +42,8 @@ def define_words(table: Table) -> list[WordLocation]:
     return words
 
 
-def get_parsed_response(raw_response: list[dict[str, str]] | None, words: list[WordLocation]) -> GenerateWords | None:
+def get_parsed_response(raw_response: list[str] | None, words: list[WordLocation],
+                        cache: list[tuple[str, str]]) -> GenerateWords | None:
     if raw_response is None:
         return None
 
@@ -54,24 +55,28 @@ def get_parsed_response(raw_response: list[dict[str, str]] | None, words: list[W
 
     parsed_response = {Direction.ACROSS: [], Direction.DOWN: []}
 
-    for index, item in enumerate(raw_response):
+    for index, answer in enumerate(raw_response):
         word_direction = words[index].type
 
         parsed_response[word_direction].append(GenerateWord(
             get_id(parsed_response[word_direction]),
-            normalize_question(item['question']),
+            normalize_question(list(filter(lambda item: item[0] == answer, cache))[0][1]),
             words[index].first_letter,
-            item['answer']
+            answer
         ))
 
     return GenerateWords(parsed_response[Direction.ACROSS], parsed_response[Direction.DOWN])
 
 
-def generate_questions_and_words(table: Table) -> GenerateResponse | None:
-    def load_word_answers_and_questions(pattern: Pattern, word_index: int) -> list[dict[str, str]]:
-        return get_possible_word_answers_and_questions(pattern)
+def generate_words_and_questions(table: Table) -> GenerateResponse | None:
+    cache = []
+
+    def load_word_answers_and_questions(pattern: Pattern, _word_index: int) -> list[str]:
+        response = get_possible_word_answers_and_questions(pattern)
+        cache.extend(response)
+        return [item[0] for item in response]
 
     locations = define_words(table)
     answers = solve(locations, load_word_answers_and_questions)
 
-    return get_parsed_response(answers, locations)
+    return get_parsed_response(answers, locations, cache)

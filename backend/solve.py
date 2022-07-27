@@ -36,16 +36,16 @@ def get_parsed_answers(raw_answers: list[str] | None, words: SolveWords) -> Solv
 
     parsed_answers = {Direction.ACROSS: [], Direction.DOWN: []}
 
-    for index, item in enumerate(raw_answers):
+    for index, answer in enumerate(raw_answers):
         word_direction = words[index].direction
 
-        parsed_answers[word_direction].append(item['answer'])
+        parsed_answers[word_direction].append(answer)
 
     return SolveAnswers(parsed_answers[Direction.ACROSS], parsed_answers[Direction.DOWN])
 
 
 def solve_questions(table: Table, words: SolveWords) -> SolveAnswers:
-    def load_word_answers(pattern: Pattern, word_index: int) -> list[dict[str, str]]:
+    def load_word_answers(pattern: Pattern, word_index: int) -> list[str]:
         return get_possible_word_answers(words[word_index].question, pattern)
 
     locations = get_locations(words, table)
