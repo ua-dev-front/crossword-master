@@ -13,8 +13,8 @@ LoadOptions = Callable[[Pattern, int], WordOptions]
 
 
 class Direction(Enum):
-    ACROSS = 'across'
-    DOWN = 'down'
+    ACROSS = 'column'
+    DOWN = 'row'
 
 
 @dataclass
@@ -48,8 +48,8 @@ class GenerateWords:
 
 @dataclass
 class GenerateApiResponse:
-    answer: str
-    question: str
+    answer: Answer
+    question: Question
 
 
 @dataclass
