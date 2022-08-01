@@ -1,8 +1,9 @@
 @import '../../styles/functions.scss';
 
 .icon-square {
-    rect {
-        stroke: #B1B3B5; 
-        stroke-opacity: 0.67;
-    }
+    width: 16px;
+    height: 16px;
+
+    border: solid 1px cl(dark, 0.67);
+    border-radius: 2px;
 }

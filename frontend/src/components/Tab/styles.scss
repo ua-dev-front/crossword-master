@@ -36,7 +36,7 @@
   &_selected {
     gap: 7px;
 
-    & > span {
+    & .tab__label {
       font-weight: 600;
       font-size: 18px;
       line-height: 21px;
@@ -60,12 +60,12 @@
     &:hover,
     &:active,
     &:focus-visible {
-      & > span {
+      & .tab__label {
         color: cl(near-black);
         border-color: cl(near-black);
       }
 
-      svg * {
+      * {
         fill-opacity: 1;
         stroke-opacity: 1;
       }
