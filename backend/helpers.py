@@ -1,6 +1,5 @@
 from app_types import Direction, Position
 from dataclasses import dataclass
-from enum import Enum
 
 __all__ = ['get_axes', 'shift_position']
 
@@ -26,5 +25,3 @@ def shift_position(previous_position: Position, direction: Direction, delta: int
     new_position.__setattr__(get_axes(direction).changeable, new_axes_position)
 
     return new_position
-
-

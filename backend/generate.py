@@ -1,6 +1,5 @@
 from api import get_possible_word_answers_and_questions
-from app_types import Direction, GenerateApiResponse, GenerateResponse, GenerateWord, GenerateWords, Pattern,\
-    Position, Table, WordLocation
+from app_types import Direction, GenerateResponse, GenerateWord, GenerateWords, Pattern, Position, Table, WordLocation
 from backtracking import solve
 from helpers import get_axes, shift_position
 
