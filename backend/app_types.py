@@ -47,12 +47,6 @@ class GenerateWords:
 
 
 @dataclass
-class GenerateApiResponse:
-    answer: Answer
-    question: Question
-
-
-@dataclass
 class GenerateResponse:
     words: GenerateWords | None
 

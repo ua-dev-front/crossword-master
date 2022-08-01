@@ -1,6 +1,6 @@
 import requests
 
-from app_types import GenerateApiResponse, Pattern, Question
+from app_types import Pattern, Question
 
 __all__ = ['get_possible_word_answers', 'get_possible_word_answers_and_questions']
 
