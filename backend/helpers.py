@@ -1,7 +1,13 @@
 from app_types import Direction, Position
 from dataclasses import dataclass
+from enum import Enum
 
 __all__ = ['get_axes', 'shift_position']
+
+
+class Axis(Enum):
+    ROW = 'row'
+    COLUMN = 'column'
 
 
 @dataclass
@@ -12,9 +18,9 @@ class Axes:
 
 def get_axes(direction: Direction) -> Axes:
     if direction == Direction.ACROSS:
-        return Axes(Direction.ACROSS.value, Direction.DOWN.value)
+        return Axes(Axis.COLUMN.value, Axis.ROW.value)
     elif direction == Direction.DOWN:
-        return Axes(Direction.DOWN.value, Direction.ACROSS.value)
+        return Axes(Axis.ROW.value, Axis.COLUMN.value)
     else:
         raise ValueError('Unknown direction')
 

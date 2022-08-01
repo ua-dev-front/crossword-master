@@ -13,8 +13,8 @@ LoadOptions = Callable[[Pattern, int], WordOptions]
 
 
 class Direction(Enum):
-    ACROSS = 'column'
-    DOWN = 'row'
+    ACROSS = 'across'
+    DOWN = 'down'
 
 
 @dataclass
