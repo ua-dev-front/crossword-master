@@ -48,8 +48,7 @@ def request_handler(func: callable):
 @app.route('/generate', methods=['POST'], endpoint='generate')
 @request_handler
 def generate(data: GenerateData) -> GenerateResponse:
-    table = data['table']
-    return GenerateResponse(generate_words_and_questions(table))
+    return GenerateResponse(generate_words_and_questions(data['table']))
 
 
 @app.route('/solve', methods=['POST'], endpoint='solve')
