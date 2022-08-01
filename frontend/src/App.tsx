@@ -111,38 +111,26 @@ function App() {
       <p>Normal:</p>
       <Tab
         label='Puzzle'
-        data={{
-          isSelected: false,
-          onClick: () => console.log('clicked tab'),
-        }}
+        isSelected={false}
+        onClick={() => console.log('clicked tab')}
         icon={<SquareFilled />}
       />
       <hr />
       <Tab
         label='Puzzle'
-        data={{
-          isSelected: false,
-          onClick: () => console.log('clicked tab'),
-        }}
+        isSelected={false}
+        onClick={() => console.log('clicked tab')}
         icon={<LeftArrow />}
       />
       <hr />
       <Tab
         label='Puzzle'
-        data={{
-          isSelected: false,
-          onClick: () => console.log('clicked tab'),
-        }}
+        isSelected={false}
+        onClick={() => console.log('clicked tab')}
         icon={<Square />}
       />
       <p>Selected:</p>
-      <Tab
-        label='Answer'
-        data={{
-          isSelected: true,
-        }}
-        icon={<SquareLetter />}
-      />
+      <Tab label='Answer' isSelected={true} icon={<SquareLetter />} />
       <hr />
       <p>Cell example:</p>
       <Cell
