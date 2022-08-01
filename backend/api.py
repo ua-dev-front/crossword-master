@@ -1,6 +1,6 @@
 import requests
 
-from app_types import Pattern, Question
+from app_types import Pattern, Question, GenerateApiResponse
 
 __all__ = ['get_possible_word_answers', 'get_possible_word_answers_and_questions']
 
@@ -28,9 +28,12 @@ def get_possible_word_answers(question: Question, pattern: Pattern) -> list[str]
     return [answer['word'] for answer in response]
 
 
-def get_possible_word_answers_and_questions(pattern: Pattern) -> list[tuple[str, str]]:
+def get_possible_word_answers_and_questions(pattern: Pattern) -> list[GenerateApiResponse]:
+    def normalize_question(question: str) -> str:
+        return question.split('\t', 1)[1]
+
     api_pattern = get_api_pattern(pattern)
     generate_path = f'{API_PATH}?sp={api_pattern}&md=d'
     response = filter(lambda item: item.get('defs') is not None, api_request(generate_path))
 
-    return [(item['word'], item['defs'][0]) for item in response]
+    return [GenerateApiResponse(item['word'], normalize_question(item['defs'][0])) for item in response]
