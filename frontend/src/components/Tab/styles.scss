@@ -16,6 +16,10 @@
   border: 1px solid transparent;
   border-radius: 2px;
 
+  * {
+    transition: all 0.2s ease-in-out;
+  }
+
   &__icon {
     display: flex;
     align-items: center;
@@ -26,9 +30,7 @@
     font-size: 16px;
     line-height: 19px;
     color: cl(dark);
-    border-width: 0 0 1px 0;
-    border-style: dashed;
-    border-color: cl(dark);
+    border-bottom: 1px dashed cl(dark);
   }
 
   &_selected {

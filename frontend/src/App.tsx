@@ -86,8 +86,8 @@ const answerMatrix = [
   ...[...Array(4)].map(() => [...Array(10)].map(() => null)),
 ];
 
-const puzzleMatrix = answerMatrix.map(row =>
-  row.map(cell => (cell ? { number: cell.number } : null))
+const puzzleMatrix = answerMatrix.map((row) =>
+  row.map((cell) => (cell ? { number: cell.number } : null))
 );
 
 const emptyMatrix = [...Array(10)].map(() => [...Array(10)].map(() => false));

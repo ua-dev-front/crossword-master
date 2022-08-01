@@ -20,7 +20,7 @@ export default function SquareLetter() {
         <text
           x='30%'
           y='80%'
-          fill='black'
+          fill='#666666'
           fontFamily="'Gloria Hallelujah', cursive"
           fontSize={12}
           fillOpacity='0.67'

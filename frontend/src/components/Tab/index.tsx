@@ -9,16 +9,14 @@ type Props = {
   onClick?: () => void;
 };
 
-export default function Tab(props: Props) {
-  const { label, icon, onClick, isSelected } = props;
-
+export default function Tab({ label, icon, onClick, isSelected }: Props) {
   const classes = classNames('tab', isSelected && 'tab_selected');
 
   return (
     <button
       tabIndex={0}
       className={classes}
-      onClick={onClick}
+      onClick={() => (onClick ? onClick() : null)}
       disabled={isSelected}
     >
       <div className='tab__icon'>{icon}</div>
