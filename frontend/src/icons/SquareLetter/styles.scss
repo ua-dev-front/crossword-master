@@ -1,0 +1,15 @@
+@import '../../styles/functions.scss';
+
+.icon-square-letter {
+    rect {
+        stroke: #B1B3B5; 
+        stroke-opacity: 0.67;
+    }
+
+    text {
+        fill: cl(near-black);
+        font-family: var(--font-cursive);
+        fill-opacity: 0.67;
+        font-size: 12px;
+    }
+}
