@@ -34,21 +34,22 @@ class WordLocation:
 
 
 @dataclass
-class Word:
-    id: int
+class GenerateWord:
+    answer: Answer
     question: Question
     start_position: Position
-
-
-@dataclass
-class GenerateWord(Word):
-    answer: Answer
 
 
 @dataclass
 class GenerateWords:
     across: list[GenerateWord]
     down: list[GenerateWord]
+
+
+@dataclass
+class GenerateApiResponse:
+    answer: str
+    question: str
 
 
 @dataclass
