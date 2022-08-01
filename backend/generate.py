@@ -1,59 +1,48 @@
 from api import get_possible_word_answers_and_questions
-from app_types import Direction, GenerateResponse, GenerateWord, GenerateWords, Pattern, Position, Table, WordLocation
+from app_types import Direction, GenerateResponse, GenerateWord, GenerateWords, Pattern, Position, Table, WordLocation, \
+    GenerateApiResponse
 from backtracking import solve
+from helpers import get_axes, shift_position
 
 __all__ = ['generate_words_and_questions']
 
 
-def get_existed_word(position: Position, direction: Direction, words: list[WordLocation]) -> WordLocation | None:
-    for word in words:
-        if direction == Direction.ACROSS and position.column == word.first_letter.column + word.length \
-                and position.row == word.first_letter.row:
-            return word
-        elif direction == Direction.DOWN and position.row == word.first_letter.row + word.length \
-                and position.column == word.first_letter.column:
-            return word
-    return None
+def determine_locations(table: Table) -> list[WordLocation]:
+    def extract_location(position: Position, scope_direction: Direction,
+                         scope_locations: list[WordLocation]) -> WordLocation | None:
+        axis_to_change, another_axis = get_axes(scope_direction)
+        return next((scope_location for scope_location in scope_locations
+                     if getattr(scope_location.first_letter, axis_to_change) + scope_location.length ==
+                     getattr(position, axis_to_change)
+                     and getattr(scope_location.first_letter, another_axis) == getattr(position, another_axis)), None)
 
+    def is_new_location(position: Position, scope_direction: Direction) -> bool:
+        axis_to_change, another_axis = get_axes(scope_direction)
+        previous_row, previous_column = shift_position(position, scope_direction, -1)
+        next_row, next_column = shift_position(position, scope_direction)
 
-def is_new_word(position: Position, direction: Direction, table: Table) -> bool:
-    if direction == Direction.ACROSS:
-        return (position.column == 0 or table[position.row][position.column - 1] == 0) \
-               and (position.column == len(table) - 1 or table[position.row][position.column + 1] == 1)
-    if direction == Direction.DOWN:
-        return (position.row == 0 or table[position.row - 1][position.column] == 0) \
-               and (position.row == len(table) - 1 or table[position.row + 1][position.column] == 1)
-    return False
+        return (getattr(position, axis_to_change) == 0 or table[previous_row][previous_column] == 0) and \
+               (getattr(position, axis_to_change) == len(table) - 1 or table[next_row][next_column] == 1)
 
-
-def define_words(table: Table) -> list[WordLocation]:
-    words = []
+    locations = []
 
     for row in range(len(table)):
         for column in range(len(table[0])):
             if table[row][column] == 1:
                 for direction in [Direction.ACROSS, Direction.DOWN]:
-                    word = get_existed_word(Position(row, column), direction, words)
-                    if word is None and is_new_word(Position(row, column), direction, table):
-                        words.append(WordLocation(Position(row, column), 1, direction))
-                    elif word is not None:
-                        word.length += 1
+                    location = extract_location(Position(row, column), direction, locations)
+                    if location is None and is_new_location(Position(row, column), direction):
+                        locations.append(WordLocation(Position(row, column), 1, direction))
+                    elif location is not None:
+                        location.length += 1
 
-    return words
+    return locations
 
 
 def get_parsed_response(raw_response: list[str] | None, words: list[WordLocation],
-                        cache: list[tuple[str, str]]) -> GenerateWords | None:
+                        cache: list[GenerateApiResponse]) -> GenerateWords | None:
     if raw_response is None:
         return None
-
-    def normalize_question(question: str) -> str:
-        return question.split('\t')[1]
-
-    def get_id(response: list[dict[str, str | int]]) -> int:
-        if len(response) == 0:
-            return 1
-        return max(response, key=lambda item: item.id).id + 1
 
     parsed_response = {Direction.ACROSS: [], Direction.DOWN: []}
 
@@ -61,10 +50,9 @@ def get_parsed_response(raw_response: list[str] | None, words: list[WordLocation
         word_direction = words[index].type
 
         parsed_response[word_direction].append(GenerateWord(
-            get_id([*parsed_response[Direction.ACROSS], *parsed_response[Direction.DOWN]]),
-            normalize_question(list(filter(lambda item: item[0] == answer, cache))[0][1]),
+            answer,
+            next(map(lambda item: item.question, filter(lambda item: item.answer == answer, cache))),
             words[index].first_letter,
-            answer
         ))
 
     return GenerateWords(parsed_response[Direction.ACROSS], parsed_response[Direction.DOWN])
@@ -76,9 +64,9 @@ def generate_words_and_questions(table: Table) -> GenerateResponse | None:
     def load_word_answers_and_questions(pattern: Pattern, _word_index: int) -> list[str]:
         response = get_possible_word_answers_and_questions(pattern)
         cache.extend(response)
-        return [item[0] for item in response]
+        return [item.answer for item in response]
 
-    locations = define_words(table)
+    locations = determine_locations(table)
     answers = solve(locations, load_word_answers_and_questions)
 
     return get_parsed_response(answers, locations, cache)
