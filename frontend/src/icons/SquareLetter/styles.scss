@@ -1,15 +1,14 @@
 @import '../../styles/functions.scss';
 
 .icon-square-letter {
-    rect {
-        stroke: cl(dark); 
-        stroke-opacity: 0.67;
-    }
+    width: 16px;
+    height: 16px;
 
-    text {
-        fill: cl(near-black);
-        font-family: var(--font-cursive);
-        fill-opacity: 0.67;
-        font-size: 12px;
-    }
+    border: solid 1px cl(dark, 0.67);
+    border-radius: 2px;
+
+    color: cl(near-black, 0.67);
+    font-family: var(--font-cursive);
+    font-size: 12px;
+    line-height: 16px;
 }

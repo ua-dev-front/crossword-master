@@ -1,8 +1,9 @@
 @import '../../styles/functions.scss';
 
 .icon-square-filled {
-    rect {
-        fill: cl(dark); 
-        fill-opacity: 0.67;
-    }
+    height: 16px;
+    width: 16px;
+
+    background-color: cl(dark, 0.67); 
+    border-radius: 2px;
 }
