@@ -1,5 +1,5 @@
 import './styles.scss';
 
 export default function SquareLetter() {
-  return <span className='icon-square-letter'>A</span>;
+  return <span className='icon-square_letter icon-square'>A</span>;
 }

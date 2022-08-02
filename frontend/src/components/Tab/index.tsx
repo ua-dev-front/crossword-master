@@ -14,9 +14,8 @@ export default function Tab({ label, icon, onClick, isSelected }: Props) {
 
   return (
     <button
-      tabIndex={0}
       className={classes}
-      onClick={() => (onClick ? onClick() : null)}
+      onClick={() => onClick?.()}
       disabled={isSelected}
     >
       <div className='tab__icon'>{icon}</div>

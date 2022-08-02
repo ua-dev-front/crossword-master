@@ -1,14 +1,8 @@
 @import '../../styles/functions.scss';
 
-.icon-square-letter {
-    width: 16px;
-    height: 16px;
-
-    border: solid 1px cl(dark, 0.67);
-    border-radius: 2px;
-
-    color: cl(near-black, 0.67);
-    font-family: var(--font-cursive);
-    font-size: 12px;
-    line-height: 16px;
+.icon-square_letter {
+  color: cl(near-black, 0.67);
+  font-family: var(--font-cursive);
+  font-size: 12px;
+  line-height: 16px;
 }

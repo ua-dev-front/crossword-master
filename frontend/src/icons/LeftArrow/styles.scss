@@ -1,8 +1,8 @@
 @import '../../styles/functions.scss';
 
 .icon-left-arrow {
-    path {
-        fill: cl(near-black);
-        fill-opacity: 0.67;
-    }
+  --icon-colour: #{cl(near-black, 0.67)};
+  path {
+    fill: var(--icon-colour);
+  }
 }

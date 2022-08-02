@@ -1,9 +1,12 @@
 @import '../../styles/functions.scss';
 
 .icon-square {
-    width: 16px;
-    height: 16px;
+  --icon-size: 16px;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  box-sizing: border-box;
 
-    border: solid 1px cl(dark, 0.67);
-    border-radius: 2px;
+  --icon-colour: #{cl(dark, 0.67)};
+  border: solid 1px var(--icon-colour);
+  border-radius: 2px;
 }
