@@ -16,16 +16,21 @@
   border: 1px solid transparent;
   border-radius: 2px;
 
-  * {
-    transition: all 0.2s ease-in-out;
-  }
-
   &__icon {
     display: flex;
     align-items: center;
+
+    .icon {
+      transition-duration: var(--transition-duration);
+      transition-timing-function: var(--transition-function);
+      transition-property: fill, background-color, border-color;
+    }
   }
 
   &__label {
+    transition-duration: var(--transition-duration);
+    transition-timing-function: var(--transition-function);
+    transition-property: color, font-size, border-color;
     font-family: var(--font-straight);
     font-size: 16px;
     line-height: 19px;
@@ -44,13 +49,10 @@
       border: 0;
     }
 
-    svg {
+    .icon {
       transform: scale(1.125);
 
-      * {
-        fill-opacity: 1;
-        stroke-opacity: 1;
-      }
+      --icon-colour: #{cl(dark)};
     }
   }
 
@@ -65,9 +67,8 @@
         border-color: cl(near-black);
       }
 
-      * {
-        fill-opacity: 1;
-        stroke-opacity: 1;
+      .icon {
+        --icon-colour: #{cl(dark)};
       }
     }
 

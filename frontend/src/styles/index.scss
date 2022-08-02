@@ -17,6 +17,8 @@ $rgb_colors: (
   }
   --font-straight: 'Roboto', sans-serif;
   --font-cursive: 'Gloria Hallelujah', cursive;
+  --transition-duration: 0.2s;
+  --transition-function: ease-in-out;
 }
 
 body {
