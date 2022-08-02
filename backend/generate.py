@@ -7,18 +7,18 @@ __all__ = ['generate_words_and_questions']
 
 
 def determine_locations(table: Table) -> list[WordLocation]:
-    def extract_location(position: Position, scope_direction: Direction,
-                         scope_locations: list[WordLocation]) -> WordLocation | None:
-        axes = get_axes(scope_direction)
-        return next((scope_location for scope_location in scope_locations
-                     if getattr(scope_location.first_letter, axes.changeable) + scope_location.length ==
+    def extract_location(position: Position, location_direction: Direction, all_locations: list[WordLocation]) -> \
+            WordLocation | None:
+        axes = get_axes(location_direction)
+        return next((current_location for current_location in all_locations
+                     if getattr(current_location.first_letter, axes.changeable) + current_location.length ==
                      getattr(position, axes.changeable)
-                     and getattr(scope_location.first_letter, axes.fixed) == getattr(position, axes.fixed)), None)
+                     and getattr(current_location.first_letter, axes.fixed) == getattr(position, axes.fixed)), None)
 
-    def is_new_location(position: Position, scope_direction: Direction) -> bool:
-        axes = get_axes(scope_direction)
-        previous_row, previous_column = shift_position(position, scope_direction, -1)
-        next_row, next_column = shift_position(position, scope_direction)
+    def is_new_location(position: Position, location_direction: Direction) -> bool:
+        axes = get_axes(location_direction)
+        previous_row, previous_column = shift_position(position, location_direction, -1)
+        next_row, next_column = shift_position(position, location_direction)
 
         return (getattr(position, axes.changeable) == 0 or table[previous_row][previous_column] == 0) and \
                (getattr(position, axes.changeable) == len(
