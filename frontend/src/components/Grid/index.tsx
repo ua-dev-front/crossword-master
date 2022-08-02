@@ -35,7 +35,6 @@ export default function Grid(props: Props) {
         return {
           editable: true,
           filled: matrix[row][column],
-          onEdited: () => props.onChange(row, column),
         };
       case Mode.Puzzle:
         return {
@@ -82,6 +81,11 @@ export default function Grid(props: Props) {
             key={`${rowIndex}-${columnIndex}`}
             data={getData(rowIndex, columnIndex)}
             roundedCorners={getRoundedCorners(rowIndex, columnIndex)}
+            onEdited={
+              mode === Mode.Draw || mode === Mode.Erase
+                ? () => props.onChange(rowIndex, columnIndex)
+                : undefined
+            }
           />
         ))
       )}

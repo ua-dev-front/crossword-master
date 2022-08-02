@@ -2,7 +2,6 @@ type CellData =
   | {
       editable: true;
       filled: boolean;
-      onEdited: () => void;
     }
   | {
       editable: false;

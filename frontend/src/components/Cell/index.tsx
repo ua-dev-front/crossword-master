@@ -9,17 +9,16 @@ const ACCESSIBILITY_KEYS = ['Enter', 'Space'];
 type Props = {
   data: CellData;
   roundedCorners?: Corner[];
+  onEdited?: () => void;
 };
 
-export default function Cell({ data, roundedCorners }: Props) {
+export default function Cell({ data, roundedCorners, onEdited }: Props) {
   const { editable } = data;
   const content = !editable ? data.content : null;
   const filled: boolean = (editable && data.filled) || (!editable && !!content);
 
   const handleEdited = () => {
-    if (editable) {
-      data.onEdited();
-    }
+    if (editable && onEdited) onEdited();
   };
 
   const handleClick = () => {
