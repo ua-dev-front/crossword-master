@@ -79,6 +79,7 @@ export default function Grid(props: Props) {
       {props.matrix.map((row, rowIndex) =>
         row.map((cell, columnIndex) => (
           <Cell
+            key={`${rowIndex}-${columnIndex}`}
             data={getData(rowIndex, columnIndex)}
             roundedCorners={getRoundedCorners(rowIndex, columnIndex)}
           />
