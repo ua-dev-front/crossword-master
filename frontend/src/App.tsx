@@ -107,8 +107,8 @@ function App() {
         data={{
           editable: true,
           filled,
-          onEdited: () => setFilled(!filled),
         }}
+        onEdited={() => setFilled(!filled)}
       />
       <hr />
       <Cell
