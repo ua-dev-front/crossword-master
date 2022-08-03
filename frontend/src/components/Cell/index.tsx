@@ -17,9 +17,7 @@ export default function Cell({ data, roundedCorners, onEdited }: Props) {
   const content = !editable ? data.content : null;
   const filled: boolean = (editable && data.filled) || (!editable && !!content);
 
-  const handleEdited = () => {
-    if (editable && onEdited) onEdited();
-  };
+  const handleEdited = () => editable && onEdited && onEdited();
 
   const handleClick = () => {
     handleEdited();
