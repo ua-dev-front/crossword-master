@@ -1,0 +1,52 @@
+@import '../../styles//functions.scss';
+
+.layout {
+    --wrapper-width: 2044px;
+
+    background-color: cl(selected);
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    overflow: hidden;
+
+    &__wrapper {
+        width: var(--wrapper-width);
+        height: 1363px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        &__repeated-background {
+            position: relative;
+
+            &,
+            &__inner {
+                width: 100%;
+            }
+
+            &__inner {
+                height: 790px;
+                position: absolute;
+                margin-top: -160px;
+                background-size: cover;
+                background: round;
+                background-image: url('../../assets/repeated_background.png');
+            }
+        }
+
+        &__background {
+            width: var(--wrapper-width);
+        }
+
+        &__content {
+            width: 620px;
+            height: 825px;
+            padding: 64px;
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%, 370px);
+            box-sizing: border-box;
+        }
+    }
+}

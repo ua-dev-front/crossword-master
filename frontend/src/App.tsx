@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Button from './components/Button';
 import Cell from './components/Cell';
 import Grid from './components/Grid';
+import Layout from './components/Layout';
 import Corner from './types/corner';
 import Mode from './types/mode';
 
@@ -136,8 +137,9 @@ function App() {
       <p>Grid puzzle example:</p>
       <Grid mode={Mode.Puzzle} matrix={puzzleMatrix} />
       <hr />
-      <p>Grid answer example:</p>
-      <Grid mode={Mode.Answer} matrix={answerMatrix} />
+      <Layout>
+        <Grid mode={Mode.Answer} matrix={answerMatrix} />
+      </Layout>
     </>
   );
 }
