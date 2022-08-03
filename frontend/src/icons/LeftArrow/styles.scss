@@ -5,8 +5,8 @@
   height: var(--icon-size);
   width: var(--icon-size);
 
-  --icon-colour: #{cl(dark, 0.67)};
+  --icon-color: #{cl(dark, 0.67)};
   .icon-path {
-    fill: var(--icon-colour);
+    fill: var(--icon-color);
   }
 }

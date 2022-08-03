@@ -6,7 +6,7 @@
   height: var(--icon-size);
   box-sizing: border-box;
 
-  --icon-colour: #{cl(dark, 0.67)};
-  border: solid 1px var(--icon-colour);
+  --icon-color: #{cl(dark, 0.67)};
+  border: solid 1px var(--icon-color);
   border-radius: 2px;
 }
