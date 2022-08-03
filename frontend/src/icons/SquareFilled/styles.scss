@@ -1,6 +1,8 @@
 @import '../../styles/functions.scss';
 
-.icon-square_filled {
-  background-color: var(--icon-colour);
-  border: none;
+.icon-square {
+  &.icon-square_filled {
+    background-color: var(--icon-colour);
+    border: none;
+  }
 }
