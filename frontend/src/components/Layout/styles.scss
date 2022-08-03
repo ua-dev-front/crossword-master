@@ -40,13 +40,15 @@
         }
 
         &__content {
-            width: 620px;
+            width: 528px;
             height: 825px;
             padding: 64px;
             position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             left: 50%;
             transform: translate(-50%, 370px);
-            box-sizing: border-box;
         }
     }
 }
