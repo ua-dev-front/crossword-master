@@ -6,8 +6,6 @@ import Tab from './components/Tab';
 import Corner from './types/corner';
 import Mode from './types/mode';
 import LeftArrow from './icons/LeftArrow';
-import SquareFilled from './icons/SquareFilled';
-import SquareLetter from './icons/SquareLetter';
 import Square from './icons/Square';
 
 const answerMatrix = [
@@ -113,7 +111,7 @@ function App() {
         label='Puzzle'
         isSelected={false}
         onClick={() => console.log('clicked tab')}
-        icon={<SquareFilled />}
+        icon={<Square isFilled={true} />}
       />
       <hr />
       <Tab
@@ -127,10 +125,14 @@ function App() {
         label='Puzzle'
         isSelected={false}
         onClick={() => console.log('clicked tab')}
-        icon={<Square />}
+        icon={<Square isFilled={false} />}
       />
       <p>Selected:</p>
-      <Tab label='Answer' isSelected={true} icon={<SquareLetter />} />
+      <Tab
+        label='Answer'
+        isSelected={true}
+        icon={<Square isFilled={false} content={'A'} />}
+      />
       <hr />
       <p>Cell example:</p>
       <Cell
