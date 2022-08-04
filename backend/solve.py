@@ -1,7 +1,7 @@
 from api import get_possible_word_answers
 from app_types import Direction, Pattern, Position, SolveAnswers, SolveWords, Table, WordLocation
 from backtracking import solve
-from helpers import increase_position
+from helpers import shift_position
 
 __all__ = ['solve_questions']
 
@@ -17,7 +17,7 @@ def get_word_length(start_position: Position, table: Table, direction: Direction
 
     while is_filled_cell(position, table):
         length += 1
-        position = increase_position(position, direction)
+        position = shift_position(position, direction)
 
     return length
 

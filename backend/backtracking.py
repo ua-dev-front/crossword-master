@@ -1,5 +1,5 @@
 from app_types import Direction, LoadOptions, Pattern, Position, WordLocation
-from helpers import increase_position
+from helpers import shift_position
 
 __all__ = ['solve']
 
@@ -11,7 +11,7 @@ def update_table(answer: str, table: BackTrackTable, direction: Direction, start
 
     for letter in answer:
         table[position.row][position.column] = letter
-        position = increase_position(position, direction)
+        position = shift_position(position, direction)
 
 
 def get_word_pattern(table: BackTrackTable, direction: Direction, start_position: Position, word_len: int) -> Pattern:
@@ -23,14 +23,14 @@ def get_word_pattern(table: BackTrackTable, direction: Direction, start_position
 
         pattern.append(current_cell if isinstance(current_cell, str) else None)
 
-        position = increase_position(position, direction)
+        position = shift_position(position, direction)
 
     return pattern
 
 
 def get_table(locations: list[WordLocation]) -> BackTrackTable:
     def get_last_position(location: WordLocation) -> Position:
-        return increase_position(location.first_letter, location.type, location.length)
+        return shift_position(location.first_letter, location.type, location.length)
 
     def get_table_size() -> int:
         return max(coord for location in locations for coord in get_last_position(location))
