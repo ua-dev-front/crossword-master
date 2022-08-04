@@ -53,7 +53,8 @@
     .icon {
       transform: scale(1.125);
 
-      --icon-color: #{cl(dark)};
+      --icon-stroke: #{cl(near-black)};
+      --icon-fill: #{cl(dark)};
     }
   }
 
@@ -69,7 +70,8 @@
       }
 
       .icon {
-        --icon-color: #{cl(dark)};
+        --icon-stroke: #{cl(near-black)};
+        --icon-fill: #{cl(dark)};
       }
     }
 
