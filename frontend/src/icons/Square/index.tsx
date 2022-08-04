@@ -9,8 +9,8 @@ type Props = {
 export default function Square({ isFilled, content }: Props) {
   const classes = classnames(
     'icon',
-    'icon__square',
-    isFilled && 'icon__square_filled'
+    'icon-square',
+    isFilled && 'icon-square_filled'
   );
 
   return <span className={classes}>{content}</span>;

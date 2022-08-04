@@ -6,7 +6,7 @@ export default function LeftArrow() {
       viewBox='0 0 16 8'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
-      className='icon icon__left-arrow'
+      className='icon icon-left-arrow'
     >
       <path
         className='icon-path'
