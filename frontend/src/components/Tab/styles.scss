@@ -1,0 +1,82 @@
+@import '../../styles/functions.scss';
+
+.tab {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  width: fit-content;
+  height: fit-content;
+  gap: 4px;
+  box-sizing: border-box;
+  padding: 2px 3px;
+
+  background: none;
+  outline: none;
+  border: 1px solid transparent;
+  border-radius: 2px;
+
+  &__icon {
+    display: flex;
+    align-items: center;
+
+    .icon,
+    .icon-path {
+      transition-duration: var(--transition-duration);
+      transition-timing-function: var(--transition-function);
+      transition-property: fill, background-color, border-color;
+    }
+  }
+
+  &__label {
+    transition-duration: var(--transition-duration);
+    transition-timing-function: var(--transition-function);
+    transition-property: color, font-size, border-color;
+    font-family: var(--font-straight);
+    font-size: 16px;
+    line-height: 19px;
+    color: cl(dark);
+    border-bottom: 1px dashed cl(dark);
+  }
+
+  &_selected {
+    gap: 7px;
+
+    & .tab__label {
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 21px;
+      color: cl(near-black);
+      border: 0;
+    }
+
+    .icon {
+      transform: scale(1.125);
+
+      --icon-stroke: #{cl(near-black)};
+      --icon-fill: #{cl(dark)};
+    }
+  }
+
+  &:not(&_selected) {
+    cursor: pointer;
+
+    &:hover,
+    &:active,
+    &:focus-visible {
+      & .tab__label {
+        color: cl(near-black);
+        border-color: cl(near-black);
+      }
+
+      .icon {
+        --icon-stroke: #{cl(near-black)};
+        --icon-fill: #{cl(dark)};
+      }
+    }
+
+    &:focus-visible {
+      border-color: cl(selected);
+    }
+  }
+}
