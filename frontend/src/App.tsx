@@ -7,6 +7,7 @@ import Corner from './types/corner';
 import Mode from './types/mode';
 import LeftArrow from './icons/LeftArrow';
 import Square from './icons/Square';
+import TextField from './components/TextField';
 
 const answerMatrix = [
   [
@@ -93,6 +94,7 @@ const emptyMatrix = [...Array(10)].map(() => [...Array(10)].map(() => false));
 function App() {
   const [filled, setFilled] = useState(false);
   const [matrix, setMatrix] = useState(emptyMatrix);
+  const [textFieldValue, setTextFieldValue] = useState<string | null>(null);
 
   const handleMatrixChange = (row: number, column: number) => {
     const newMatrix = [...matrix];
@@ -105,6 +107,15 @@ function App() {
   return (
     <>
       <p>Under development</p>
+      <h3>Text field exapmle:</h3>
+      <TextField
+        isEditable
+        content={textFieldValue ?? ''}
+        onChange={(val) => setTextFieldValue(val)}
+      />
+      <hr />
+      <TextField content={textFieldValue ?? ''} />
+      <hr />
       <h3>Pictogram example:</h3>
       <p>Normal:</p>
       <Tab

@@ -1,0 +1,30 @@
+@import '../../styles/functions.scss';
+
+.text-field {
+    box-sizing: border-box;
+    width: 200px;
+    min-height: 33px;
+    padding: 6px;
+    background-color: transparent;
+    border: none;
+    overflow: hidden;
+    overflow-wrap: break-word;
+
+    font-family: var(--font-straight);
+    font-size: 18px;
+    line-height: 21px;
+
+    &_editable {
+        border: 1px solid cl(light-dark);
+        border-radius: 2px;
+        outline: none;
+        resize: none;
+
+        // To overwrite default textarea height
+        height: 33px;
+
+        &:focus-visible {
+            border-color: cl(near-black);
+        }
+    }
+}
