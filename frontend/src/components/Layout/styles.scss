@@ -2,6 +2,8 @@
 
 .layout {
     --wrapper-width: 2044px;
+    --mask-shift: 160px;
+    --content-padding: 64px;
 
     display: flex;
     justify-content: center;
@@ -19,9 +21,9 @@
         &__background {
             position: absolute;
             width: 100%;
-            height: 1117px;
-            background-image: url("../../assets/background.webp");
-            background-size: contain;
+            height: 100%;
+            background-image: url('../../assets/background.webp');
+            background-repeat: no-repeat;
         }
 
         &__content {
@@ -30,21 +32,24 @@
             align-items: center;
             width: 528px;
             min-height: 860px;
-            padding: 64px;
+            padding: var(--content-padding);
             margin-top: 125px;
-            z-index: 5;
+            z-index: 3;
         }
 
         &__repeated-background {
             position: relative;
-            width: var(--wrapper-width);
-            height: 100%;
+            
+            &,
+            &__background,
+            &__mask {
+                width: 100%;
+                height: 100%;
+            }
 
             &__background,
             &__mask {
                 position: absolute;
-                width: 100%;
-                height: 100%;
             }
 
             &__background {
@@ -53,8 +58,8 @@
             }
 
             &__mask {
-                top: -160px;
-                padding-bottom: 160px;
+                top: calc(var(--mask-shift) * -1);
+                padding-bottom: var(--mask-shift);
                 background-image: url('../../assets/repeated_background_mask.webp');
                 z-index: 2;
             }
