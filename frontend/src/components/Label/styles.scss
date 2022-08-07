@@ -1,0 +1,26 @@
+@import '../../styles/functions.scss';
+
+.label {
+    --small-font-size: 18px;
+    --large-font-size: 21px;
+    --font-size-line-height-coefficient: 2;
+
+    @function line-height($font-size) {
+        @return calc($font-size * var(--font-size-line-height-coefficient));
+    }
+
+    width: 100%;
+    font-family: var(--font-cursive);
+    color: cl(dark);
+    text-align: center;
+
+    &_small {
+        font-size: var(--small-font-size);
+        line-height: line-height(var(--small-font-size));
+    }
+
+    &_large {
+        font-size: var(--large-font-size);
+        line-height: line-height(var(--large-font-size));
+    }
+}
