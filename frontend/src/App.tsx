@@ -139,6 +139,8 @@ function App() {
       <hr />
       <Layout>
         <Grid mode={Mode.Answer} matrix={answerMatrix} />
+        <Grid mode={Mode.Answer} matrix={answerMatrix} />
+        <Grid mode={Mode.Answer} matrix={answerMatrix} />
       </Layout>
     </>
   );
