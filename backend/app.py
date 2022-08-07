@@ -2,7 +2,8 @@ from flask import Flask, jsonify, request
 from typing import TypedDict
 
 from app_types import Direction, GenerateResponse, Position, SolveResponse, SolveWord, Table
-from solve_questions import solve_questions
+from generate import generate_words_and_questions
+from solve import solve_questions
 
 
 # types
@@ -47,9 +48,7 @@ def request_handler(func: callable):
 @app.route('/generate', methods=['POST'], endpoint='generate')
 @request_handler
 def generate(data: GenerateData) -> GenerateResponse:
-    table = data['table']
-
-    return {'words': None}
+    return GenerateResponse(generate_words_and_questions(data['table']))
 
 
 @app.route('/solve', methods=['POST'], endpoint='solve')

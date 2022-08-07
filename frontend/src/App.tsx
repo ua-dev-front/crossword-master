@@ -3,8 +3,11 @@ import Button from './components/Button';
 import Cell from './components/Cell';
 import Grid from './components/Grid';
 import Layout from './components/Layout';
+import Tab from './components/Tab';
 import Corner from './types/corner';
 import Mode from './types/mode';
+import LeftArrow from './icons/LeftArrow';
+import Square from './icons/Square';
 
 const answerMatrix = [
   [
@@ -103,13 +106,42 @@ function App() {
   return (
     <>
       <p>Under development</p>
+      <h3>Pictogram example:</h3>
+      <p>Normal:</p>
+      <Tab
+        label='Puzzle'
+        isSelected={false}
+        onClick={() => console.log('clicked tab')}
+        icon={<Square isFilled={true} />}
+      />
+      <hr />
+      <Tab
+        label='Puzzle'
+        isSelected={false}
+        onClick={() => console.log('clicked tab')}
+        icon={<LeftArrow />}
+      />
+      <hr />
+      <Tab
+        label='Puzzle'
+        isSelected={false}
+        onClick={() => console.log('clicked tab')}
+        icon={<Square isFilled={false} />}
+      />
+      <p>Selected:</p>
+      <Tab
+        label='Answer'
+        isSelected={true}
+        icon={<Square isFilled={false} content={'A'} />}
+      />
+      <hr />
       <p>Cell example:</p>
       <Cell
         data={{
           editable: true,
           filled,
-          onEdited: () => setFilled(!filled),
         }}
+        onEdited={() => setFilled(!filled)}
       />
       <hr />
       <Cell

@@ -1,0 +1,12 @@
+@import '../../styles/functions.scss';
+
+.icon-left-arrow {
+  --icon-size: 16px;
+  height: var(--icon-size);
+  width: var(--icon-size);
+
+  --icon-stroke: #{cl(dark, 0.67)};
+  .icon-path {
+    fill: var(--icon-stroke);
+  }
+}
