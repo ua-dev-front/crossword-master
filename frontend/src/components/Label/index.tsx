@@ -8,7 +8,5 @@ type Props = {
 };
 
 export default function Label({ content, size }: Props) {
-  const classes = `label label_${size}`;
-
-  return <p className={classes}>{content}</p>;
+  return <p className={`label label_${size}`}>{content}</p>;
 }

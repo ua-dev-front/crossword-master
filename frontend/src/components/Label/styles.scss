@@ -3,24 +3,20 @@
 .label {
     --small-font-size: 18px;
     --large-font-size: 21px;
-    --font-size-line-height-coefficient: 2;
 
-    @function line-height($font-size) {
-        @return calc($font-size * var(--font-size-line-height-coefficient));
-    }
-
-    width: 100%;
-    font-family: var(--font-cursive);
+    display: block;
+    margin: 0 0 1em 0;
     color: cl(dark);
+    font-family: var(--font-cursive);
     text-align: center;
+    line-height: 2em;
+    
 
     &_small {
         font-size: var(--small-font-size);
-        line-height: line-height(var(--small-font-size));
     }
 
     &_large {
         font-size: var(--large-font-size);
-        line-height: line-height(var(--large-font-size));
     }
 }
