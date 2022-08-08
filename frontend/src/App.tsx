@@ -94,7 +94,9 @@ const emptyMatrix = [...Array(10)].map(() => [...Array(10)].map(() => false));
 function App() {
   const [filled, setFilled] = useState(false);
   const [matrix, setMatrix] = useState(emptyMatrix);
-  const [textFieldValue, setTextFieldValue] = useState<string | null>(null);
+  const [textFieldValue, setTextFieldValue] = useState<string | null>(
+    'hello worldhello worldhello worldhello worldhello worldhello worldhello world'
+  );
 
   const handleMatrixChange = (row: number, column: number) => {
     const newMatrix = [...matrix];
@@ -108,13 +110,17 @@ function App() {
     <>
       <p>Under development</p>
       <h3>Text field exapmle:</h3>
-      <TextField
-        isEditable
-        content={textFieldValue ?? ''}
-        onChange={(val) => setTextFieldValue(val)}
-      />
+      <div style={{ width: '200px' }}>
+        <TextField
+          isEditable
+          content={textFieldValue ?? ''}
+          onChange={(val) => setTextFieldValue(val)}
+        />
+      </div>
       <hr />
-      <TextField content={textFieldValue ?? ''} />
+      <div style={{ width: '200px' }}>
+        <TextField content={textFieldValue ?? ''} />
+      </div>
       <hr />
       <h3>Pictogram example:</h3>
       <p>Normal:</p>
