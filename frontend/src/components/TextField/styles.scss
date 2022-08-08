@@ -15,6 +15,7 @@
         border-color: cl(light-dark);
         outline: none;
         resize: none;
+        overflow: hidden;
 
         &:focus-visible {
             border-color: cl(near-black);
