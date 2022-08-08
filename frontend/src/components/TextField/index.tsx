@@ -1,4 +1,5 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
+import ReactTextareaAutosize from 'react-textarea-autosize';
 import classnames from 'classnames';
 import './styles.scss';
 
@@ -14,21 +15,14 @@ export default function TextField({
   onChange,
 }: Props) {
   const classes = classnames('text-field', isEditable && 'text-field_editable');
-
-  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    // Set height of textarea according to content
-    e.target.style.height = '0px';
-    e.target.style.height = `${e.target.scrollHeight}px`;
-
-    onChange?.(e.target.value);
-  };
+  const placeholder = 'TBD';
 
   return isEditable ? (
-    <textarea
+    <ReactTextareaAutosize
       className={classes}
-      placeholder='TBD'
+      placeholder={placeholder}
       value={content}
-      onChange={handleChange}
+      onChange={(e) => onChange?.(e.target.value)}
     />
   ) : (
     <div className={classes}>{content}</div>
