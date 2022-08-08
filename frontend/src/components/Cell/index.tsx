@@ -1,7 +1,7 @@
 import React, { KeyboardEvent } from 'react';
 import classnames from 'classnames';
-import CellData from '../../types/cellData';
-import Corner from '../../types/corner';
+import CellData from './cellData';
+import Corner from './corner';
 import './styles.scss';
 
 const ACCESSIBILITY_KEYS = ['Enter', 'Space'];

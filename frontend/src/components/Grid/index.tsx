@@ -1,8 +1,8 @@
 import React from 'react';
 import Cell from '../Cell';
-import CellData from '../../types/cellData';
-import Corner from '../../types/corner';
-import Mode from '../../types/mode';
+import CellData from '../../components/Cell/cellData';
+import Corner from '../Cell/corner';
+import Mode from './mode';
 import './styles.scss';
 
 type Props =

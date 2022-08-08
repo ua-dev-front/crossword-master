@@ -1,5 +1,5 @@
 import React from 'react';
-import LabelSize from '../../types/labelSize';
+import LabelSize from './labelSize';
 import './styles.scss';
 
 type Props = {

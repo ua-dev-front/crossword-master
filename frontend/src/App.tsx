@@ -4,9 +4,9 @@ import Cell from './components/Cell';
 import Grid from './components/Grid';
 import Label from './components/Label';
 import Tab from './components/Tab';
-import Corner from './types/corner';
-import LabelSize from './types/labelSize';
-import Mode from './types/mode';
+import Corner from './components/Cell/corner';
+import LabelSize from './components/Label/labelSize';
+import Mode from './components/Grid/mode';
 import LeftArrow from './icons/LeftArrow';
 import Square from './icons/Square';
 
