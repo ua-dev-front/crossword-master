@@ -16,6 +16,7 @@
         outline: none;
         resize: none;
         overflow: hidden;
+        overflow-wrap: break-word;
 
         &:focus-visible {
             border-color: cl(near-black);

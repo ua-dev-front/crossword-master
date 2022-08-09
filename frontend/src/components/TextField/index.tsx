@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import classnames from 'classnames';
 import './styles.scss';
 
@@ -8,6 +8,8 @@ type Props = {
   onChange?: (value: string) => void;
 };
 
+const PLACEHOLDER = 'TBD';
+
 export default function TextField({
   isEditable = false,
   content,
@@ -16,10 +18,10 @@ export default function TextField({
   const textareaRef = useRef(null);
 
   const classes = classnames('text-field', isEditable && 'text-field_editable');
-  const placeholder = 'TBD';
 
   const setHeight = (element: HTMLTextAreaElement) => {
-    // Set height to zero to get real height of content, instead of strictly set height
+    // If content has less lines than it used to (user deletes content), in order to get real height of content,
+    // instead of strictly set height, reset height to 0.
     element.style.height = '0';
 
     const elementStyles = window.getComputedStyle(element);
@@ -31,14 +33,16 @@ export default function TextField({
     element.style.height = `${fullHeight}px`;
   };
 
-  useEffect(() => {
-    if (isEditable && textareaRef.current) setHeight(textareaRef.current);
+  useLayoutEffect(() => {
+    if (isEditable && textareaRef.current) {
+      setHeight(textareaRef.current);
+    }
   }, [content, isEditable]);
 
   return isEditable ? (
     <textarea
       className={classes}
-      placeholder={placeholder}
+      placeholder={PLACEHOLDER}
       value={content}
       onChange={(e) => onChange?.(e.target.value)}
       ref={textareaRef}

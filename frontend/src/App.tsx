@@ -94,9 +94,7 @@ const emptyMatrix = [...Array(10)].map(() => [...Array(10)].map(() => false));
 function App() {
   const [filled, setFilled] = useState(false);
   const [matrix, setMatrix] = useState(emptyMatrix);
-  const [textFieldValue, setTextFieldValue] = useState<string | null>(
-    'hello worldhello worldhello worldhello worldhello worldhello worldhello world'
-  );
+  const [textFieldValue, setTextFieldValue] = useState<string | null>(null);
 
   const handleMatrixChange = (row: number, column: number) => {
     const newMatrix = [...matrix];
