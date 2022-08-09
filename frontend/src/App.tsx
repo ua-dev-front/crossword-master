@@ -169,7 +169,7 @@ function App() {
       <p>Grid puzzle example:</p>
       <Grid mode={Mode.Puzzle} matrix={puzzleMatrix} />
       <hr />
-      <Layout>
+      <Layout title='Crossword Generator & Solver'>
         <Grid mode={Mode.Answer} matrix={answerMatrix} />
         <Grid mode={Mode.Answer} matrix={answerMatrix} />
         <Grid mode={Mode.Answer} matrix={answerMatrix} />
