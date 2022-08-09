@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import Button from './components/Button';
 import Cell from './components/Cell';
-import Grid from './components/Grid';
-import Label from './components/Label';
+import Grid, { Mode } from './components/Grid';
+import Label, { LabelSize } from './components/Label';
 import Tab from './components/Tab';
 import Corner from './components/Cell/corner';
-import LabelSize from './components/Label/labelSize';
-import Mode from './components/Grid/mode';
 import LeftArrow from './icons/LeftArrow';
 import Square from './icons/Square';
 

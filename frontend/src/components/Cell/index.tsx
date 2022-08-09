@@ -1,10 +1,19 @@
 import React, { KeyboardEvent } from 'react';
 import classnames from 'classnames';
-import CellData from './cellData';
 import Corner from './corner';
 import './styles.scss';
 
 const ACCESSIBILITY_KEYS = ['Enter', 'Space'];
+
+export type CellData =
+  | {
+      editable: true;
+      filled: boolean;
+    }
+  | {
+      editable: false;
+      content: { letter: string | null; number: number | null } | null;
+    };
 
 type Props = {
   data: CellData;

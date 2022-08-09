@@ -1,6 +1,10 @@
 import React from 'react';
-import LabelSize from './labelSize';
 import './styles.scss';
+
+export enum LabelSize {
+  Small = 'small',
+  Large = 'large',
+}
 
 type Props = {
   content: string;
