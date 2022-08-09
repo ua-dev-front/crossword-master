@@ -1,9 +1,14 @@
 import React from 'react';
-import Cell from '../Cell';
-import CellData from '../../types/cellData';
-import Corner from '../../types/corner';
-import Mode from '../../types/mode';
+import Cell, { CellData } from '../Cell';
+import Corner from '../Cell/corner';
 import './styles.scss';
+
+export enum Mode {
+  Answer = 'answer',
+  Draw = 'draw',
+  Erase = 'erase',
+  Puzzle = 'puzzle',
+}
 
 type Props =
   | {
