@@ -1,9 +1,6 @@
 @import '../../styles/functions.scss';
 
 .label {
-    --small-font-size: 18px;
-    --large-font-size: 21px;
-
     display: block;
     margin: 0 0 1em 0;
     color: cl(dark);
@@ -12,10 +9,10 @@
     line-height: 2em;
 
     &_small {
-        font-size: var(--small-font-size);
+        font-size: 18px;
     }
 
     &_large {
-        font-size: var(--large-font-size);
+        font-size: 21px;
     }
 }
