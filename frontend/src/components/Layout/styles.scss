@@ -1,4 +1,4 @@
-@import "../../styles/functions.scss";
+@import '../../styles/functions.scss';
 
 .layout {
     --wrapper-width: 2044px;
@@ -48,7 +48,7 @@
         position: absolute;
         width: var(--wrapper-width);
         height: 100%;
-        background-image: url("../../assets/background.webp");
+        background-image: url('../../assets/background.webp');
         background-repeat: no-repeat;
     }
 
@@ -65,14 +65,14 @@
         }
 
         &-background {
-            background-image: url("../../assets/repeated-background.webp");
+            background-image: url('../../assets/repeated-background.webp');
             z-index: 1;
         }
 
         &-mask {
             top: calc(var(--mask-shift) * -1);
             padding-bottom: var(--mask-shift);
-            background-image: url("../../assets/repeated-background-mask.webp");
+            background-image: url('../../assets/repeated-background-mask.webp');
             z-index: 2;
         }
     }
