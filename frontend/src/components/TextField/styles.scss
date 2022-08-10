@@ -2,6 +2,7 @@
 
 .text-field {
     width: 100%;
+    box-sizing: border-box;
     padding: 6px;
     background-color: transparent;
     border: 1px solid transparent;
@@ -15,6 +16,9 @@
         border-color: cl(light-dark);
         outline: none;
         resize: none;
+
+        // When height of element is smaller than height of content (when we autoresize textarea)
+        // scrollbar shouldn't appear for autoresize to work correctly
         overflow: hidden;
         overflow-wrap: break-word;
 

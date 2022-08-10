@@ -20,15 +20,12 @@ export default function TextField({
   const classes = classnames('text-field', isEditable && 'text-field_editable');
 
   const setHeight = (element: HTMLTextAreaElement) => {
-    // If content has less lines than it used to (user deletes content), in order to get real height of content,
-    // instead of strictly set height, reset height to 0.
-    element.style.height = '0';
+    const borderHeight = element.offsetHeight - element.clientHeight;
 
-    const elementStyles = window.getComputedStyle(element);
-    const fullHeight =
-      element.scrollHeight -
-      parseInt(elementStyles.paddingTop) -
-      parseInt(elementStyles.paddingBottom);
+    // If content has less lines than it used to (user deletes content), in order to get real height of content,
+    // we have to make sure that strictly set height will be smaller than content height.
+    element.style.height = '0';
+    const fullHeight = element.scrollHeight + borderHeight;
 
     element.style.height = `${fullHeight}px`;
   };
