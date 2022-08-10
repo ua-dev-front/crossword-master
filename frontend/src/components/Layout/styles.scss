@@ -1,9 +1,9 @@
 @import '../../styles/functions.scss';
 
 .layout {
-    --wrapper-width: 2044px;
-    --mask-shift: 160px;
-    --content-padding: 64px;
+    --layout-wrapper-width: 2044px;
+    --layout-mask-shift: 160px;
+    --layout-content-padding: 64px;
 
     position: relative;
     display: flex;
@@ -17,7 +17,7 @@
         flex-direction: column;
         align-items: center;
         width: 100vw;
-        max-width: var(--wrapper-width);
+        max-width: var(--layout-wrapper-width);
         min-height: 100%;
     }
 
@@ -42,14 +42,14 @@
         align-items: center;
         width: 528px;
         min-height: 860px;
-        padding: var(--content-padding);
+        padding: var(--layout-content-padding);
         margin-top: 125px;
         z-index: 3;
     }
 
     &__background {
         position: absolute;
-        width: var(--wrapper-width);
+        width: var(--layout-wrapper-width);
         height: 100%;
         background-image: url('../../assets/background.webp');
         background-repeat: no-repeat;
@@ -57,7 +57,7 @@
 
     &__repeated-background {
         position: relative;
-        width: var(--wrapper-width);
+        width: var(--layout-wrapper-width);
         height: 100%;
 
         &-background,
@@ -73,8 +73,8 @@
         }
 
         &-mask {
-            top: calc(var(--mask-shift) * -1);
-            padding-bottom: var(--mask-shift);
+            top: calc(var(--layout-mask-shift) * -1);
+            padding-bottom: var(--layout-mask-shift);
             background-image: url('../../assets/repeated-background-mask.webp');
             z-index: 2;
         }
