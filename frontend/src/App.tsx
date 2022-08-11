@@ -94,7 +94,7 @@ const emptyMatrix = [...Array(10)].map(() => [...Array(10)].map(() => false));
 function App() {
   const [filled, setFilled] = useState(false);
   const [matrix, setMatrix] = useState(emptyMatrix);
-  const [textFieldValue, setTextFieldValue] = useState<string>(
+  const [textFieldValue, setTextFieldValue] = useState(
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
   );
 
