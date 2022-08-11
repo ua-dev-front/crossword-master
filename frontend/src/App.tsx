@@ -99,7 +99,7 @@ export type Question = {
 function App() {
   const [filled, setFilled] = useState(false);
   const [matrix, setMatrix] = useState(emptyMatrix);
-  const [questions, setQuestions] = useState<Question[]>([
+  const [questions, setQuestions] = useState([
     { id: 1, question: 'A thin, flat, circular plate or similar object.' },
     {
       id: 33,
