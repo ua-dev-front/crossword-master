@@ -7,7 +7,7 @@ import Corner from './types/corner';
 import Mode from './types/mode';
 import LeftArrow from './icons/LeftArrow';
 import Square from './icons/Square';
-import TextField from './components/TextField';
+import QuestionPanel, { panelColor } from './components/QuestionPanel';
 
 const answerMatrix = [
   [
@@ -91,12 +91,22 @@ const puzzleMatrix = answerMatrix.map((row) =>
 
 const emptyMatrix = [...Array(10)].map(() => [...Array(10)].map(() => false));
 
+export type Question = {
+  id: number;
+  question: string;
+};
+
 function App() {
   const [filled, setFilled] = useState(false);
   const [matrix, setMatrix] = useState(emptyMatrix);
-  const [textFieldValue, setTextFieldValue] = useState<string>(
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-  );
+  const [questions, setQuestions] = useState<Question[]>([
+    { id: 1, question: 'A thin, flat, circular plate or similar object.' },
+    {
+      id: 33,
+      question:
+        'A male person considered to have been significantly shaped by some external influence; a male adopted person in relation to his adoptive parents.',
+    },
+  ]);
 
   const handleMatrixChange = (row: number, column: number) => {
     const newMatrix = [...matrix];
@@ -106,21 +116,30 @@ function App() {
     setMatrix(newMatrix);
   };
 
+  const handleQuestionsChange = (value: string, index: number) => {
+    const newQuestions = [...questions];
+
+    newQuestions[index].question = value;
+
+    setQuestions(newQuestions);
+  };
+
   return (
     <>
       <p>Under development</p>
-      <h3>Text field exapmle:</h3>
-      <div style={{ width: '200px' }}>
-        <TextField
-          isEditable
-          content={textFieldValue ?? ''}
-          onChange={(val) => setTextFieldValue(val)}
-        />
-      </div>
+      <h3>Question panel exapmle:</h3>
+      <QuestionPanel
+        questions={questions}
+        isEditable={true}
+        color={panelColor.Pink}
+        onChange={(value, index) => handleQuestionsChange(value, index)}
+      />
       <hr />
-      <div style={{ width: '200px' }}>
-        <TextField content={textFieldValue ?? ''} />
-      </div>
+      <QuestionPanel
+        questions={questions}
+        isEditable={false}
+        color={panelColor.Yellow}
+      />
       <hr />
       <h3>Pictogram example:</h3>
       <p>Normal:</p>

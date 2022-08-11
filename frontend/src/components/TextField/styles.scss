@@ -7,6 +7,7 @@
     background-color: transparent;
     border: 1px solid transparent;
     border-radius: 2px;
+    overflow-wrap: break-word;
 
     font-family: var(--font-straight);
     font-size: 18px;
@@ -20,7 +21,6 @@
         // When height of element is smaller than height of content (when we autoresize textarea)
         // scrollbar shouldn't appear for autoresize to work correctly
         overflow: hidden;
-        overflow-wrap: break-word;
 
         &:focus-visible {
             border-color: cl(near-black);
