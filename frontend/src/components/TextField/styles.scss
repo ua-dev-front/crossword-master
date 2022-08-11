@@ -18,8 +18,8 @@
         outline: none;
         resize: none;
 
-        // When height of element is smaller than height of content (when we autoresize textarea)
-        // scrollbar shouldn't appear for autoresize to work correctly
+        // When height of element is smaller than height of content (when we autoresize textarea) scrollbar shouldn't
+        // appear for autoresize to work correctly
         overflow: hidden;
 
         &:focus-visible {
