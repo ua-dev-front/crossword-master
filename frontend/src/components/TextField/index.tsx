@@ -22,7 +22,7 @@ export default function TextField({
   const setHeight = (element: HTMLTextAreaElement) => {
     const borderHeight = element.offsetHeight - element.clientHeight;
 
-    // If content has less lines than it used to (user deletes content), in order to get real height of content, we
+    // If content has fewer lines than it used to (user deletes content), in order to get real height of content, we
     // have to make sure that strictly set height will be smaller than content height.
     element.style.height = '0';
     const fullHeight = element.scrollHeight + borderHeight;
