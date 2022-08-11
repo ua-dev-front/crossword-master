@@ -23,10 +23,6 @@
         align-items: baseline;
         justify-content: space-between;
         column-gap: 7px;
-
-        // &:not(&:last-child) {
-        //     padding-bottom: 10px;
-        // }
     }
 
     &__item-index {
@@ -45,7 +41,10 @@
     &:not(&_editable) {
         .question-panel__item {
             &:not(&:last-child) {
-                border-bottom: 1px dashed cl(dark);
+                .text-field {
+                    padding-bottom: 10px;
+                    border-bottom: 1px dashed cl(dark);
+                }
             }
         }
     }
