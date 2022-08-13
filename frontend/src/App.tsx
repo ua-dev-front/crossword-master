@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Button from './components/Button';
 import Cell from './components/Cell';
+import Dialog from './components/Dialog';
 import Grid, { Mode } from './components/Grid';
 import Label, { LabelSize } from './components/Label';
 import Tab from './components/Tab';
@@ -176,6 +177,14 @@ function App() {
       <hr />
       <p>Label large example:</p>
       <Label content='Across' size={LabelSize.Large} />
+      <hr />
+      <Dialog
+        label='Questions & answers will be lost. Continue?'
+        buttons={[
+          { label: 'Yes', onClick: () => console.log('yes') },
+          { label: 'No', onClick: () => console.log('no') },
+        ]}
+      />
     </>
   );
 }
