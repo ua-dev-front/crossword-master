@@ -4,11 +4,10 @@ import Cell from './components/Cell';
 import Grid, { Mode } from './components/Grid';
 import Label, { LabelSize } from './components/Label';
 import Tab from './components/Tab';
-import TextField from './components/TextField';
 import Corner from './components/Cell/corner';
 import LeftArrow from './icons/LeftArrow';
 import Square from './icons/Square';
-import QuestionPanel, { panelColor } from './components/QuestionPanel';
+import QuestionPanel, { QuestionPanelColor } from './components/QuestionPanel';
 
 const answerMatrix = [
   [
@@ -100,7 +99,7 @@ export type Question = {
 function App() {
   const [filled, setFilled] = useState(false);
   const [matrix, setMatrix] = useState(emptyMatrix);
-  const [questions, setQuestions] = useState([
+  const [questions, setQuestions] = useState<Question[]>([
     { id: 1, question: 'A thin, flat, circular plate or similar object.' },
     {
       id: 33,
@@ -132,14 +131,14 @@ function App() {
       <QuestionPanel
         questions={questions}
         isEditable={true}
-        color={panelColor.Pink}
+        color={QuestionPanelColor.Pink}
         onChange={(value, index) => handleQuestionsChange(value, index)}
       />
       <hr />
       <QuestionPanel
         questions={questions}
         isEditable={false}
-        color={panelColor.Yellow}
+        color={QuestionPanelColor.Yellow}
       />
       <hr />
       <h3>Pictogram example:</h3>

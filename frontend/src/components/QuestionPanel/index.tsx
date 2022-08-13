@@ -4,13 +4,13 @@ import TextField from '../TextField';
 import './styles.scss';
 import { Question } from '../../App';
 
-export enum panelColor {
+export enum QuestionPanelColor {
   Pink = 'pink',
   Yellow = 'yellow',
 }
 
 type Props = {
-  color: panelColor;
+  color: QuestionPanelColor;
   isEditable: boolean;
   questions: Question[];
   onChange?: (value: string, index: number) => void;
@@ -22,21 +22,28 @@ export default function QuestionPanel({
   questions,
   onChange,
 }: Props) {
+  const className = 'question-panel';
+
   const classes = classnames(
-    'question-panel',
+    className,
     isEditable && 'question-panel_editable',
-    color === panelColor.Pink && 'question-panel_pink',
-    color === panelColor.Yellow && 'question-panel_yellow'
+    `${className}_${color}`
   );
 
   return (
     <div className={classes}>
-      {questions.map((question, index) => (
-        <div className='question-panel__item' key={`question-field-${index}`}>
-          <span className='question-panel__item-index'>{question.id}</span>
+      {questions.map(({ question, id }, index) => (
+        <div className='question-panel__item' key={id}>
+          <span
+            className={`question-panel__item-id ${
+              id.toString().length === 1 ? 'single' : 'multiple'
+            }-digit`}
+          >
+            {id}
+          </span>
           <TextField
             isEditable={isEditable}
-            content={question.question}
+            content={question}
             onChange={(value) => onChange?.(value, index)}
           />
         </div>

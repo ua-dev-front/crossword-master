@@ -1,6 +1,9 @@
 @import '../../styles/functions.scss';
 
 .question-panel {
+    --question-panel-font-size: 18px;
+    --question-panel-line-height: 21px;
+
     width: 240px;
     display: flex;
     flex-direction: column;
@@ -22,21 +25,27 @@
         display: flex;
         align-items: baseline;
         justify-content: flex-end;
-        column-gap: 7px;
     }
 
-    &__item-index {
+    &__item-id {
         font-weight: 500;
-        font-size: 18px;
-        line-height: 21px;
+        font-size: var(--question-panel-font-size);
+        line-height: var(--question-panel-line-height);
         color: cl(near-black);
         text-align: right;
-        direction: rtl;
-        width: 11px;
-        flex-basis: auto;
+
+        &.single-digit {
+            margin-right: 7px;
+        }
+        &.multiple-digit {
+            margin-right: 4px;
+        }
     }
 
     .text-field {
+        --text-field-font-size: var(--question-panel-font-size);
+        --text-field-line-height: (--question-panel-line-height);
+        flex-shrink: 0;
         flex-basis: 90%;
     }
 
