@@ -25,6 +25,7 @@
     }
 
     &:focus-visible {
+        border: none;
         outline: 2px solid cl(selected);
     }
 }
