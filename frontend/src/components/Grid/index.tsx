@@ -44,7 +44,7 @@ export default function Grid(props: Props) {
         return {
           editable: false,
           content: matrix[row][column]
-            ? { letter: null, number: matrix[row][column]!.number }
+            ? { letter: null, number: matrix[row][column]?.number ?? null }
             : null,
         };
       case Mode.Answer:
