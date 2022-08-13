@@ -13,18 +13,9 @@ type Props = {
 };
 
 export default function Label({ content, size }: Props) {
-  const getContentWithLineBreaks = (content: string) => {
-    const splitContent = content.split('\n');
-
-    return splitContent.map((line, index) => (
-      <span key={index}>
-        {line}
-        {index !== splitContent.length - 1 && <br />}
-      </span>
-    ));
-  };
-
   return (
-    <p className={`label label_${size}`}>{getContentWithLineBreaks(content)}</p>
+    <p className={`label label_${size}`}>{content.split('\n').flatMap(
+      (line, index) => [index > 0 && <br key={index} />, line]
+    )}</p>
   );
 }
