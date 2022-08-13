@@ -1,9 +1,15 @@
 @import '../../styles/functions.scss';
 
 .text-field {
+    &,
+    &::after {
+        --field-padding: 6px;
+    }
+
+    position: relative;
     width: 100%;
     box-sizing: border-box;
-    padding: 6px;
+    padding: var(--field-padding);
     background-color: transparent;
     border: 1px solid transparent;
     border-radius: 2px;

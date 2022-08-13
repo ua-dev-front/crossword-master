@@ -13,7 +13,9 @@ $rgb_colors: (
   'mandys-pink': '245, 199, 199',
 );
 
-:root {
+:root,
+::after,
+::before {
   @each $key, $value in $rgb_colors {
     --color-#{$key}: #{unquote($value)};
   }

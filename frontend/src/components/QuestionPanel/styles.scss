@@ -21,7 +21,7 @@
     &__item {
         display: flex;
         align-items: baseline;
-        justify-content: space-between;
+        justify-content: flex-end;
         column-gap: 7px;
     }
 
@@ -31,19 +31,27 @@
         line-height: 21px;
         color: cl(near-black);
         text-align: right;
-        flex: 0 2 10%;
+        direction: rtl;
+        width: 11px;
+        flex-basis: auto;
     }
 
     .text-field {
-        flex: 2 1 90%;
+        flex-basis: 90%;
     }
 
     &:not(&_editable) {
         .question-panel__item {
             &:not(&:last-child) {
                 .text-field {
-                    padding-bottom: 10px;
-                    border-bottom: 1px dashed cl(dark);
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        width: calc(100% - var(--field-padding) * 2);
+                        bottom: -5px;
+                        left: var(--field-padding);
+                        border-bottom: 1px dashed cl(dark);
+                    }
                 }
             }
         }
