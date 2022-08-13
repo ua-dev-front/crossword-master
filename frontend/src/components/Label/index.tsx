@@ -19,7 +19,7 @@ export default function Label({ content, size }: Props) {
     return splitContent.map((line, index) => (
       <span key={index}>
         {line}
-        {index !== splitContent.length - 1 ? <br /> : null}
+        {index !== splitContent.length - 1 && <br />}
       </span>
     ));
   };
