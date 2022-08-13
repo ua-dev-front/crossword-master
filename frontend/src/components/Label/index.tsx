@@ -3,6 +3,7 @@ import './styles.scss';
 
 export enum LabelSize {
   Small = 'small',
+  Medium = 'medium',
   Large = 'large',
 }
 
@@ -12,5 +13,14 @@ type Props = {
 };
 
 export default function Label({ content, size }: Props) {
-  return <p className={`label label_${size}`}>{content}</p>;
+  return (
+    <p className={`label label_${size}`}>
+      {content.split('\\n').map((element) => (
+        <>
+          {element}
+          <br />
+        </>
+      ))}
+    </p>
+  );
 }
