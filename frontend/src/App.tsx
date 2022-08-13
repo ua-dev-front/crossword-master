@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import Button from './components/Button';
 import Cell from './components/Cell';
-import Grid from './components/Grid';
+import Grid, { Mode } from './components/Grid';
+import Label, { LabelSize } from './components/Label';
 import Tab from './components/Tab';
 import TextField from './components/TextField';
-import Corner from './types/corner';
-import Mode from './types/mode';
+import Corner from './components/Cell/corner';
 import LeftArrow from './icons/LeftArrow';
 import Square from './icons/Square';
 
@@ -187,6 +187,12 @@ function App() {
       <hr />
       <p>Grid answer example:</p>
       <Grid mode={Mode.Answer} matrix={answerMatrix} />
+      <hr />
+      <p>Label small example:</p>
+      <Label content='Please enter questions below' size={LabelSize.Small} />
+      <hr />
+      <p>Label large example:</p>
+      <Label content='Across' size={LabelSize.Large} />
     </>
   );
 }

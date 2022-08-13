@@ -1,0 +1,18 @@
+@import '../../styles/functions.scss';
+
+.label {
+    display: block;
+    margin: 0 0 1em 0;
+    color: cl(dark);
+    font-family: var(--font-cursive);
+    text-align: center;
+    line-height: 2em;
+
+    &_small {
+        font-size: 18px;
+    }
+
+    &_large {
+        font-size: 21px;
+    }
+}
