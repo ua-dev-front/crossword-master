@@ -8,11 +8,16 @@
     text-align: center;
     line-height: 2em;
 
+
     &_small {
         font-size: 18px;
     }
 
-    &_large {
+    &_medium {
         font-size: 21px;
+    }
+
+    &_large {
+        font-size: 24px;
     }
 }

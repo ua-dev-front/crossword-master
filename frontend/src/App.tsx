@@ -175,11 +175,11 @@ function App() {
       <p>Label small example:</p>
       <Label content='Please enter questions below' size={LabelSize.Small} />
       <hr />
-      <p>Label large example:</p>
-      <Label content='Across' size={LabelSize.Large} />
+      <p>Label medium example:</p>
+      <Label content='Across' size={LabelSize.Medium} />
       <hr />
       <Dialog
-        label='Questions & answers will be lost. Continue?'
+        label='Questions & answers will be lost.\nContinue?'
         buttons={[
           { label: 'Yes', onClick: () => console.log('yes') },
           { label: 'No', onClick: () => console.log('no') },
