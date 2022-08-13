@@ -1,9 +1,15 @@
 import React, { KeyboardEvent } from 'react';
 import classnames from 'classnames';
-import Corner from './corner';
 import './styles.scss';
 
 const ACCESSIBILITY_KEYS = ['Enter', 'Space'];
+
+export enum Corner {
+  TopLeft = 'top-left',
+  TopRight = 'top-right',
+  BottomLeft = 'bottom-left',
+  BottomRight = 'bottom-right',
+}
 
 export type CellData =
   | {
