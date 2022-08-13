@@ -14,7 +14,7 @@ type Props = {
 
 export default function Label({ content, size }: Props) {
   const getContentWithLineBreaks = (content: string) => {
-    const splitContent = content.split('\\n');
+    const splitContent = content.split('\n');
 
     return splitContent.map((line, index) => (
       <span key={index}>

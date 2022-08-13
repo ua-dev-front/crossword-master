@@ -179,7 +179,7 @@ function App() {
       <Label content='Across' size={LabelSize.Medium} />
       <hr />
       <Dialog
-        label='Questions & answers will be lost.\nContinue?'
+        label={'Questions & answers will be lost.\nContinue?'}
         buttons={[
           { label: 'Yes', onClick: () => console.log('yes') },
           { label: 'No', onClick: () => console.log('no') },
