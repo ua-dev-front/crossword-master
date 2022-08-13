@@ -14,12 +14,12 @@ type Props = {
 
 export default function Label({ content, size }: Props) {
   const getContentWithLineBreaks = (content: string) => {
-    const splitedContent = content.split('\\n');
+    const splitContent = content.split('\\n');
 
-    return splitedContent.map((line, index) => (
+    return splitContent.map((line, index) => (
       <span key={index}>
         {line}
-        {index !== splitedContent.length - 1 ? <br /> : null}
+        {index !== splitContent.length - 1 ? <br /> : null}
       </span>
     ));
   };
