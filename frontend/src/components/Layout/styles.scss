@@ -5,6 +5,7 @@
     --layout-content-padding: 64px;
 
     position: relative;
+    min-width: 656px;
     display: flex;
     justify-content: center;
     background-color: cl(selected);
@@ -14,7 +15,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 100vw;
+        width: 100%;
         max-width: 2044px;
         min-height: 100%;
     }
@@ -39,7 +40,7 @@
         flex-direction: column;
         align-items: center;
         width: 528px;
-        min-height: 860px;
+        min-height: 860px; // the height of the background after which the repeating background starts
         padding: var(--layout-content-padding);
         margin-top: 125px;
         z-index: 3;
