@@ -3,11 +3,11 @@ import Button from './components/Button';
 import Cell from './components/Cell';
 import Grid from './components/Grid';
 import Tab from './components/Tab';
+import TextField from './components/TextField';
 import Corner from './types/corner';
 import Mode from './types/mode';
 import LeftArrow from './icons/LeftArrow';
 import Square from './icons/Square';
-import TextField from './components/TextField';
 
 const answerMatrix = [
   [
@@ -113,13 +113,13 @@ function App() {
       <div style={{ width: '200px' }}>
         <TextField
           isEditable
-          content={textFieldValue ?? ''}
-          onChange={(val) => setTextFieldValue(val)}
+          content={textFieldValue}
+          onChange={(value) => setTextFieldValue(value)}
         />
       </div>
       <hr />
       <div style={{ width: '200px' }}>
-        <TextField content={textFieldValue ?? ''} />
+        <TextField content={textFieldValue} />
       </div>
       <hr />
       <h3>Pictogram example:</h3>

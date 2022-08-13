@@ -41,7 +41,7 @@ export default function TextField({
       className={classes}
       placeholder={PLACEHOLDER}
       value={content}
-      onChange={(e) => onChange?.(e.target.value)}
+      onChange={(event) => onChange?.(event.target.value)}
       ref={textareaRef}
     />
   ) : (
