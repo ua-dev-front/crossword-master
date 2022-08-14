@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
-import Button from './components/Button';
-import Cell from './components/Cell';
-import Grid, { Mode } from './components/Grid';
-import Label, { LabelSize } from './components/Label';
-import Tab from './components/Tab';
-import Corner from './components/Cell/corner';
-import LeftArrow from './icons/LeftArrow';
-import Square from './icons/Square';
-import QuestionPanel, {
-  Question,
-  QuestionPanelColor,
-} from './components/QuestionPanel';
+import Button from 'components/Button';
+import Cell, { Corner } from 'components/Cell';
+import Grid, { Mode } from 'components/Grid';
+import Label, { LabelSize } from 'components/Label';
+import Tab from 'components/Tab';
+import TextField from 'components/TextField';
+import LeftArrow from 'icons/LeftArrow';
+import Square from 'icons/Square';
 
 const answerMatrix = [
   [
