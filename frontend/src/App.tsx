@@ -7,7 +7,10 @@ import Tab from './components/Tab';
 import Corner from './components/Cell/corner';
 import LeftArrow from './icons/LeftArrow';
 import Square from './icons/Square';
-import QuestionPanel, { QuestionPanelColor } from './components/QuestionPanel';
+import QuestionPanel, {
+  Question,
+  QuestionPanelColor,
+} from './components/QuestionPanel';
 
 const answerMatrix = [
   [
@@ -91,11 +94,6 @@ const puzzleMatrix = answerMatrix.map((row) =>
 
 const emptyMatrix = [...Array(10)].map(() => [...Array(10)].map(() => false));
 
-export type Question = {
-  id: number;
-  question: string;
-};
-
 function App() {
   const [filled, setFilled] = useState(false);
   const [matrix, setMatrix] = useState(emptyMatrix);
@@ -117,11 +115,11 @@ function App() {
   };
 
   const handleQuestionsChange = (value: string, index: number) => {
-    const newQuestions = [...questions];
-
-    newQuestions[index].question = value;
-
-    setQuestions(newQuestions);
+    setQuestions((questions) =>
+      questions.map((question, questionIndex) =>
+        questionIndex === index ? { ...question, question: value } : question
+      )
+    );
   };
 
   return (

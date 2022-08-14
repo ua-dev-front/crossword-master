@@ -1,25 +1,19 @@
 @import '../../styles/functions.scss';
 
 .text-field {
-    &,
-    &::after {
-        --field-padding: 6px;
-    }
-
-    --text-field-font-size: 18px;
-    --text-field-line-height: 21px;
-    position: relative;
     width: 100%;
     box-sizing: border-box;
-    padding: var(--field-padding);
+    padding: 6px;
+    margin: 0;
     background-color: transparent;
     border: 1px solid transparent;
     border-radius: 2px;
     overflow-wrap: break-word;
+    transition: border-color var(--transition-duration) var(--transition-function);
 
     font-family: var(--font-straight);
-    font-size: var(--text-field-font-size);
-    line-height: var(--text-field-line-height);
+    font-size: var(--question-panel-font-size);
+    line-height: var(--question-panel-line-height);
 
     &_editable {
         border-color: cl(light-dark);

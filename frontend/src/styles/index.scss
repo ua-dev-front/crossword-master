@@ -13,16 +13,16 @@ $rgb_colors: (
   'mandys-pink': '245, 199, 199',
 );
 
-:root,
-::after,
-::before {
+:root {
   @each $key, $value in $rgb_colors {
     --color-#{$key}: #{unquote($value)};
   }
   --font-straight: 'Roboto', sans-serif;
   --font-cursive: 'Gloria Hallelujah', cursive;
-  --transition-duration: 0.2s;
+  --transition-duration: 2s;
   --transition-function: ease-in-out;
+  --question-panel-font-size: 18px;
+  --question-panel-line-height: 21px;
 }
 
 body {

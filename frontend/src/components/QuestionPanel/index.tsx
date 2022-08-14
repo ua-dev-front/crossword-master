@@ -2,12 +2,16 @@ import React from 'react';
 import classnames from 'classnames';
 import TextField from '../TextField';
 import './styles.scss';
-import { Question } from '../../App';
 
 export enum QuestionPanelColor {
   Pink = 'pink',
   Yellow = 'yellow',
 }
+
+export type Question = {
+  id: number;
+  question: string;
+};
 
 type Props = {
   color: QuestionPanelColor;
@@ -26,16 +30,16 @@ export default function QuestionPanel({
 
   const classes = classnames(
     className,
-    isEditable && 'question-panel_editable',
+    isEditable && `${className}_editable`,
     `${className}_${color}`
   );
 
   return (
-    <div className={classes}>
+    <section className={classes}>
       {questions.map(({ question, id }, index) => (
-        <div className='question-panel__item' key={id}>
+        <article className={`${className}__item`} key={id}>
           <span
-            className={`question-panel__item-id ${
+            className={`${className}__item-id ${
               id.toString().length === 1 ? 'single' : 'multiple'
             }-digit`}
           >
@@ -46,8 +50,11 @@ export default function QuestionPanel({
             content={question}
             onChange={(value) => onChange?.(value, index)}
           />
-        </div>
+          {index < questions.length - 1 && (
+            <hr className={`${className}__item-divider`} />
+          )}
+        </article>
       ))}
-    </div>
+    </section>
   );
 }
