@@ -3,8 +3,11 @@ import Button from 'components/Button';
 import Cell, { Corner } from 'components/Cell';
 import Grid, { Mode } from 'components/Grid';
 import Label, { LabelSize } from 'components/Label';
+import QuestionPanel, {
+  Question,
+  QuestionPanelColor,
+} from 'components/QuestionPanel';
 import Tab from 'components/Tab';
-import TextField from 'components/TextField';
 import LeftArrow from 'icons/LeftArrow';
 import Square from 'icons/Square';
 
@@ -111,8 +114,8 @@ function App() {
   };
 
   const handleQuestionsChange = (value: string, index: number) => {
-    setQuestions((questions) =>
-      questions.map((question, questionIndex) =>
+    setQuestions((oldQuestions) =>
+      oldQuestions.map((question, questionIndex) =>
         questionIndex === index ? { ...question, question: value } : question
       )
     );
