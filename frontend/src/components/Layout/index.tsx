@@ -8,7 +8,7 @@ type Props = {
 
 export default function Layout({ children, title }: Props) {
   return (
-    <div className='layout'>
+    <main className='layout'>
       <div className='layout__wrapper'>
         <h1 className='layout__title'>{title}</h1>
         <div className='layout__content'>{children}</div>
@@ -18,6 +18,6 @@ export default function Layout({ children, title }: Props) {
           <div className='layout__repeated-background-background'></div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
