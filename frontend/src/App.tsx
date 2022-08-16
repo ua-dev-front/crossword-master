@@ -104,6 +104,7 @@ function App() {
         'A male person considered to have been significantly shaped by some external influence; a male adopted person in relation to his adoptive parents.',
     },
   ]);
+  const [panelEditable, setPanelEditable] = useState(true);
 
   const handleMatrixChange = (row: number, column: number) => {
     const newMatrix = [...matrix];
@@ -125,9 +126,16 @@ function App() {
     <>
       <p>Under development</p>
       <h3>Question panel exapmle:</h3>
+      <input
+        id='set-editable'
+        type='checkbox'
+        checked={panelEditable}
+        onChange={(e) => setPanelEditable(e.target.checked)}
+      />
+      <label htmlFor='set-editable'>Editable</label>
       <QuestionPanel
         questions={questions}
-        isEditable={true}
+        isEditable={panelEditable}
         color={QuestionPanelColor.Pink}
         onChange={(value, index) => handleQuestionsChange(value, index)}
       />
