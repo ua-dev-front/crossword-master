@@ -17,8 +17,8 @@ export default function Dialog({ label, buttons }: Props) {
       <Label content={label} size={LabelSize.Large} />
       <div className='dialog__buttons-wrapper'>
         <div className='dialog__buttons'>
-          {buttons.map(({ label, onClick }) => (
-            <Button key={label} label={label} onClick={onClick} />
+          {buttons.map(({ label: buttonLabel, onClick }) => (
+            <Button key={buttonLabel} label={buttonLabel} onClick={onClick} />
           ))}
         </div>
       </div>
