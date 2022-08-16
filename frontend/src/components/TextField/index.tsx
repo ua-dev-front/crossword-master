@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import './styles.scss';
 
 type Props = {
+  className?: string;
   isEditable?: boolean;
   content: string;
   onChange?: (value: string) => void;
@@ -11,13 +12,18 @@ type Props = {
 const PLACEHOLDER = 'TBD';
 
 export default function TextField({
+  className,
   isEditable = false,
   content,
   onChange,
 }: Props) {
   const textareaRef = useRef(null);
 
-  const classes = classnames('text-field', isEditable && 'text-field_editable');
+  const classes = classnames(
+    'text-field',
+    isEditable && 'text-field_editable',
+    className
+  );
 
   const setHeight = (element: HTMLTextAreaElement) => {
     const borderHeight = element.offsetHeight - element.clientHeight;
