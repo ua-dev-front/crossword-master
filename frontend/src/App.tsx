@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Dialog from 'components/Dialog';
 import Button from 'components/Button';
 import Cell, { Corner } from 'components/Cell';
 import Grid, { Mode } from 'components/Grid';
@@ -190,8 +191,16 @@ function App() {
       <p>Label small example:</p>
       <Label content='Please enter questions below' size={LabelSize.Small} />
       <hr />
-      <p>Label large example:</p>
-      <Label content='Across' size={LabelSize.Large} />
+      <p>Label medium example:</p>
+      <Label content='Across' size={LabelSize.Medium} />
+      <hr />
+      <Dialog
+        label={'Questions & answers will be lost.\nContinue?'}
+        buttons={[
+          { label: 'Yes', onClick: () => console.log('yes') },
+          { label: 'No', onClick: () => console.log('no') },
+        ]}
+      />
     </>
   );
 }
