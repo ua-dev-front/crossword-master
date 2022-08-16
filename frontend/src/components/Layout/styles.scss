@@ -2,7 +2,6 @@
 
 .layout {
     --layout-mask-shift: 160px;
-    --layout-content-padding: 64px;
 
     position: relative;
     min-height: 100%;
@@ -43,7 +42,7 @@
         align-items: center;
         width: 528px;
         min-height: 860px; // the height after which the repeating background starts
-        padding: var(--layout-content-padding);
+        padding: 64px 0;
         margin-top: 125px;
         z-index: 3;
     }
