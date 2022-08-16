@@ -1,6 +1,5 @@
 import React from 'react';
-import Cell, { CellData } from '../Cell';
-import Corner from '../Cell/corner';
+import Cell, { CellData, Corner } from 'components/Cell';
 import './styles.scss';
 
 export enum Mode {
@@ -45,7 +44,7 @@ export default function Grid(props: Props) {
         return {
           editable: false,
           content: matrix[row][column]
-            ? { letter: null, number: matrix[row][column]!.number }
+            ? { letter: null, number: matrix[row][column]?.number ?? null }
             : null,
         };
       case Mode.Answer:
