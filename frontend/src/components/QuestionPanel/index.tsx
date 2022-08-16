@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import classnames from 'classnames';
 import TextField from '../TextField';
 import './styles.scss';
@@ -37,9 +37,9 @@ export default function QuestionPanel({
   return (
     <section className={classes}>
       {questions.map(({ question, id }, index) => (
-        <>
+        <Fragment key={id}>
           {index !== 0 && <hr className={`${className}__item-divider`} />}
-          <article className={`${className}__item`} key={id}>
+          <article className={`${className}__item`}>
             <TextField
               className={`${className}__item-id ${
                 id.toString().length === 1 ? 'single' : 'multiple'
@@ -53,7 +53,7 @@ export default function QuestionPanel({
               onChange={(value) => onChange?.(value, index)}
             />
           </article>
-        </>
+        </Fragment>
       ))}
     </section>
   );
