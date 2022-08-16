@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import Button from './components/Button';
-import Cell from './components/Cell';
-import Layout from './components/Layout';
-import Grid, { Mode } from './components/Grid';
-import Label, { LabelSize } from './components/Label';
-import Tab from './components/Tab';
-import Corner from './components/Cell/corner';
-import LeftArrow from './icons/LeftArrow';
-import Square from './icons/Square';
+import Button from 'components/Button';
+import Cell, { Corner } from 'components/Cell';
+import Grid, { Mode } from 'components/Grid';
+import Label, { LabelSize } from 'components/Label';
+import Layout from 'components/Layout';
+import Tab from 'components/Tab';
+import TextField from 'components/TextField';
+import LeftArrow from 'icons/LeftArrow';
+import Square from 'icons/Square';
 
 const answerMatrix = [
   [
@@ -94,6 +94,9 @@ const emptyMatrix = [...Array(10)].map(() => [...Array(10)].map(() => false));
 function App() {
   const [filled, setFilled] = useState(false);
   const [matrix, setMatrix] = useState(emptyMatrix);
+  const [textFieldValue, setTextFieldValue] = useState(
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+  );
 
   const handleMatrixChange = (row: number, column: number) => {
     const newMatrix = [...matrix];
@@ -106,6 +109,19 @@ function App() {
   return (
     <>
       <p>Under development</p>
+      <h3>Text field exapmle:</h3>
+      <div style={{ width: '200px' }}>
+        <TextField
+          isEditable
+          content={textFieldValue}
+          onChange={(value) => setTextFieldValue(value)}
+        />
+      </div>
+      <hr />
+      <div style={{ width: '200px' }}>
+        <TextField content={textFieldValue} />
+      </div>
+      <hr />
       <h3>Pictogram example:</h3>
       <p>Normal:</p>
       <Tab
