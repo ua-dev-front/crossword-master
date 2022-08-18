@@ -42,15 +42,19 @@ export default function TextField({
     }
   }, [content, isEditable]);
 
-  return isEditable ? (
-    <textarea
-      className={classes}
-      placeholder={PLACEHOLDER}
-      value={content}
-      onChange={(event) => onChange?.(event.target.value)}
-      ref={textareaRef}
-    />
-  ) : (
-    <div className={classes}>{content}</div>
+  return (
+    <div className={classes}>
+      {isEditable ? (
+        <textarea
+          className='text-field__content'
+          placeholder={PLACEHOLDER}
+          value={content}
+          onChange={(event) => onChange?.(event.target.value)}
+          ref={textareaRef}
+        />
+      ) : (
+        <div className='text-field__content'>{content}</div>
+      )}
+    </div>
   );
 }
