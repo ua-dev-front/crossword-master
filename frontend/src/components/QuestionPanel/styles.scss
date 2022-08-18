@@ -34,7 +34,7 @@
         color: cl(near-black);
         text-align: right;
         padding-top: var(--text-field-padding);
-        border-top: 1px solid transparent;
+        border-top: var(--text-field-border-width) solid transparent;
 
         &--single-digit {
             margin-right: 7px;
