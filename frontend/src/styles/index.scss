@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap');
 
 @import './functions.scss';
@@ -6,6 +6,7 @@
 $rgb_colors: (
   'primary': '229, 229, 229',
   'light-dark': '177, 179, 181',
+  'light': '249, 251, 253',
   'dark': '102, 102, 102',
   'near-black': '48, 31, 15',
   'selected': '158, 137, 109',
@@ -21,7 +22,15 @@ $rgb_colors: (
   --transition-function: ease-in-out;
 }
 
+html,
+body,
+#root {
+  height: 100%;
+}
+
 body {
   background-color: cl(primary);
   font-family: var(--font-straight);
+  margin: 0;
+  padding: 0;
 }
