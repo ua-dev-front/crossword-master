@@ -1,6 +1,7 @@
 @import '../../styles/functions.scss';
 
 .question-panel {
+    --item-question-width: 198px;
     box-sizing: border-box;
     width: 240px;
     display: flex;
@@ -21,32 +22,36 @@
 
     &__item {
         display: flex;
-        align-items: first baseline;
+        align-items: flex-start;
         justify-content: flex-end;
         position: relative;
     }
 
     &__item-id {
+        font-weight: 500;
+        font-size: var(--text-field-font-size);
+        line-height: var(--text-field-line-height);
+        color: cl(near-black);
         text-align: right;
-        padding-right: 0;
+        padding-top: var(--text-field-padding);
+        border-top: 1px solid transparent;
 
-        &.single-digit {
+        &--single-digit {
             margin-right: 7px;
         }
-        &.multiple-digit {
+        &--multiple-digit {
             margin-right: 4px;
         }
     }
 
     &__item-question {
         flex-shrink: 0;
-        width: 198px;
+        width: var(--item-question-width);
     }
 
     &__item-divider {
-        width: 77%;
         border: none;
-        margin: 0 auto;
+        margin: 0 calc(100% - (var(--item-question-width) - var(--text-field-padding)));
         border-bottom: 1px dashed cl(dark);
         transition: border-color var(--transition-duration) var(--transition-function);
     }

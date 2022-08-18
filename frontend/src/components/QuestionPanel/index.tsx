@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import classnames from 'classnames';
 import TextField from '../TextField';
 import './styles.scss';
@@ -36,25 +36,26 @@ export default function QuestionPanel({
 
   return (
     <section className={classes}>
-      {questions.map(({ question, id }, index) => (
-        <Fragment key={id}>
-          {index !== 0 && <hr className={`${className}__item-divider`} />}
-          <article className={`${className}__item`}>
-            <TextField
-              className={`${className}__item-id ${
-                id.toString().length === 1 ? 'single' : 'multiple'
-              }-digit`}
-              content={id.toString()}
-            />
-            <TextField
-              className={`${className}__item-question`}
-              isEditable={isEditable}
-              content={question}
-              onChange={(value) => onChange?.(value, index)}
-            />
-          </article>
-        </Fragment>
-      ))}
+      {questions.flatMap(({ question, id }, index) => [
+        index > 0 && (
+          <hr className={`${className}__item-divider`} key={`divider-${id}`} />
+        ),
+        <article className={`${className}__item`} key={id}>
+          <label
+            className={`${className}__item-id ${className}__item-id--${
+              id.toString().length === 1 ? 'single' : 'multiple'
+            }-digit`}
+          >
+            {id}
+          </label>
+          <TextField
+            className={`${className}__item-question`}
+            isEditable={isEditable}
+            content={question}
+            onChange={(value) => onChange?.(value, index)}
+          />
+        </article>,
+      ])}
     </section>
   );
 }
