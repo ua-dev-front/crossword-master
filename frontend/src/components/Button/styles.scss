@@ -10,7 +10,7 @@
     border-color: cl(dark);
     color: cl(dark);
     cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
+    transition: background-color var(--transition-duration) var(--transition-function);
     user-select: none;
 
     &:hover,

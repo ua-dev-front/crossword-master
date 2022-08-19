@@ -1,0 +1,83 @@
+@import '../../styles/functions.scss';
+
+.layout {
+    --layout-mask-shift: 160px;
+
+    position: relative;
+    min-height: 100%;
+    height: max-content;
+    min-width: 560px;
+    display: flex;
+    justify-content: center;
+    background-color: cl(selected);
+
+    &__wrapper {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-width: 2030px;
+        min-height: 100%;
+    }
+
+    &__title {
+        position: absolute;
+        margin: 0;
+        padding: 30px;
+        top: 0;
+        left: 0;
+        z-index: 4;
+        font-size: 32px;
+        font-weight: bold;
+        line-height: 38px;
+        color: cl(light);
+        -webkit-text-stroke: 1px cl(dark);
+        text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 528px;
+        min-height: 860px; // the height after which the repeating background starts
+        padding: 64px 0;
+        margin-top: 125px;
+        z-index: 3;
+    }
+
+    &__background {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image: url('../../assets/background.webp');
+        background-repeat: no-repeat;
+        background-position-x: center;
+    }
+
+    &__repeated-background {
+        position: relative;
+        width: 100%;
+        height: 100%;
+
+        &-background,
+        &-mask {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        &-background {
+            background-image: url('../../assets/repeated-background.webp');
+            z-index: 1;
+        }
+
+        &-mask {
+            top: calc(var(--layout-mask-shift) * -1);
+            padding-bottom: var(--layout-mask-shift);
+            background-image: url('../../assets/repeated-background-mask.webp');
+            z-index: 2;
+        }
+    }
+}
