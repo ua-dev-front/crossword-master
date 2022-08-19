@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import Dialog from 'components/Dialog';
 import Button from 'components/Button';
 import Cell, { Corner } from 'components/Cell';
 import Grid, { Mode } from 'components/Grid';
 import Label, { LabelSize } from 'components/Label';
+import Layout from 'components/Layout';
 import QuestionPanel, {
   Question,
   QuestionPanelColor,
@@ -208,15 +210,30 @@ function App() {
       <hr />
       <p>Grid puzzle example:</p>
       <Grid mode={Mode.Puzzle} matrix={puzzleMatrix} />
-      <hr />
       <p>Grid answer example:</p>
       <Grid mode={Mode.Answer} matrix={answerMatrix} />
       <hr />
       <p>Label small example:</p>
       <Label content='Please enter questions below' size={LabelSize.Small} />
+      <p>Label medium example:</p>
+      <Label content='Across' size={LabelSize.Medium} />
       <hr />
       <p>Label large example:</p>
       <Label content='Across' size={LabelSize.Large} />
+      <hr />
+      <Dialog
+        label={'Questions & answers will be lost.\nContinue?'}
+        buttons={[
+          { label: 'Yes', onClick: () => console.log('yes') },
+          { label: 'No', onClick: () => console.log('no') },
+        ]}
+      />
+      <hr />
+      <Layout title='Crossword Generator & Solver'>
+        <Grid mode={Mode.Answer} matrix={answerMatrix} />
+        <Grid mode={Mode.Answer} matrix={answerMatrix} />
+        <Grid mode={Mode.Answer} matrix={answerMatrix} />
+      </Layout>
     </>
   );
 }
