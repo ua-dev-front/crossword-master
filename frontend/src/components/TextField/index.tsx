@@ -3,25 +3,26 @@ import classnames from 'classnames';
 import './styles.scss';
 
 type Props = {
-  className?: string;
-  isEditable?: boolean;
   content: string;
+  isEditable?: boolean;
   onChange?: (value: string) => void;
+  className?: string;
 };
 
 const PLACEHOLDER = 'TBD';
 
 export default function TextField({
-  className,
-  isEditable = false,
   content,
+  isEditable = false,
   onChange,
+  className,
 }: Props) {
+  const baseClassName = 'text-field';
   const textareaRef = useRef(null);
 
   const classes = classnames(
-    'text-field',
-    isEditable && 'text-field_editable',
+    baseClassName,
+    isEditable && `${baseClassName}_editable`,
     className
   );
 
@@ -46,14 +47,14 @@ export default function TextField({
     <div className={classes}>
       {isEditable ? (
         <textarea
-          className='text-field__content'
+          className={`${baseClassName}__content`}
           placeholder={PLACEHOLDER}
           value={content}
           onChange={(event) => onChange?.(event.target.value)}
           ref={textareaRef}
         />
       ) : (
-        <div className='text-field__content'>{content}</div>
+        <div className={`${baseClassName}__content`}>{content}</div>
       )}
     </div>
   );

@@ -7,11 +7,11 @@
     transition: border-color var(--transition-duration) var(--transition-function);
     box-sizing: border-box;
     padding: var(--text-field-padding);
-    margin: 0;
+    min-height: calc(
+        var(--text-field-line-height) + var(--text-field-padding) * 2 + var(--text-field-border-width) * 2
+    );
 
     &__content {
-        width: 100%;
-        height: 100%;
         box-sizing: border-box;
         background-color: transparent;
         overflow-wrap: break-word;

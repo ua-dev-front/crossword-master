@@ -130,7 +130,7 @@ function App() {
         id='set-editable'
         type='checkbox'
         checked={panelEditable}
-        onChange={(e) => setPanelEditable(e.target.checked)}
+        onChange={(event) => setPanelEditable(event.target.checked)}
       />
       <label htmlFor='set-editable'>Editable</label>
       <QuestionPanel

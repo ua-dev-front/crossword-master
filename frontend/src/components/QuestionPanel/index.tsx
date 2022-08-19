@@ -14,16 +14,16 @@ export type Question = {
 };
 
 type Props = {
-  color: QuestionPanelColor;
-  isEditable: boolean;
   questions: Question[];
+  isEditable: boolean;
+  color: QuestionPanelColor;
   onChange?: (value: string, index: number) => void;
 };
 
 export default function QuestionPanel({
-  color,
-  isEditable,
   questions,
+  isEditable,
+  color,
   onChange,
 }: Props) {
   const className = 'question-panel';
@@ -41,13 +41,13 @@ export default function QuestionPanel({
           <hr className={`${className}__item-divider`} key={`divider-${id}`} />
         ),
         <article className={`${className}__item`} key={id}>
-          <label
-            className={`${className}__item-id ${className}__item-id--${
+          <span
+            className={`${className}__item-id ${className}__item-id_${
               id.toString().length === 1 ? 'single' : 'multiple'
             }-digit`}
           >
             {id}
-          </label>
+          </span>
           <TextField
             className={`${className}__item-question`}
             isEditable={isEditable}
