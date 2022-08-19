@@ -11,7 +11,7 @@
     line-height: 36px;
     min-width: 100px;
     padding: 1px 24px;
-    transition: background-color 0.2s ease-in-out;
+    transition: background-color var(--transition-duration) var(--transition-function);
     user-select: none;
     width: max-content;
 
