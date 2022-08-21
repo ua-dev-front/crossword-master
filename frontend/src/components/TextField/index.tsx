@@ -7,6 +7,7 @@ type Props = {
   isEditable?: boolean;
   onChange?: (value: string) => void;
   className?: string;
+  inputId?: string;
 };
 
 const PLACEHOLDER = 'TBD';
@@ -16,6 +17,7 @@ export default function TextField({
   isEditable = false,
   onChange,
   className,
+  inputId,
 }: Props) {
   const baseClassName = 'text-field';
   const textareaRef = useRef(null);
@@ -47,6 +49,7 @@ export default function TextField({
     <div className={classes}>
       {isEditable ? (
         <textarea
+          id={inputId}
           className={`${baseClassName}__content`}
           placeholder={PLACEHOLDER}
           value={content}
@@ -54,7 +57,9 @@ export default function TextField({
           ref={textareaRef}
         />
       ) : (
-        <div className={`${baseClassName}__content`}>{content}</div>
+        <div className={`${baseClassName}__content`}>
+          {content || <>&nbsp;</>}
+        </div>
       )}
     </div>
   );
