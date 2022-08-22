@@ -1,7 +1,7 @@
 @import '../../styles/functions.scss';
 
 .question-panel {
-    --item-question-width: 198px;
+    --item-id-width: 21px;
 
     box-sizing: border-box;
     width: 240px;
@@ -30,26 +30,27 @@
         font-size: var(--text-field-font-size);
         line-height: var(--text-field-line-height);
         color: cl(near-black);
-        text-align: right;
+        text-align: center;
         padding-top: var(--text-field-padding);
         border-top: var(--text-field-border-width) solid transparent;
+        width: var(--item-id-width);
+        flex-shrink: 0;
 
-        &_single-digit {
-            margin-right: 7px;
-        }
         &_multiple-digit {
-            margin-right: 4px;
+            position: relative;
+            left: -4px;
         }
     }
 
     &__item-question {
-        flex-shrink: 0;
-        width: var(--item-question-width);
+        flex-grow: 1;
+        flex-basis: 198px;
+        min-width: 0; // without this line editable TextField takes all the width in panel
     }
 
     &__item-divider {
         border: none;
-        margin: 0 calc(100% - (var(--item-question-width) - var(--text-field-padding) - var(--text-field-border-width)));
+        margin: 0 calc(var(--item-id-width) + var(--text-field-border-width) + var(--text-field-padding));
         border-bottom: 1px dashed cl(dark);
         transition: border-color var(--transition-duration) var(--transition-function);
     }
