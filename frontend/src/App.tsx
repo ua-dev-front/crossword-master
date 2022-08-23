@@ -5,6 +5,7 @@ import Cell, { Corner } from 'components/Cell';
 import Grid, { Mode } from 'components/Grid';
 import Label, { LabelSize } from 'components/Label';
 import Layout from 'components/Layout';
+import Loader from 'components/Loader';
 import Tab from 'components/Tab';
 import TextField from 'components/TextField';
 import LeftArrow from 'icons/LeftArrow';
@@ -98,6 +99,7 @@ function App() {
   const [textFieldValue, setTextFieldValue] = useState(
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
   );
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleMatrixChange = (row: number, column: number) => {
     const newMatrix = [...matrix];
@@ -110,6 +112,17 @@ function App() {
   return (
     <>
       <p>Under development</p>
+      <p>Button example:</p>
+      <Button
+        label='Turn on loader'
+        onClick={() => {
+          setIsLoading(true);
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 5000);
+        }}
+      />
+      <Loader label='Solving' isLoading={isLoading} />
       <h3>Text field exapmle:</h3>
       <div style={{ width: '200px' }}>
         <TextField
@@ -171,8 +184,6 @@ function App() {
         }}
         roundedCorners={[Corner.TopLeft]}
       />
-      <p>Button example:</p>
-      <Button label='Click me' onClick={() => console.log('clicked')} />
       <hr />
       <p>Grid edit example:</p>
       <Grid
