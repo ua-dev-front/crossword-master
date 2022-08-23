@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 import classnames from 'classnames';
 import TextField from '../TextField';
 import './styles.scss';
@@ -43,7 +43,7 @@ export default function QuestionPanel({
             id.toString().length === 1 ? 'single' : 'multiple'
           }-digit`
         );
-        const inputId = `${id}-question`;
+        const inputId = useId();
 
         return [
           index > 0 && (

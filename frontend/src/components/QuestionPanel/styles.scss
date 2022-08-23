@@ -44,7 +44,7 @@
 
     &__item-question {
         flex-grow: 1;
-        flex-basis: 198px;
+        flex-basis: calc(100% - var(--item-id-width));
         min-width: 0; // without this line editable TextField takes all the width in panel
     }
 
