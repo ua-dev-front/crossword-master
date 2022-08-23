@@ -34,7 +34,6 @@
         padding-top: var(--text-field-padding);
         border-top: var(--text-field-border-width) solid transparent;
         width: var(--item-id-width);
-        flex-shrink: 0;
 
         &_multiple-digit {
             position: relative;
