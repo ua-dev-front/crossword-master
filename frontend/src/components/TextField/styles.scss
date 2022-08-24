@@ -4,7 +4,6 @@
     display: flex;
     border: var(--text-field-border-width) solid transparent;
     border-radius: 2px;
-    transition: border-color var(--transition-duration) var(--transition-function);
     box-sizing: border-box;
     padding: var(--text-field-padding);
 
@@ -37,5 +36,9 @@
         &:focus-within {
             border-color: cl(near-black);
         }
+    }
+
+    &_transition {
+        transition: border-color var(--transition-duration) var(--transition-function);
     }
 }

@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import './styles.scss';
 
@@ -21,10 +21,13 @@ export default function TextField({
 }: Props) {
   const baseClassName = 'text-field';
   const textareaRef = useRef(null);
+  const isMounted = useRef(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const classes = classnames(
     baseClassName,
     isEditable && `${baseClassName}_editable`,
+    isTransitioning && `${baseClassName}_transition`,
     className
   );
 
@@ -43,10 +46,18 @@ export default function TextField({
     if (isEditable && textareaRef.current) {
       setHeight(textareaRef.current);
     }
-  }, [content, isEditable]);
+  }, [isEditable]);
+
+  useEffect(() => {
+    if (isMounted.current) {
+      setIsTransitioning(true);
+    } else {
+      isMounted.current = true;
+    }
+  }, [isEditable]);
 
   return (
-    <div className={classes}>
+    <div className={classes} onTransitionEnd={() => setIsTransitioning(false)}>
       {isEditable ? (
         <textarea
           id={inputId}
