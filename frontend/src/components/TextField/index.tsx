@@ -1,4 +1,10 @@
-import React, { useEffect, useLayoutEffect, useRef } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import classnames from 'classnames';
 import './styles.scss';
 
@@ -22,6 +28,8 @@ export default function TextField({
   const baseClassName = 'text-field';
   const textareaRef = useRef(null);
   const prevIsEditable = useRef(isEditable);
+  const [, updateState] = useState({});
+  const forceUpdate = useCallback(() => updateState({}), []);
 
   const classes = classnames(
     baseClassName,
@@ -52,11 +60,7 @@ export default function TextField({
   }, [isEditable]);
 
   return (
-    <div
-      className={classes}
-      onTransitionEnd={() => (prevIsEditable.current = isEditable)}
-      onClick={() => (prevIsEditable.current = isEditable)}
-    >
+    <div className={classes} onTransitionEnd={() => forceUpdate()}>
       {isEditable ? (
         <textarea
           id={inputId}
@@ -64,6 +68,7 @@ export default function TextField({
           placeholder={PLACEHOLDER}
           value={content}
           onChange={(event) => onChange?.(event.target.value)}
+          onFocus={() => forceUpdate()}
           ref={textareaRef}
         />
       ) : (
