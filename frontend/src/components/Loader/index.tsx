@@ -1,6 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
-import './style.scss';
+import './styles.scss';
 
 type Props = {
   label: string;
