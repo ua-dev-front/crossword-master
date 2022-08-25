@@ -110,6 +110,9 @@ function App() {
   return (
     <>
       <p>Under development</p>
+      <p>Button example:</p>
+      <Button label='Click me' onClick={() => console.log('clicked')} />
+      <hr />
       <h3>Text field exapmle:</h3>
       <div style={{ width: '200px' }}>
         <TextField
@@ -171,9 +174,6 @@ function App() {
         }}
         roundedCorners={[Corner.TopLeft]}
       />
-      <p>Button example:</p>
-      <Button label='Click me' onClick={() => console.log('clicked')} />
-      <hr />
       <p>Grid edit example:</p>
       <Grid
         mode={Mode.Draw}
