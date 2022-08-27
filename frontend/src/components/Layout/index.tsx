@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import TitleLabel, { TitleLabelSize } from 'components/TitleLabel';
 import './styles.scss';
 
 type Props = {
@@ -9,8 +10,8 @@ type Props = {
 export default function Layout({ children, title }: Props) {
   return (
     <div className='layout'>
+      <TitleLabel content={title} size={TitleLabelSize.Large} className='layout__title' />
       <div className='layout__wrapper'>
-        <h1 className='layout__title'>{title}</h1>
         <main className='layout__content'>{children}</main>
         <div className='layout__background' />
         <div className='layout__repeated-background'>
