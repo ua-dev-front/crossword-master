@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
-import usePrevValue from 'hooks/usePrevValue';
+import usePreviousValue from 'hooks/usePreviousValue';
 import './styles.scss';
 
 type Props = {
@@ -22,7 +22,7 @@ export default function TextField({
 }: Props) {
   const baseClassName = 'text-field';
   const textareaRef = useRef(null);
-  const prevIsEditable = usePrevValue(isEditable);
+  const prevIsEditable = usePreviousValue(isEditable);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const classes = classnames(
