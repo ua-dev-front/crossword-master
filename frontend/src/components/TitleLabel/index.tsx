@@ -20,13 +20,13 @@ export default function TitleLabel({
   tag: Tag,
   className,
 }: Props) {
-  const componentClassName = 'title-label';
+  const baseClassName = 'title-label';
 
   return (
     <Tag
       className={classnames(
-        componentClassName,
-        `${componentClassName}_${size}`,
+        baseClassName,
+        `${baseClassName}_${size}`,
         className
       )}
     >
