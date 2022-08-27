@@ -1,0 +1,21 @@
+@import 'styles/functions.scss';
+
+.title-label {
+    margin: 0;
+    padding: 30px;
+    color: cl(light);
+    -webkit-text-stroke: 1px cl(dark);
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+    &_small {
+        font-size: 28px;
+        font-weight: 600;
+        line-height: 32px;
+    }
+
+    &_large {
+        font-size: 32px;
+        font-weight: bold;
+        line-height: 38px;
+    }
+}
