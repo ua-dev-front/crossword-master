@@ -5,7 +5,7 @@ import './styles.scss';
 
 type Props = {
   label: string;
-  isLoading: boolean; // is needed to make the animation on the loader appear and disappear
+  isLoading: boolean; // is needed to display the animation, shows the loader when true
 };
 
 export default function Loader({ label, isLoading }: Props) {
