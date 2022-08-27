@@ -141,6 +141,8 @@ function App() {
         color={QuestionPanelColor.Pink}
         onChange={(value, index) => handleQuestionsChange(value, index)}
       />
+      <p>Button example:</p>
+      <Button label='Click me' onClick={() => console.log('clicked')} />
       <hr />
       <QuestionPanel
         questions={questions}
@@ -196,9 +198,6 @@ function App() {
         }}
         roundedCorners={[Corner.TopLeft]}
       />
-      <p>Button example:</p>
-      <Button label='Click me' onClick={() => console.log('clicked')} />
-      <hr />
       <p>Grid edit example:</p>
       <Grid
         mode={Mode.Draw}

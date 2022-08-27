@@ -1,19 +1,17 @@
 @import 'styles/functions.scss';
 
 .button {
+    min-width: 100px;
+    padding: 1px;
     background-color: transparent;
     border-radius: 4px;
-    border: 1px solid cl(dark);
+    border-style: solid;
+    border-width: 1px;
+    border-color: cl(dark);
     color: cl(dark);
     cursor: pointer;
-    font-family: var(--font-cursive);
-    font-size: 18px;
-    line-height: 36px;
-    min-width: 100px;
-    padding: 1px 24px;
     transition: background-color var(--transition-duration) var(--transition-function);
     user-select: none;
-    width: max-content;
 
     &:hover,
     &:focus-visible {
@@ -25,6 +23,16 @@
     }
 
     &:focus-visible {
-        outline-color: cl(selected);
+        padding: 0; // to not move the button on focus
+        border-width: 2px;
+        border-color: cl(selected);
+        outline: none;
+    }
+
+    &__label {
+        padding: 0 24px;
+        font-family: var(--font-cursive);
+        font-size: 18px;
+        line-height: 2em;
     }
 }
