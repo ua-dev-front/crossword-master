@@ -5,16 +5,15 @@ import './styles.scss';
 
 type Props = {
   label: string;
-  isLoading: boolean; // need to make an animation, shows the loader when true
+  isLoading: boolean; // is needed to make the animation on the loader appear and disappear
 };
 
 export default function Loader({ label, isLoading }: Props) {
   const className = 'loader';
-  const classes = classnames(className, !isLoading && `${className}_hidden`);
 
   return (
-    <div className={classes}>
-      <TitleLabel content={label} size={TitleLabelSize.Small} />
+    <div className={classnames(className, !isLoading && `${className}_hidden`)}>
+      <TitleLabel content={label} size={TitleLabelSize.Small} tag='h2' />
     </div>
   );
 }

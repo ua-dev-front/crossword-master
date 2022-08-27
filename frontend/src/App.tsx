@@ -99,9 +99,7 @@ function App() {
   const [textFieldValue, setTextFieldValue] = useState(
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
   );
-  const [isLoading, toggleLoading] = useReducer((state) => {
-    return !state;
-  }, false);
+  const [isLoading, toggleLoading] = useReducer((state) => !state, false);
 
   const handleMatrixChange = (row: number, column: number) => {
     const newMatrix = [...matrix];
@@ -115,13 +113,10 @@ function App() {
     <>
       <p>Under development</p>
       <p>Button example:</p>
-      <Button
-        label='Toggle loader'
-        onClick={() => {
-          toggleLoading();
-        }}
-      />
-      <Loader label='Solving...' isLoading={isLoading} />
+      <Button label='Toggle loader' onClick={() => toggleLoading()} />
+      <div style={{ width: 476, height: 476, margin: 20 }}>
+        <Loader label='Solving...' isLoading={isLoading} />
+      </div>
       <h3>Text field example:</h3>
       <div style={{ width: '200px' }}>
         <TextField

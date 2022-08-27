@@ -10,13 +10,27 @@ export enum TitleLabelSize {
 type Props = {
   content: string;
   size: TitleLabelSize;
+  tag: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
   className?: string;
 };
 
-export default function TitleLabel({ content, size, className }: Props) {
+export default function TitleLabel({
+  content,
+  size,
+  tag: Tag,
+  className,
+}: Props) {
+  const componentClassName = 'title-label';
+
   return (
-    <h1 className={`title-label title-label_${size} ${className}`}>
+    <Tag
+      className={classnames(
+        componentClassName,
+        `${componentClassName}_${size}`,
+        className
+      )}
+    >
       {content}
-    </h1>
+    </Tag>
   );
 }
