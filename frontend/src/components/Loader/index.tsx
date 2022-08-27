@@ -13,7 +13,7 @@ export default function Loader({ label, isLoading }: Props) {
 
   return (
     <div className={classnames(className, !isLoading && `${className}_hidden`)}>
-      <TitleLabel content={label} size={TitleLabelSize.Small} tag='h2' />
+      <TitleLabel content={label} size={TitleLabelSize.Small} tag='p' />
     </div>
   );
 }
