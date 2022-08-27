@@ -1,6 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
-import TitleLabel from 'components/TitleLabel';
+import TitleLabel, { TitleLabelSize } from 'components/TitleLabel';
 import './styles.scss';
 
 type Props = {
@@ -14,7 +14,7 @@ export default function Loader({ label, isLoading }: Props) {
 
   return (
     <div className={classes}>
-      <div className={`${className}__label`}>{label}</div>
+      <TitleLabel content={label} size={TitleLabelSize.Small} />
     </div>
   );
 }
