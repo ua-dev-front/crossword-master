@@ -48,7 +48,7 @@ export default function TextField({
     if (isEditable && textareaRef.current) {
       setHeight(textareaRef.current);
     }
-  }, [isEditable]);
+  }, [isEditable, content]);
 
   useEffect(() => {
     setIsTransitioning(true);
