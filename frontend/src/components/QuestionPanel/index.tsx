@@ -26,8 +26,9 @@ export default function QuestionPanel({
   color,
   onChange,
 }: Props) {
-  const className = 'question-panel';
+  const panelId = useId();
 
+  const className = 'question-panel';
   const classes = classnames(
     className,
     isEditable && `${className}_editable`,
@@ -37,22 +38,23 @@ export default function QuestionPanel({
   return (
     <section className={classes}>
       {questions.flatMap(({ question, id }, index) => {
+        const itemIdClassName = `${className}__item-id`;
         const idClasses = classnames(
-          `${className}__item-id`,
-          `${className}__item-id_${
+          itemIdClassName,
+          `${itemIdClassName}_${
             id.toString().length === 1 ? 'single' : 'multiple'
           }-digit`
         );
-        const inputId = useId();
+        const inputId = `${panelId}-${id}`;
 
         return [
           index > 0 && (
             <hr
-              className={`${className}__item-divider`}
               key={`divider-${id}`}
+              className={`${className}__item-divider`}
             />
           ),
-          <article className={`${className}__item`} key={id}>
+          <article key={id} className={`${className}__item`}>
             {isEditable ? (
               <label className={idClasses} htmlFor={inputId}>
                 {id}

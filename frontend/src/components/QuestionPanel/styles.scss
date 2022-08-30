@@ -19,6 +19,12 @@
         background-color: cl(mandys-pink);
     }
 
+    &_editable {
+        .question-panel__item-divider {
+            border-color: transparent;
+        }
+    }
+
     &__item {
         display: flex;
         align-items: flex-start;
@@ -51,11 +57,5 @@
         margin: 0 calc(var(--question-panel-item-id-width) + var(--text-field-border-width) + var(--text-field-padding));
         border-bottom: 1px dashed cl(dark);
         transition: border-color var(--transition-duration) var(--transition-function);
-    }
-
-    &_editable {
-        .question-panel__item-divider {
-            border-color: transparent;
-        }
     }
 }

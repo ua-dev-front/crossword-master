@@ -20,11 +20,11 @@ export default function TextField({
   className,
   inputId,
 }: Props) {
-  const baseClassName = 'text-field';
   const textareaRef = useRef(null);
   const prevIsEditable = usePreviousValue(isEditable);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
+  const baseClassName = 'text-field';
   const classes = classnames(
     baseClassName,
     isEditable && `${baseClassName}_editable`,

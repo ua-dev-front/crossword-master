@@ -21,6 +21,10 @@
         line-height: var(--text-field-line-height);
     }
 
+    &_transition {
+        transition: border-color var(--transition-duration) var(--transition-function);
+    }
+
     &_editable {
         border-color: cl(light-dark);
 
@@ -36,9 +40,5 @@
         &:focus-within {
             border-color: cl(near-black);
         }
-    }
-
-    &_transition {
-        transition: border-color var(--transition-duration) var(--transition-function);
     }
 }
