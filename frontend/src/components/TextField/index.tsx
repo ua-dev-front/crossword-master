@@ -62,7 +62,7 @@ export default function TextField({
           className={`${baseClassName}__content`}
           placeholder={PLACEHOLDER}
           value={content}
-          onChange={(event) => onChange?.(event.target.value)}
+          onChange={({ target: { value } }) => onChange?.(value)}
           onFocus={() => setIsTransitioning(false)}
           ref={textareaRef}
         />
