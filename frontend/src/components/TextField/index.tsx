@@ -1,23 +1,37 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
+import usePreviousValue from 'hooks/usePreviousValue';
 import './styles.scss';
 
 type Props = {
-  isEditable?: boolean;
   content: string;
+  isEditable?: boolean;
   onChange?: (value: string) => void;
+  className?: string;
+  inputId?: string;
 };
 
 const PLACEHOLDER = 'TBD';
 
 export default function TextField({
-  isEditable = false,
   content,
+  isEditable = false,
   onChange,
+  className,
+  inputId,
 }: Props) {
   const textareaRef = useRef(null);
+  const prevIsEditable = usePreviousValue(isEditable);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
-  const classes = classnames('text-field', isEditable && 'text-field_editable');
+  const baseClassName = 'text-field';
+  const classes = classnames(
+    baseClassName,
+    isEditable && `${baseClassName}_editable`,
+    (prevIsEditable !== isEditable || isTransitioning) &&
+      `${baseClassName}_transition`,
+    className
+  );
 
   const setHeight = (element: HTMLTextAreaElement) => {
     const borderHeight = element.offsetHeight - element.clientHeight;
@@ -34,17 +48,29 @@ export default function TextField({
     if (isEditable && textareaRef.current) {
       setHeight(textareaRef.current);
     }
-  }, [content, isEditable]);
+  }, [isEditable, content]);
 
-  return isEditable ? (
-    <textarea
-      className={classes}
-      placeholder={PLACEHOLDER}
-      value={content}
-      onChange={(event) => onChange?.(event.target.value)}
-      ref={textareaRef}
-    />
-  ) : (
-    <div className={classes}>{content}</div>
+  useEffect(() => {
+    setIsTransitioning(true);
+  }, [isEditable]);
+
+  return (
+    <div className={classes} onTransitionEnd={() => setIsTransitioning(false)}>
+      {isEditable ? (
+        <textarea
+          id={inputId}
+          className={`${baseClassName}__content`}
+          placeholder={PLACEHOLDER}
+          value={content}
+          onChange={({ target: { value } }) => onChange?.(value)}
+          onFocus={() => setIsTransitioning(false)}
+          ref={textareaRef}
+        />
+      ) : (
+        <div className={`${baseClassName}__content`}>
+          {content || <>&nbsp;</>}
+        </div>
+      )}
+    </div>
   );
 }
