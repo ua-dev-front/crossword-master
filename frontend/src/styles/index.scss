@@ -18,11 +18,14 @@ $rgb_colors: (
   @each $key, $value in $rgb_colors {
     --color-#{$key}: #{unquote($value)};
   }
+
   --font-straight: 'Roboto', sans-serif;
   --font-cursive: 'Gloria Hallelujah', cursive;
 
   --transition-duration: 0.2s;
   --transition-function: ease-in-out;
+  
+  --cell-border-radius: 10px;
 
   --text-field-font-size: 18px;
   --text-field-line-height: 21px;

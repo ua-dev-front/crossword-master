@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useReducer, useState } from 'react';
 import Dialog from 'components/Dialog';
 import Button from 'components/Button';
 import Cell, { Corner } from 'components/Cell';
 import Grid, { Mode } from 'components/Grid';
 import Label, { LabelSize } from 'components/Label';
 import Layout from 'components/Layout';
+import Loader from 'components/Loader';
 import QuestionPanel, {
   Question,
   QuestionPanelColor,
@@ -98,6 +99,10 @@ const emptyMatrix = [...Array(10)].map(() => [...Array(10)].map(() => false));
 function App() {
   const [filled, setFilled] = useState(false);
   const [matrix, setMatrix] = useState(emptyMatrix);
+  const [textFieldValue, setTextFieldValue] = useState(
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+  );
+  const [isLoading, toggleLoading] = useReducer((state) => !state, false);
   const [questions, setQuestions] = useState<Question[]>([
     { id: 1, question: 'A thin, flat, circular plate or similar object.' },
     {
@@ -127,6 +132,11 @@ function App() {
   return (
     <>
       <p>Under development</p>
+      <p>Button example:</p>
+      <Button label='Toggle loader' onClick={() => toggleLoading()} />
+      <div style={{ width: 476, height: 476, margin: 20 }}>
+        <Loader label='Solving...' isLoading={isLoading} />
+      </div>
       <h3>Question panel exapmle:</h3>
       <input
         id='set-editable'
@@ -198,6 +208,7 @@ function App() {
         }}
         roundedCorners={[Corner.TopLeft]}
       />
+      <hr />
       <p>Grid edit example:</p>
       <Grid
         mode={Mode.Draw}
