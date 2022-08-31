@@ -5,8 +5,11 @@ import Cell, { Corner } from 'components/Cell';
 import Grid, { Mode } from 'components/Grid';
 import Label, { LabelSize } from 'components/Label';
 import Layout from 'components/Layout';
+import QuestionPanel, {
+  Question,
+  QuestionPanelColor,
+} from 'components/QuestionPanel';
 import Tab from 'components/Tab';
-import TextField from 'components/TextField';
 import LeftArrow from 'icons/LeftArrow';
 import Square from 'icons/Square';
 
@@ -95,9 +98,15 @@ const emptyMatrix = [...Array(10)].map(() => [...Array(10)].map(() => false));
 function App() {
   const [filled, setFilled] = useState(false);
   const [matrix, setMatrix] = useState(emptyMatrix);
-  const [textFieldValue, setTextFieldValue] = useState(
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-  );
+  const [questions, setQuestions] = useState<Question[]>([
+    { id: 1, question: 'A thin, flat, circular plate or similar object.' },
+    {
+      id: 33,
+      question:
+        'A male person considered to have been significantly shaped by some external influence; a male adopted person in relation to his adoptive parents.',
+    },
+  ]);
+  const [panelEditable, setPanelEditable] = useState(true);
 
   const handleMatrixChange = (row: number, column: number) => {
     const newMatrix = [...matrix];
@@ -107,24 +116,39 @@ function App() {
     setMatrix(newMatrix);
   };
 
+  const handleQuestionsChange = (value: string, index: number) => {
+    setQuestions((oldQuestions) =>
+      oldQuestions.map((question, questionIndex) =>
+        questionIndex === index ? { ...question, question: value } : question
+      )
+    );
+  };
+
   return (
     <>
       <p>Under development</p>
+      <h3>Question panel exapmle:</h3>
+      <input
+        id='set-editable'
+        type='checkbox'
+        checked={panelEditable}
+        onChange={(event) => setPanelEditable(event.target.checked)}
+      />
+      <label htmlFor='set-editable'>Editable</label>
+      <QuestionPanel
+        questions={questions}
+        isEditable={panelEditable}
+        color={QuestionPanelColor.Pink}
+        onChange={(value, index) => handleQuestionsChange(value, index)}
+      />
       <p>Button example:</p>
       <Button label='Click me' onClick={() => console.log('clicked')} />
       <hr />
-      <h3>Text field exapmle:</h3>
-      <div style={{ width: '200px' }}>
-        <TextField
-          isEditable
-          content={textFieldValue}
-          onChange={(value) => setTextFieldValue(value)}
-        />
-      </div>
-      <hr />
-      <div style={{ width: '200px' }}>
-        <TextField content={textFieldValue} />
-      </div>
+      <QuestionPanel
+        questions={questions}
+        isEditable={false}
+        color={QuestionPanelColor.Yellow}
+      />
       <hr />
       <h3>Pictogram example:</h3>
       <p>Normal:</p>

@@ -10,6 +10,8 @@ $rgb_colors: (
   'dark': '102, 102, 102',
   'near-black': '48, 31, 15',
   'selected': '158, 137, 109',
+  'primrose': '237, 229, 155',
+  'mandys-pink': '245, 199, 199',
 );
 
 :root {
@@ -18,8 +20,14 @@ $rgb_colors: (
   }
   --font-straight: 'Roboto', sans-serif;
   --font-cursive: 'Gloria Hallelujah', cursive;
+
   --transition-duration: 0.2s;
   --transition-function: ease-in-out;
+
+  --text-field-font-size: 18px;
+  --text-field-line-height: 21px;
+  --text-field-padding: 6px;
+  --text-field-border-width: 1px;
 }
 
 html,

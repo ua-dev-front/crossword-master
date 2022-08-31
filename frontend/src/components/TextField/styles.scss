@@ -1,28 +1,43 @@
 @import 'styles/functions.scss';
 
 .text-field {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 6px;
-    background-color: transparent;
-    border: 1px solid transparent;
+    display: flex;
+    border: var(--text-field-border-width) solid transparent;
     border-radius: 2px;
+    box-sizing: border-box;
+    padding: var(--text-field-padding);
 
-    font-family: var(--font-straight);
-    font-size: 18px;
-    line-height: 21px;
+    &__content {
+        box-sizing: border-box;
+        width: 100%;
+        background-color: transparent;
+        overflow-wrap: break-word;
+        border: none;
+        margin: 0;
+        padding: 0;
+
+        font-family: var(--font-straight);
+        font-size: var(--text-field-font-size);
+        line-height: var(--text-field-line-height);
+    }
+
+    &_transition {
+        transition: border-color var(--transition-duration) var(--transition-function);
+    }
 
     &_editable {
         border-color: cl(light-dark);
-        outline: none;
-        resize: none;
 
-        // When height of element is smaller than height of content (when we autoresize textarea) scrollbar shouldn't
-        // appear for autoresize to work correctly
-        overflow: hidden;
-        overflow-wrap: break-word;
+        .text-field__content {
+            outline: none;
+            resize: none;
 
-        &:focus-visible {
+            // When height of element is smaller than height of content (when we autoresize textarea) scrollbar shouldn't
+            // appear for autoresize to work correctly
+            overflow: hidden;
+        }
+
+        &:focus-within {
             border-color: cl(near-black);
         }
     }
