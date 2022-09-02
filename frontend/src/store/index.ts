@@ -1,14 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
-import appSlice from 'components/App/appSlice';
-import gridSlice from 'components/Grid/gridSlice';
-import questionsSlice from 'components/QuestionPanel/questionsSlice';
 
 const store = configureStore({
-  reducer: {
-    app: appSlice,
-    grid: gridSlice,
-    questions: questionsSlice,
-  },
+  reducer: {},
 });
 
 export type RootState = ReturnType<typeof store.getState>;

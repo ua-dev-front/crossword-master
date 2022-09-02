@@ -7,7 +7,6 @@ export enum Mode {
   Draw = 'draw',
   Erase = 'erase',
   Puzzle = 'puzzle',
-  EnterQuestions = 'enterQuestions',
 }
 
 type Props =
