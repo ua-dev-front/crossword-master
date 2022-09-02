@@ -11,6 +11,10 @@ export enum QuestionPanelColor {
 export type Question = {
   id: number;
   question: string;
+  startPosition: {
+    row: number;
+    column: number;
+  };
 };
 
 type Props = {
