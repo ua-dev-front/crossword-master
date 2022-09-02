@@ -13,7 +13,9 @@ import QuestionPanel, {
 import Tab from 'components/Tab';
 import LeftArrow from 'icons/LeftArrow';
 import Square from 'icons/Square';
-import { useDispatch } from 'react-redux';
+import useAppDispatch from 'hooks/useAppDispatch';
+import useAppSelector from 'hooks/useAppSelector';
+import { setShowConfirmation } from './appSlice';
 
 const answerMatrix = [
   [
@@ -102,15 +104,21 @@ function App() {
   const [matrix, setMatrix] = useState(emptyMatrix);
   const [isLoading, toggleLoading] = useReducer((state) => !state, false);
   const [questions, setQuestions] = useState<Question[]>([
-    { id: 1, question: 'A thin, flat, circular plate or similar object.' },
+    {
+      id: 1,
+      question: 'A thin, flat, circular plate or similar object.',
+      startPosition: { row: 0, column: 0 },
+    },
     {
       id: 33,
       question:
         'A male person considered to have been significantly shaped by some external influence; a male adopted person in relation to his adoptive parents.',
+      startPosition: { row: 0, column: 0 },
     },
   ]);
   const [panelEditable, setPanelEditable] = useState(true);
-  const dispatch = useDispatch();
+  const showDialog = useAppSelector((state) => state.app.showConfirmation);
+  const dispatch = useAppDispatch();
 
   const handleMatrixChange = (row: number, column: number) => {
     const newMatrix = [...matrix];
@@ -131,6 +139,22 @@ function App() {
   return (
     <>
       <p>Under development</p>
+      <p>Dialog example (switch controlled by redux)</p>
+      <input
+        id='show-dialog'
+        type='checkbox'
+        checked={showDialog}
+        onChange={(event) =>
+          dispatch(setShowConfirmation(event.target.checked))
+        }
+      />
+      <label htmlFor='show-dialog'>Show dialog</label>
+      {showDialog && (
+        <Dialog
+          label='Hello'
+          buttons={[{ label: 'Yes', onClick: () => console.log('yes') }]}
+        />
+      )}
       <p>Button example:</p>
       <Button label='Toggle loader' onClick={() => toggleLoading()} />
       <div style={{ width: 476, height: 476, margin: 20 }}>

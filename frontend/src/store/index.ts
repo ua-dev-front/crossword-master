@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import appSlice from 'components/App';
+import appSlice from 'components/App/appSlice';
 import gridSlice from 'components/Grid/gridSlice';
 import questionsSlice from 'components/QuestionPanel/questionsSlice';
 
