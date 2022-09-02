@@ -13,6 +13,7 @@ import QuestionPanel, {
 import Tab from 'components/Tab';
 import LeftArrow from 'icons/LeftArrow';
 import Square from 'icons/Square';
+import { useDispatch } from 'react-redux';
 
 const answerMatrix = [
   [
@@ -99,9 +100,6 @@ const emptyMatrix = [...Array(10)].map(() => [...Array(10)].map(() => false));
 function App() {
   const [filled, setFilled] = useState(false);
   const [matrix, setMatrix] = useState(emptyMatrix);
-  const [textFieldValue, setTextFieldValue] = useState(
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-  );
   const [isLoading, toggleLoading] = useReducer((state) => !state, false);
   const [questions, setQuestions] = useState<Question[]>([
     { id: 1, question: 'A thin, flat, circular plate or similar object.' },
@@ -112,6 +110,7 @@ function App() {
     },
   ]);
   const [panelEditable, setPanelEditable] = useState(true);
+  const dispatch = useDispatch();
 
   const handleMatrixChange = (row: number, column: number) => {
     const newMatrix = [...matrix];
@@ -151,8 +150,6 @@ function App() {
         color={QuestionPanelColor.Pink}
         onChange={(value, index) => handleQuestionsChange(value, index)}
       />
-      <p>Button example:</p>
-      <Button label='Click me' onClick={() => console.log('clicked')} />
       <hr />
       <QuestionPanel
         questions={questions}
