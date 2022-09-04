@@ -13,8 +13,6 @@ import QuestionPanel, {
 import Tab from 'components/Tab';
 import LeftArrow from 'icons/LeftArrow';
 import Square from 'icons/Square';
-import useAppDispatch from 'hooks/useAppDispatch';
-import useAppSelector from 'hooks/useAppSelector';
 
 const answerMatrix = [
   [
@@ -103,10 +101,7 @@ function App() {
   const [matrix, setMatrix] = useState(emptyMatrix);
   const [isLoading, toggleLoading] = useReducer((state) => !state, false);
   const [questions, setQuestions] = useState<Question[]>([
-    {
-      id: 1,
-      question: 'A thin, flat, circular plate or similar object.',
-    },
+    { id: 1, question: 'A thin, flat, circular plate or similar object.' },
     {
       id: 33,
       question:
@@ -153,6 +148,8 @@ function App() {
         color={QuestionPanelColor.Pink}
         onChange={(value, index) => handleQuestionsChange(value, index)}
       />
+      <p>Button example:</p>
+      <Button label='Click me' onClick={() => console.log('clicked')} />
       <hr />
       <QuestionPanel
         questions={questions}
