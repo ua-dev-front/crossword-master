@@ -107,7 +107,9 @@ const generalSlice = createSlice({
 });
 
 const store = configureStore({
-  reducer: {},
+  reducer: {
+    general: generalSlice.reducer,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
