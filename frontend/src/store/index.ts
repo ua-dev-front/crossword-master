@@ -1,17 +1,9 @@
 import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { columns, rows } from 'appConstants';
+import { columns, Mode, rows } from 'appConstants';
 
 export enum Direction {
   Row = 'row',
   Column = 'column',
-}
-
-export enum Mode {
-  Draw = 'draw',
-  Erase = 'erase',
-  EnterQuestions = 'enterQuestions',
-  Answer = 'answer',
-  Puzzle = 'puzzle',
 }
 
 export type CellPosition = {
