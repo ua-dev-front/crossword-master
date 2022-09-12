@@ -31,7 +31,7 @@ export type Question = {
   startPosition: CellPosition;
 };
 
-type State = {
+export type State = {
   mode: Mode;
   grid: ({ letter: string | null; number: number | null } | null)[][];
   questions: {
