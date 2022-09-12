@@ -1,5 +1,5 @@
 import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { columns, Mode, rows } from 'appConstants';
+import { COLUMNS, ROWS } from 'appConstants';
 
 export enum Direction {
   Row = 'row',
@@ -11,13 +11,21 @@ export type CellPosition = {
   column: number;
 };
 
-type UpdateQuestionPayload = {
+export enum Mode {
+  Draw = 'draw',
+  Erase = 'erase',
+  EnterQuestions = 'enterQuestions',
+  Answer = 'answer',
+  Puzzle = 'puzzle',
+}
+
+export type UpdateQuestionPayload = {
   direction: Direction;
   id: number;
   question: string;
 };
 
-type Question = {
+export type Question = {
   id: number;
   question: string;
   startPosition: CellPosition;
@@ -36,14 +44,14 @@ type State = {
 
 const initialState: State = {
   mode: Mode.Draw,
-  grid: [...Array(rows)].map(() => [...Array(columns)].map(() => null)),
+  grid: [...Array(ROWS)].map(() => [...Array(COLUMNS)].map(() => null)),
   questions: null,
   fetchAbortController: null,
   showConfirmation: false,
 };
 
 const generalSlice = createSlice({
-  name: 'everything',
+  name: 'general',
   initialState,
   reducers: {
     fillCell: (state: State, action: PayloadAction<CellPosition>) => {
