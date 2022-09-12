@@ -1,11 +1,11 @@
 import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-enum Direction {
+export enum Direction {
   Row = 'row',
   Column = 'column',
 }
 
-enum Mode {
+export enum Mode {
   Draw = 'draw',
   Erase = 'erase',
   EnterQuestions = 'enterQuestions',
@@ -13,9 +13,15 @@ enum Mode {
   Puzzle = 'puzzle',
 }
 
-type CellAtionPayload = {
+export type CellPosition = {
   row: number;
   column: number;
+};
+
+export type Question = {
+  id: number;
+  question: string;
+  startPosition: CellPosition;
 };
 
 type EditQuestionPayload = {
@@ -24,31 +30,22 @@ type EditQuestionPayload = {
   question: string;
 };
 
-type Question = {
-  id: number;
-  question: string;
-  startPosition: {
-    row: number;
-    column: number;
-  };
-};
-
-type InitialState = {
+type GeneralState = {
   mode: Mode;
   grid: ({ letter: string | null; number: number | null } | null)[][];
   questions: {
     across: Question[];
     down: Question[];
   } | null;
-  isFetchingFromApi: boolean;
+  fetchAbortController: AbortController | null;
   showConfirmation: boolean;
 };
 
-const initialState: InitialState = {
+const initialState: GeneralState = {
   mode: Mode.Draw,
-  grid: [],
+  grid: [...Array(10)].map(() => [...Array(10)].map(() => null)),
   questions: null,
-  isFetchingFromApi: false,
+  fetchAbortController: null,
   showConfirmation: false,
 };
 
@@ -56,52 +53,55 @@ const generalSlice = createSlice({
   name: 'everything',
   initialState,
   reducers: {
-    fillCell: (state, action: PayloadAction<CellAtionPayload>) => {
+    fillCell: (state: GeneralState, action: PayloadAction<CellPosition>) => {
       // fills specified cell
     },
-    eraseCell: (state, action: PayloadAction<CellAtionPayload>) => {
+    eraseCell: (state: GeneralState, action: PayloadAction<CellPosition>) => {
       // erases specified cell
     },
-    switchToDrawing: () => {
+    switchToDrawing: (state: GeneralState) => {
       // switches the mode to Draw
     },
-    switchToErasing: () => {
+    switchToErasing: (state: GeneralState) => {
       // switches the mode to Erase
     },
-    switchToAnswer: () => {
+    switchToAnswer: (state: GeneralState) => {
       // switches the mode to Answer
     },
-    switchToPuzzle: () => {
+    switchToPuzzle: (state: GeneralState) => {
       // switches the mode to Puzzle
     },
-    switchToEnteringQuestions: () => {
+    switchToEnteringQuestions: (state: GeneralState) => {
       // switches the mode to EnterQuestions, and creates empty questions
     },
-    editQuestion: (state, action: PayloadAction<EditQuestionPayload>) => {
+    editQuestion: (
+      state: GeneralState,
+      action: PayloadAction<EditQuestionPayload>
+    ) => {
       // Updates question for specified id
     },
-    generateQuestions: () => {
-      // sets isFetchingFromApi to true, makes API call to generate questions and,
-      // after data is fetched, sets isFetchingFromApi to false,
+    generateQuestions: (state: GeneralState) => {
+      // creates new AbortController and assignes it to fetchAbortController, makes API call to generate questions and,
+      // after data is fetched, sets fetchAbortController to null,
       // sets questions to API response and updates grid accordingly
     },
-    solveQuestions: () => {
-      // sets isFetchingFromApi to true, makes API call to solve questions and,
-      // after data is fetched, sets isFetchingFromApi to false,
+    solveQuestions: (state: GeneralState) => {
+      // creates new AbortController and assignes it to fetchAbortController, makes API call to solve questions and,
+      // after data is fetched, sets fetchAbortController to null,
       // updates grid according to API response
     },
-    showConfirmation: () => {
+    showConfirmation: (state: GeneralState) => {
       // sets showConfirmation to true
     },
-    hideConfirmation: () => {
+    dismissConfirmation: (state: GeneralState) => {
       // sets showConfirmation to false
     },
-    editCrossword: () => {
-      // sets isFetchingFromApi to false, sets showConfirmation to false,
-      // sets mode to Draw, resets questions and removes letters & numbers from grid.
+    editCrossword: (state: GeneralState) => {
+      // aborts current request to the api, sets fetchAbortController to null, sets showConfirmation to false,
+      // sets mode to Draw, resets questions and removes letters & numbers from grid
     },
-    editQuestions: () => {
-      // sets isFetchingFromApi to false, sets mode to EnterQuestions.
+    updateQuestions: (state: GeneralState) => {
+      // aborts current request to the api, sets fetchAbortController to null, sets mode to EnterQuestions
     },
   },
 });
