@@ -92,10 +92,10 @@ const generalSlice = createSlice({
       // updates grid according to API response
     },
     showConfirmation: (state: State) => {
-      // sets showConfirmation to true
+      state.showConfirmation = true;
     },
     dismissConfirmation: (state: State) => {
-      // sets showConfirmation to false
+      state.showConfirmation = false;
     },
     editCrossword: (state: State) => {
       // aborts current request to the api, sets fetchAbortController to null, sets showConfirmation to false,
