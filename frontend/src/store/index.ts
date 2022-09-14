@@ -61,16 +61,16 @@ const generalSlice = createSlice({
       // erases specified cell
     },
     switchToDrawing: (state: State) => {
-      // switches the mode to Draw
+      state.mode = Mode.Draw;
     },
     switchToErasing: (state: State) => {
-      // switches the mode to Erase
+      state.mode = Mode.Erase;
     },
     switchToAnswer: (state: State) => {
-      // switches the mode to Answer
+      state.mode = Mode.Answer;
     },
     switchToPuzzle: (state: State) => {
-      // switches the mode to Puzzle
+      state.mode = Mode.Puzzle;
     },
     switchToEnteringQuestions: (state: State) => {
       // switches the mode to EnterQuestions, and creates empty questions
