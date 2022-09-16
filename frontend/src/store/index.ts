@@ -42,9 +42,13 @@ export type State = {
   showConfirmation: boolean;
 };
 
+const initialGrid = [...Array(ROWS)].map(() =>
+  [...Array(COLUMNS)].map(() => null)
+);
+
 const initialState: State = {
   mode: Mode.Draw,
-  grid: [...Array(ROWS)].map(() => [...Array(COLUMNS)].map(() => null)),
+  grid: initialGrid,
   questions: null,
   fetchAbortController: null,
   showConfirmation: false,
@@ -98,8 +102,19 @@ const generalSlice = createSlice({
       // sets showConfirmation to false
     },
     editCrossword: (state: State) => {
-      // aborts current request to the api, sets fetchAbortController to null, sets showConfirmation to false,
-      // sets mode to Draw, resets questions and removes letters & numbers from grid
+      state.fetchAbortController?.abort();
+      state.fetchAbortController = null;
+      state.showConfirmation = false;
+      state.mode = Mode.Draw;
+      state.questions = null;
+      state.grid = state.grid.map((row) =>
+        row.map((cell) => {
+          if (cell) {
+            return { ...cell, letter: null, number: null };
+          }
+          return null;
+        })
+      );
     },
     updateQuestions: (state: State) => {
       // aborts current request to the api, sets fetchAbortController to null, sets mode to EnterQuestions
