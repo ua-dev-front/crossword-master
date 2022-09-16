@@ -80,8 +80,11 @@ const generalSlice = createSlice({
       action: PayloadAction<UpdateQuestionPayload>
     ) => {
       if (state.questions) {
-        state.questions[action.payload.direction][action.payload.id].question =
-          action.payload.question;
+        state.questions[action.payload.direction].map((question) =>
+          question.id === action.payload.id
+            ? { ...question, question: action.payload.question }
+            : question
+        );
       }
     },
     generateQuestions: (state: State) => {
