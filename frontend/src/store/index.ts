@@ -73,7 +73,60 @@ const generalSlice = createSlice({
       // switches the mode to Puzzle
     },
     switchToEnteringQuestions: (state: State) => {
-      // switches the mode to EnterQuestions, and creates empty questions
+      state.mode = Mode.EnterQuestions;
+
+      const acrossQuestions: Question[] = [];
+      const downQuestions: Question[] = [];
+
+      let acrossQuestionId = 1;
+      let downQuestionId = 1;
+
+      for (let row = 0; row < ROWS; row++) {
+        for (let column = 0; column < COLUMNS; column++) {
+          if (state.grid[row][column]) {
+            const initialQuestion = {
+              question: '',
+              startPosition: { row, column },
+            };
+
+            if (
+              !state.grid?.[row]?.[column - 1] &&
+              state.grid?.[row]?.[column + 1]
+            ) {
+              acrossQuestions.push({
+                id: acrossQuestionId++,
+                ...initialQuestion,
+              });
+            }
+
+            if (
+              !state.grid?.[row - 1]?.[column] &&
+              state.grid?.[row + 1]?.[column]
+            ) {
+              downQuestions.push({
+                id: downQuestionId++,
+                ...initialQuestion,
+              });
+            }
+          }
+        }
+      }
+
+      state.questions = {
+        across: acrossQuestions,
+        down: downQuestions,
+      };
+
+      [...acrossQuestions, ...downQuestions].forEach(
+        ({ id, startPosition }) => {
+          const { row, column } = startPosition;
+          const cell = state.grid[row][column];
+
+          if (cell?.number) {
+            cell.number = id;
+          }
+        }
+      );
     },
     updateQuestion: (
       state: State,
