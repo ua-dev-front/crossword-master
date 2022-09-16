@@ -42,13 +42,9 @@ export type State = {
   showConfirmation: boolean;
 };
 
-const initialGrid = [...Array(ROWS)].map(() =>
-  [...Array(COLUMNS)].map(() => null)
-);
-
 const initialState: State = {
   mode: Mode.Draw,
-  grid: initialGrid,
+  grid: [...Array(ROWS)].map(() => [...Array(COLUMNS)].map(() => null)),
   questions: null,
   fetchAbortController: null,
   showConfirmation: false,
