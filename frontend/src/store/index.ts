@@ -118,8 +118,7 @@ const generalSlice = createSlice({
       };
 
       [...acrossQuestions, ...downQuestions].forEach(
-        ({ id, startPosition }) => {
-          const { row, column } = startPosition;
+        ({ id, startPosition: { row, column } }) => {
           const cell = state.grid[row][column];
 
           if (cell?.number) {
