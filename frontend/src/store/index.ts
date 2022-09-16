@@ -1,5 +1,6 @@
 import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { COLUMNS, ROWS } from 'appConstants';
+import { AssertionError } from 'assert';
 
 export enum Direction {
   Across = 'across',
@@ -79,13 +80,15 @@ const generalSlice = createSlice({
       state: State,
       action: PayloadAction<UpdateQuestionPayload>
     ) => {
-      if (state.questions) {
-        state.questions[action.payload.direction].map((question) =>
-          question.id === action.payload.id
-            ? { ...question, question: action.payload.question }
-            : question
-        );
+      if (!state.questions) {
+        throw new AssertionError({ message: 'state.questions is null' });
       }
+
+      state.questions[action.payload.direction].map((question) =>
+        question.id === action.payload.id
+          ? { ...question, question: action.payload.question }
+          : question
+      );
     },
     generateQuestions: (state: State) => {
       // creates new AbortController and assignes it to fetchAbortController, makes API call to generate questions and,
