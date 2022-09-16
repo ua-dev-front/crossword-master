@@ -7,6 +7,7 @@
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint"],
   "rules": {
+    "@typescript-eslint/no-non-null-assertion": "off",
     "arrow-parens": "error",
     "@typescript-eslint/array-type": "error",
     "no-shadow": "off",
