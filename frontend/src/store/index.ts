@@ -104,12 +104,9 @@ const generalSlice = createSlice({
       state.mode = Mode.Draw;
       state.questions = null;
       state.grid = state.grid.map((row) =>
-        row.map((cell) => {
-          if (cell) {
-            return { ...cell, letter: null, number: null };
-          }
-          return null;
-        })
+        row.map((cell) =>
+          cell ? { ...cell, letter: null, number: null } : null
+        )
       );
     },
     updateQuestions: (state: State) => {
