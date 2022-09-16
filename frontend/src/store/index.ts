@@ -81,7 +81,7 @@ const generalSlice = createSlice({
       action: PayloadAction<UpdateQuestionPayload>
     ) => {
       if (!state.questions) {
-        throw new AssertionError({ message: 'state.questions is null' });
+        throw new AssertionError({ message: 'Questions do not exist' });
       }
 
       state.questions[action.payload.direction].map((question) =>
