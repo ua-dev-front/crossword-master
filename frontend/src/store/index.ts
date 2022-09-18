@@ -46,23 +46,31 @@ const getQuestionsFromGrid = (grid: State['grid']) => {
   const acrossQuestions: Question[] = [];
   const downQuestions: Question[] = [];
 
+  const getNewWordArray = (row: number, column: number) => {
+    if (!grid?.[row]?.[column - 1] && grid?.[row]?.[column + 1]) {
+      return acrossQuestions;
+    }
+
+    if (!grid?.[row - 1]?.[column] && grid?.[row + 1]?.[column]) {
+      return downQuestions;
+    }
+
+    return null;
+  };
+
   let currentId = 1;
 
   for (let row = 0; row < ROWS; row++) {
     for (let column = 0; column < COLUMNS; column++) {
       if (grid[row][column]) {
-        const initialQuestion = {
-          id: currentId++,
-          question: '',
-          startPosition: { row, column },
-        };
+        const newWordArray = getNewWordArray(row, column);
 
-        if (!grid?.[row]?.[column - 1] && grid?.[row]?.[column + 1]) {
-          acrossQuestions.push(initialQuestion);
-        }
-
-        if (!grid?.[row - 1]?.[column] && grid?.[row + 1]?.[column]) {
-          downQuestions.push(initialQuestion);
+        if (newWordArray) {
+          newWordArray.push({
+            id: currentId++,
+            question: '',
+            startPosition: { row, column },
+          });
         }
       }
     }
