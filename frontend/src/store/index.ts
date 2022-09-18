@@ -55,22 +55,25 @@ const generalSlice = createSlice({
   initialState,
   reducers: {
     fillCell: (state: State, action: PayloadAction<CellPosition>) => {
-      // fills specified cell
+      state.grid[action.payload.row][action.payload.column] = {
+        letter: null,
+        number: null,
+      };
     },
     eraseCell: (state: State, action: PayloadAction<CellPosition>) => {
-      // erases specified cell
+      state.grid[action.payload.row][action.payload.column] = null;
     },
     switchToDrawing: (state: State) => {
-      // switches the mode to Draw
+      state.mode = Mode.Draw;
     },
     switchToErasing: (state: State) => {
-      // switches the mode to Erase
+      state.mode = Mode.Erase;
     },
     switchToAnswer: (state: State) => {
-      // switches the mode to Answer
+      state.mode = Mode.Answer;
     },
     switchToPuzzle: (state: State) => {
-      // switches the mode to Puzzle
+      state.mode = Mode.Puzzle;
     },
     switchToEnteringQuestions: (state: State) => {
       // switches the mode to EnterQuestions, and creates empty questions
@@ -92,10 +95,10 @@ const generalSlice = createSlice({
       // updates grid according to API response
     },
     showConfirmation: (state: State) => {
-      // sets showConfirmation to true
+      state.showConfirmation = true;
     },
     dismissConfirmation: (state: State) => {
-      // sets showConfirmation to false
+      state.showConfirmation = false;
     },
     editCrossword: (state: State) => {
       state.fetchAbortController = null;
@@ -129,4 +132,14 @@ export const editCrosswordAndAbortFetch =
     dispatch(generalSlice.actions.editCrossword());
   };
 
+export const {
+  fillCell,
+  eraseCell,
+  switchToDrawing,
+  switchToErasing,
+  switchToAnswer,
+  switchToPuzzle,
+  showConfirmation,
+  dismissConfirmation,
+} = generalSlice.actions;
 export default store;
