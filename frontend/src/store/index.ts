@@ -55,10 +55,13 @@ const generalSlice = createSlice({
   initialState,
   reducers: {
     fillCell: (state: State, action: PayloadAction<CellPosition>) => {
-      // fills specified cell
+      state.grid[action.payload.row][action.payload.column] = {
+        letter: null,
+        number: null,
+      };
     },
     eraseCell: (state: State, action: PayloadAction<CellPosition>) => {
-      // erases specified cell
+      state.grid[action.payload.row][action.payload.column] = null;
     },
     switchToDrawing: (state: State) => {
       state.mode = Mode.Draw;
@@ -92,10 +95,10 @@ const generalSlice = createSlice({
       // updates grid according to API response
     },
     showConfirmation: (state: State) => {
-      // sets showConfirmation to true
+      state.showConfirmation = true;
     },
     dismissConfirmation: (state: State) => {
-      // sets showConfirmation to false
+      state.showConfirmation = false;
     },
     editCrossword: (state: State) => {
       // aborts current request to the api, sets fetchAbortController to null, sets showConfirmation to false,
@@ -117,9 +120,13 @@ export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
 export const {
+  fillCell,
+  eraseCell,
   switchToDrawing,
   switchToErasing,
   switchToAnswer,
   switchToPuzzle,
+  showConfirmation,
+  dismissConfirmation,
 } = generalSlice.actions;
 export default store;
