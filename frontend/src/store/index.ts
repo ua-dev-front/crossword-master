@@ -95,10 +95,10 @@ const generalSlice = createSlice({
       // updates grid according to API response
     },
     showConfirmation: (state: State) => {
-      // sets showConfirmation to true
+      state.showConfirmation = true;
     },
     dismissConfirmation: (state: State) => {
-      // sets showConfirmation to false
+      state.showConfirmation = false;
     },
     editCrossword: (state: State) => {
       // aborts current request to the api, sets fetchAbortController to null, sets showConfirmation to false,
@@ -119,6 +119,6 @@ const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
-export const { fillCell, eraseCell } = generalSlice.actions;
-
+export const { fillCell, eraseCell, showConfirmation, dismissConfirmation } =
+  generalSlice.actions;
 export default store;
