@@ -92,22 +92,25 @@ const generalSlice = createSlice({
   initialState,
   reducers: {
     fillCell: (state: State, action: PayloadAction<CellPosition>) => {
-      // fills specified cell
+      state.grid[action.payload.row][action.payload.column] = {
+        letter: null,
+        number: null,
+      };
     },
     eraseCell: (state: State, action: PayloadAction<CellPosition>) => {
-      // erases specified cell
+      state.grid[action.payload.row][action.payload.column] = null;
     },
     switchToDrawing: (state: State) => {
-      // switches the mode to Draw
+      state.mode = Mode.Draw;
     },
     switchToErasing: (state: State) => {
-      // switches the mode to Erase
+      state.mode = Mode.Erase;
     },
     switchToAnswer: (state: State) => {
-      // switches the mode to Answer
+      state.mode = Mode.Answer;
     },
     switchToPuzzle: (state: State) => {
-      // switches the mode to Puzzle
+      state.mode = Mode.Puzzle;
     },
     switchToEnteringQuestions: (state: State) => {
       state.mode = Mode.EnterQuestions;
@@ -140,10 +143,10 @@ const generalSlice = createSlice({
       // updates grid according to API response
     },
     showConfirmation: (state: State) => {
-      // sets showConfirmation to true
+      state.showConfirmation = true;
     },
     dismissConfirmation: (state: State) => {
-      // sets showConfirmation to false
+      state.showConfirmation = false;
     },
     editCrossword: (state: State) => {
       // aborts current request to the api, sets fetchAbortController to null, sets showConfirmation to false,
@@ -164,5 +167,15 @@ const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
-export const { switchToEnteringQuestions } = generalSlice.actions;
+export const {
+  fillCell,
+  eraseCell,
+  switchToDrawing,
+  switchToErasing,
+  switchToAnswer,
+  switchToPuzzle,
+  switchToEnteringQuestions,
+  showConfirmation,
+  dismissConfirmation,
+} = generalSlice.actions;
 export default store;
