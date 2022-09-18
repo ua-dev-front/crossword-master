@@ -42,6 +42,35 @@ export type State = {
   showConfirmation: boolean;
 };
 
+const getQuestionsFromGrid = (grid: State['grid']) => {
+  const acrossQuestions: Question[] = [];
+  const downQuestions: Question[] = [];
+
+  let currentId = 1;
+
+  for (let row = 0; row < ROWS; row++) {
+    for (let column = 0; column < COLUMNS; column++) {
+      if (grid[row][column]) {
+        const initialQuestion = {
+          id: currentId++,
+          question: '',
+          startPosition: { row, column },
+        };
+
+        if (!grid?.[row]?.[column - 1] && grid?.[row]?.[column + 1]) {
+          acrossQuestions.push(initialQuestion);
+        }
+
+        if (!grid?.[row - 1]?.[column] && grid?.[row + 1]?.[column]) {
+          downQuestions.push(initialQuestion);
+        }
+      }
+    }
+  }
+
+  return { across: acrossQuestions, down: downQuestions };
+};
+
 const initialState: State = {
   mode: Mode.Draw,
   grid: [...Array(ROWS)].map(() => [...Array(COLUMNS)].map(() => null)),
@@ -75,47 +104,16 @@ const generalSlice = createSlice({
     switchToEnteringQuestions: (state: State) => {
       state.mode = Mode.EnterQuestions;
 
-      const acrossQuestions: Question[] = [];
-      const downQuestions: Question[] = [];
-
-      let currentId = 1;
-
-      for (let row = 0; row < ROWS; row++) {
-        for (let column = 0; column < COLUMNS; column++) {
-          if (state.grid[row][column]) {
-            const initialQuestion = {
-              id: currentId++,
-              question: '',
-              startPosition: { row, column },
-            };
-
-            if (
-              !state.grid?.[row]?.[column - 1] &&
-              state.grid?.[row]?.[column + 1]
-            ) {
-              acrossQuestions.push(initialQuestion);
-            }
-
-            if (
-              !state.grid?.[row - 1]?.[column] &&
-              state.grid?.[row + 1]?.[column]
-            ) {
-              downQuestions.push(initialQuestion);
-            }
-          }
-        }
-      }
+      const { across, down } = getQuestionsFromGrid(state.grid);
 
       state.questions = {
-        across: acrossQuestions,
-        down: downQuestions,
+        across,
+        down,
       };
 
-      [...acrossQuestions, ...downQuestions].forEach(
-        ({ id, startPosition: { row, column } }) => {
-          state.grid[row][column]!.number = id;
-        }
-      );
+      [...across, ...down].forEach(({ id, startPosition: { row, column } }) => {
+        state.grid[row][column]!.number = id;
+      });
     },
     updateQuestion: (
       state: State,
