@@ -1,5 +1,10 @@
-import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { COLUMNS, ROWS } from 'appConstants';
+import {
+  configureStore,
+  createAsyncThunk,
+  createSlice,
+  PayloadAction,
+} from '@reduxjs/toolkit';
+import { API_PATH, COLUMNS, GENERATE_ENDPOINT, ROWS } from 'appConstants';
 
 export enum Direction {
   Row = 'row',
@@ -49,6 +54,39 @@ const initialState: State = {
   fetchAbortController: null,
   showConfirmation: false,
 };
+
+export const generateQuestions = createAsyncThunk(
+  'generateQuestions',
+  async (_, { getState }) => {
+    const {
+      general: { fetchAbortController },
+    }: any = getState();
+    const response = await fetch(`${API_PATH}${GENERATE_ENDPOINT}`, {
+      headers: {
+        'Content-type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        table: [
+          [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
+          [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        ],
+      }),
+      signal: fetchAbortController.signal,
+    });
+    const res = await response.json();
+
+    return res;
+  }
+);
 
 const generalSlice = createSlice({
   name: 'general',
@@ -104,6 +142,20 @@ const generalSlice = createSlice({
     updateQuestions: (state: State) => {
       // aborts current request to the api, sets fetchAbortController to null, sets mode to EnterQuestions
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(generateQuestions.pending, (state) => {
+      const fetchAbortController = new AbortController();
+      state.fetchAbortController = fetchAbortController;
+    });
+    builder.addCase(generateQuestions.rejected, (state, action) => {
+      state.fetchAbortController = null;
+      console.log(action);
+    });
+    builder.addCase(generateQuestions.fulfilled, (state, action) => {
+      state.fetchAbortController = null;
+      console.log(action);
+    });
   },
 });
 

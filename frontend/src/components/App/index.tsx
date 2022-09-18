@@ -11,6 +11,8 @@ import QuestionPanel, {
   QuestionPanelColor,
 } from 'components/QuestionPanel';
 import Tab from 'components/Tab';
+import useAppDispatch from 'hooks/useAppDispatch';
+import { generateQuestions } from 'store';
 import LeftArrow from 'icons/LeftArrow';
 import Square from 'icons/Square';
 
@@ -97,6 +99,7 @@ const puzzleMatrix = answerMatrix.map((row) =>
 const emptyMatrix = [...Array(10)].map(() => [...Array(10)].map(() => false));
 
 function App() {
+  const dispatch = useAppDispatch();
   const [filled, setFilled] = useState(false);
   const [matrix, setMatrix] = useState(emptyMatrix);
   const [isLoading, toggleLoading] = useReducer((state) => !state, false);
@@ -129,6 +132,11 @@ function App() {
   return (
     <>
       <p>Under development</p>
+      <p>Generate questions</p>
+      <Button
+        label='Generate questions'
+        onClick={() => dispatch(generateQuestions())}
+      />
       <p>Button example:</p>
       <Button label='Toggle loader' onClick={() => toggleLoading()} />
       <div style={{ width: 476, height: 476, margin: 20 }}>
