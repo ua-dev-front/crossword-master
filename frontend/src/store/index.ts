@@ -80,14 +80,11 @@ const generalSlice = createSlice({
       state: State,
       action: PayloadAction<UpdateQuestionPayload>
     ) => {
-      if (!state.questions) {
-        throw new AssertionError({ message: 'Questions do not exist' });
-      }
+      const { direction, id, question } = action.payload;
 
-      state.questions[action.payload.direction].map((question) =>
-        question.id === action.payload.id
-          ? { ...question, question: action.payload.question }
-          : question
+      state.questions![direction] = state.questions![direction].map(
+        (oldQuestion) =>
+          oldQuestion.id === id ? { ...oldQuestion, question } : oldQuestion
       );
     },
     generateQuestions: (state: State) => {
