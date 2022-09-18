@@ -55,10 +55,13 @@ const generalSlice = createSlice({
   initialState,
   reducers: {
     fillCell: (state: State, action: PayloadAction<CellPosition>) => {
-      // fills specified cell
+      state.grid[action.payload.row][action.payload.column] = {
+        letter: null,
+        number: null,
+      };
     },
     eraseCell: (state: State, action: PayloadAction<CellPosition>) => {
-      // erases specified cell
+      state.grid[action.payload.row][action.payload.column] = null;
     },
     switchToDrawing: (state: State) => {
       // switches the mode to Draw
@@ -116,5 +119,6 @@ const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
-export const { showConfirmation, dismissConfirmation } = generalSlice.actions;
+export const { fillCell, eraseCell, showConfirmation, dismissConfirmation } =
+  generalSlice.actions;
 export default store;
