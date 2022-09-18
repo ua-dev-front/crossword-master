@@ -78,13 +78,13 @@ const generalSlice = createSlice({
       const acrossQuestions: Question[] = [];
       const downQuestions: Question[] = [];
 
-      let acrossQuestionId = 1;
-      let downQuestionId = 1;
+      let currentId = 1;
 
       for (let row = 0; row < ROWS; row++) {
         for (let column = 0; column < COLUMNS; column++) {
           if (state.grid[row][column]) {
             const initialQuestion = {
+              id: currentId++,
               question: '',
               startPosition: { row, column },
             };
@@ -93,20 +93,14 @@ const generalSlice = createSlice({
               !state.grid?.[row]?.[column - 1] &&
               state.grid?.[row]?.[column + 1]
             ) {
-              acrossQuestions.push({
-                id: acrossQuestionId++,
-                ...initialQuestion,
-              });
+              acrossQuestions.push(initialQuestion);
             }
 
             if (
               !state.grid?.[row - 1]?.[column] &&
               state.grid?.[row + 1]?.[column]
             ) {
-              downQuestions.push({
-                id: downQuestionId++,
-                ...initialQuestion,
-              });
+              downQuestions.push(initialQuestion);
             }
           }
         }
