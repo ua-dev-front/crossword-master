@@ -77,10 +77,10 @@ const generalSlice = createSlice({
     },
     updateQuestion: (
       state: State,
-      action: PayloadAction<UpdateQuestionPayload>
+      {
+        payload: { direction, id, question },
+      }: PayloadAction<UpdateQuestionPayload>
     ) => {
-      const { direction, id, question } = action.payload;
-
       state.questions![direction] = state.questions![direction].map(
         (oldQuestion) =>
           oldQuestion.id === id ? { ...oldQuestion, question } : oldQuestion
