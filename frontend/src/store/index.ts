@@ -98,7 +98,6 @@ const generalSlice = createSlice({
       // sets showConfirmation to false
     },
     editCrossword: (state: State) => {
-      state.fetchAbortController?.abort();
       state.fetchAbortController = null;
       state.showConfirmation = false;
       state.mode = Mode.Draw;
@@ -123,5 +122,11 @@ const store = configureStore({
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+export const editCrosswordAndAbortFetch =
+  () => (dispatch: AppDispatch, getState: () => RootState) => {
+    getState().general.fetchAbortController?.abort();
+    dispatch(generalSlice.actions.editCrossword());
+  };
 
 export default store;
