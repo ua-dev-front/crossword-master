@@ -1,4 +1,3 @@
-import { AssertionError } from 'assert';
 import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { COLUMNS, ROWS } from 'appConstants';
 
