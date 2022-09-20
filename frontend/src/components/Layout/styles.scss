@@ -29,14 +29,18 @@
         z-index: 4;
     }
 
-    &__content {
+    &__content-wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;
         width: 528px;
         min-height: 860px; // the height after which the repeating background starts
-        padding: 64px 0;
         margin-top: 125px;
+        padding: 64px 0;
+    }
+
+    &__content {
+        min-height: 760px;
         z-index: 3;
     }
 

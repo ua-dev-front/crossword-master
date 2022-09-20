@@ -17,7 +17,9 @@ export default function Layout({ children, title }: Props) {
         className='layout__title'
       />
       <div className='layout__wrapper'>
-        <main className='layout__content'>{children}</main>
+        <div className='layout__content-wrapper'>
+          <main className='layout__content'>{children}</main>
+        </div>
         <div className='layout__background' />
         <div className='layout__repeated-background'>
           <div className='layout__repeated-background-mask'></div>
