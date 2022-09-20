@@ -2,8 +2,8 @@ import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { COLUMNS, ROWS } from 'appConstants';
 
 export enum Direction {
-  Row = 'row',
-  Column = 'column',
+  Across = 'across',
+  Down = 'down',
 }
 
 export type CellPosition = {
@@ -35,8 +35,8 @@ export type State = {
   mode: Mode;
   grid: ({ letter: string | null; number: number | null } | null)[][];
   questions: {
-    across: Question[];
-    down: Question[];
+    [Direction.Across]: Question[];
+    [Direction.Down]: Question[];
   } | null;
   fetchAbortController: AbortController | null;
   showConfirmation: boolean;
@@ -80,9 +80,14 @@ const generalSlice = createSlice({
     },
     updateQuestion: (
       state: State,
-      action: PayloadAction<UpdateQuestionPayload>
+      {
+        payload: { direction, id, question },
+      }: PayloadAction<UpdateQuestionPayload>
     ) => {
-      // Updates question for specified id
+      state.questions![direction] = state.questions![direction].map(
+        (oldQuestion) =>
+          oldQuestion.id === id ? { ...oldQuestion, question } : oldQuestion
+      );
     },
     generateQuestions: (state: State) => {
       // creates new AbortController and assignes it to fetchAbortController, makes API call to generate questions and,
@@ -126,6 +131,7 @@ export const {
   switchToErasing,
   switchToAnswer,
   switchToPuzzle,
+  updateQuestion,
   showConfirmation,
   dismissConfirmation,
 } = generalSlice.actions;
