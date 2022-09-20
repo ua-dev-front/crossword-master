@@ -106,8 +106,15 @@ const generalSlice = createSlice({
       state.showConfirmation = false;
     },
     editCrossword: (state: State) => {
-      // aborts current request to the api, sets fetchAbortController to null, sets showConfirmation to false,
-      // sets mode to Draw, resets questions and removes letters & numbers from grid
+      state.fetchAbortController = null;
+      state.showConfirmation = false;
+      state.mode = Mode.Draw;
+      state.questions = null;
+      state.grid = state.grid.map((row) =>
+        row.map((cell) =>
+          cell ? { ...cell, letter: null, number: null } : null
+        )
+      );
     },
     updateQuestions: (state: State) => {
       // aborts current request to the api, sets fetchAbortController to null, sets mode to EnterQuestions
@@ -123,6 +130,12 @@ const store = configureStore({
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+export const editCrosswordAndAbortFetch =
+  () => (dispatch: AppDispatch, getState: () => RootState) => {
+    getState().general.fetchAbortController?.abort();
+    dispatch(generalSlice.actions.editCrossword());
+  };
 
 export const {
   fillCell,
