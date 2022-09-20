@@ -35,8 +35,7 @@ class SolveData(TypedDict):
 
 # Endpoints
 app = Flask(__name__)
-CORS(app, resources={
-     r'*': {'origins': ['http://localhost:3000', 'https://crossword-master.org']}})
+CORS(app, resources={r'*': {'origins': ['http://localhost:3000', 'https://crossword-master.org']}})
 
 
 def request_handler(func: callable):
