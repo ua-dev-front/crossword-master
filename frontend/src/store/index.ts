@@ -178,4 +178,5 @@ export const {
   showConfirmation,
   dismissConfirmation,
 } = generalSlice.actions;
+
 export default store;
