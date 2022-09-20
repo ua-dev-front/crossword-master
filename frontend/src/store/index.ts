@@ -47,46 +47,53 @@ export type State = {
   showConfirmation: boolean;
 };
 
+type GenerateResponseDirection = {
+  answer: string;
+  question: string;
+  start_position: CellPosition;
+}[];
+
+type GenerateResponse = {
+  words: {
+    [Direction.Across]: GenerateResponseDirection;
+    [Direction.Down]: GenerateResponseDirection;
+  };
+};
+
+export const generateQuestions = createAsyncThunk<
+  GenerateResponse,
+  void,
+  { state: RootState }
+>('generateQuestions', async (_, { getState }) => {
+  const {
+    general: { fetchAbortController, grid },
+  } = getState();
+
+  const response = await fetch(`${API_PATH}${GENERATE_ENDPOINT}`, {
+    headers: {
+      'Content-type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify({
+      table: grid.map((row) => row.map((cell) => +!!cell)),
+    }),
+    signal: fetchAbortController?.signal,
+  });
+  const result = await response.json();
+
+  return result;
+});
+
 const initialState: State = {
   mode: Mode.Draw,
   grid: [...Array(ROWS)].map(() => [...Array(COLUMNS)].map(() => null)),
-  questions: null,
+  questions: {
+    across: [],
+    down: [],
+  },
   fetchAbortController: null,
   showConfirmation: false,
 };
-
-export const generateQuestions = createAsyncThunk(
-  'generateQuestions',
-  async (_, { getState }) => {
-    const {
-      general: { fetchAbortController },
-    }: any = getState();
-    const response = await fetch(`${API_PATH}${GENERATE_ENDPOINT}`, {
-      headers: {
-        'Content-type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify({
-        table: [
-          [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
-          [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        ],
-      }),
-      signal: fetchAbortController.signal,
-    });
-    const res = await response.json();
-
-    return res;
-  }
-);
 
 const generalSlice = createSlice({
   name: 'general',
@@ -169,7 +176,31 @@ const generalSlice = createSlice({
     });
     builder.addCase(generateQuestions.fulfilled, (state, action) => {
       state.fetchAbortController = null;
-      console.log(action);
+
+      Object.entries(action.payload.words).map(([direction, questions]) => {
+        state.questions![direction as Direction] = questions.map(
+          (question) => ({
+            question: question.question,
+            id: Math.floor(Math.random() * 100), // Shouldn't the id be generated on backend?
+            startPosition: question.start_position,
+          })
+        );
+
+        questions.map((question) => {
+          [...question.answer].map((character, index) => {
+            let { row, column } = question.start_position;
+            if (direction === Direction.Across) {
+              column += index;
+            } else {
+              row += index;
+            }
+            state.grid[row][column] = {
+              letter: character,
+              number: index === 0 ? Math.floor(Math.random() * 100) : null, // again, should the id be generated on backend?
+            };
+          });
+        });
+      });
     });
   },
 });
@@ -178,6 +209,12 @@ const store = configureStore({
   reducer: {
     general: generalSlice.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredPaths: ['general.fetchAbortController'],
+      },
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
