@@ -117,9 +117,10 @@ const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
-export const abortRequestAndEditQuestions =
+export const editQuestionsAndAbortFetch =
   () => (dispatch: AppDispatch, getState: () => RootState) => {
     getState().general.fetchAbortController?.abort();
     dispatch(generalSlice.actions.editQuestions());
   };
+
 export default store;
