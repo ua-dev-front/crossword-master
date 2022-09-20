@@ -46,16 +46,18 @@ function getQuestionsFromGrid(grid: State['grid']) {
   const acrossQuestions: Question[] = [];
   const downQuestions: Question[] = [];
 
-  const getNewWordArray = (row: number, column: number) => {
+  const getNewWordArrays = (row: number, column: number) => {
+    const arrays = [];
+
     if (!grid?.[row]?.[column - 1] && grid?.[row]?.[column + 1]) {
-      return acrossQuestions;
+      arrays.push(acrossQuestions);
     }
 
     if (!grid?.[row - 1]?.[column] && grid?.[row + 1]?.[column]) {
-      return downQuestions;
+      arrays.push(downQuestions);
     }
 
-    return null;
+    return arrays;
   };
 
   let currentId = 1;
@@ -63,15 +65,13 @@ function getQuestionsFromGrid(grid: State['grid']) {
   for (let row = 0; row < grid.length; row++) {
     for (let column = 0; column < grid[row].length; column++) {
       if (grid[row][column]) {
-        const newWordArray = getNewWordArray(row, column);
-
-        if (newWordArray) {
-          newWordArray.push({
+        getNewWordArrays(row, column).forEach((array) => {
+          array.push({
             id: currentId++,
             question: '',
             startPosition: { row, column },
           });
-        }
+        });
       }
     }
   }
@@ -179,3 +179,5 @@ export const {
   dismissConfirmation,
 } = generalSlice.actions;
 export default store;
+
+store.dispatch(switchToEnteringQuestions());
