@@ -179,5 +179,3 @@ export const {
   dismissConfirmation,
 } = generalSlice.actions;
 export default store;
-
-store.dispatch(switchToEnteringQuestions());
