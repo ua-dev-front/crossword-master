@@ -42,7 +42,7 @@ export type State = {
   showConfirmation: boolean;
 };
 
-const getQuestionsFromGrid = (grid: State['grid']) => {
+function getQuestionsFromGrid(grid: State['grid']) {
   const acrossQuestions: Question[] = [];
   const downQuestions: Question[] = [];
 
@@ -60,8 +60,8 @@ const getQuestionsFromGrid = (grid: State['grid']) => {
 
   let currentId = 1;
 
-  for (let row = 0; row < ROWS; row++) {
-    for (let column = 0; column < COLUMNS; column++) {
+  for (let row = 0; row < grid.length; row++) {
+    for (let column = 0; column < grid[row].length; column++) {
       if (grid[row][column]) {
         const newWordArray = getNewWordArray(row, column);
 
@@ -77,7 +77,7 @@ const getQuestionsFromGrid = (grid: State['grid']) => {
   }
 
   return { across: acrossQuestions, down: downQuestions };
-};
+}
 
 const initialState: State = {
   mode: Mode.Draw,
