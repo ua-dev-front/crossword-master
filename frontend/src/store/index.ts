@@ -246,9 +246,9 @@ const generalSlice = createSlice({
       const fetchAbortController = new AbortController();
       state.fetchAbortController = fetchAbortController;
     });
-    builder.addCase(generateQuestions.rejected, (state, action) => {
+    builder.addCase(generateQuestions.rejected, (state, { error }) => {
       state.fetchAbortController = null;
-      console.log(action);
+      console.error(`Generating questions failed: ${error.stack}`);
     });
     builder.addCase(generateQuestions.fulfilled, (state, action) => {
       state.fetchAbortController = null;
