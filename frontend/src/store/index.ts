@@ -86,7 +86,84 @@ export const generateQuestions = createAsyncThunk<
 
 const initialState: State = {
   mode: Mode.Draw,
-  grid: [...Array(ROWS)].map(() => [...Array(COLUMNS)].map(() => null)),
+  grid: [
+    [
+      { letter: null, number: null },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    ],
+    [
+      { letter: null, number: null },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    ],
+    [
+      { letter: null, number: null },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    ],
+    [
+      { letter: null, number: null },
+      { letter: null, number: null },
+      { letter: null, number: null },
+      { letter: null, number: null },
+      { letter: null, number: null },
+      null,
+      null,
+      null,
+      null,
+      null,
+    ],
+    [
+      null,
+      null,
+      null,
+      { letter: null, number: null },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    ],
+    [
+      null,
+      null,
+      null,
+      { letter: null, number: null },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    ],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+  ],
   questions: {
     across: [],
     down: [],
@@ -187,7 +264,7 @@ const generalSlice = createSlice({
         );
 
         questions.map((question) => {
-          [...question.answer].map((character, index) => {
+          question.answer.split('').map((character, index) => {
             let { row, column } = question.start_position;
             if (direction === Direction.Across) {
               column += index;
