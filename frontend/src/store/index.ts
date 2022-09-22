@@ -4,7 +4,7 @@ import {
   createSlice,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import { API_PATH, COLUMNS, GENERATE_ENDPOINT, ROWS } from 'appConstants';
+import { API_URL, COLUMNS, GENERATE_ENDPOINT, ROWS } from 'appConstants';
 
 export enum Direction {
   Across = 'across',
@@ -69,7 +69,7 @@ export const generateQuestions = createAsyncThunk<
     general: { fetchAbortController, grid },
   } = getState();
 
-  const response = await fetch(`${API_PATH}${GENERATE_ENDPOINT}`, {
+  const response = await fetch(`${API_URL}${GENERATE_ENDPOINT}`, {
     headers: {
       'Content-type': 'application/json',
     },
