@@ -75,13 +75,12 @@ export const generateQuestions = createAsyncThunk<
     },
     method: 'POST',
     body: JSON.stringify({
-      table: grid.map((row) => row.map((cell) => +!!cell)),
+      table: grid.map((row) => row.map((cell) => (cell ? 1 : 0))),
     }),
     signal: fetchAbortController?.signal,
   });
-  const result = await response.json();
 
-  return result;
+  return response.json();
 });
 
 const initialState: State = {
@@ -254,7 +253,7 @@ const generalSlice = createSlice({
     builder.addCase(generateQuestions.fulfilled, (state, action) => {
       state.fetchAbortController = null;
 
-      Object.entries(action.payload.words).map(([direction, questions]) => {
+      Object.entries(action.payload.words).forEach(([direction, questions]) => {
         state.questions![direction as Direction] = questions.map(
           (question) => ({
             question: question.question,
@@ -263,8 +262,8 @@ const generalSlice = createSlice({
           })
         );
 
-        questions.map((question) => {
-          question.answer.split('').map((character, index) => {
+        questions.forEach((question) => {
+          question.answer.split('').forEach((letter, index) => {
             let { row, column } = question.start_position;
             if (direction === Direction.Across) {
               column += index;
@@ -272,7 +271,7 @@ const generalSlice = createSlice({
               row += index;
             }
             state.grid[row][column] = {
-              letter: character,
+              letter,
               number: index === 0 ? Math.floor(Math.random() * 100) : null, // again, should the id be generated on backend?
             };
           });
