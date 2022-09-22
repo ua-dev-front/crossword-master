@@ -116,8 +116,9 @@ const generalSlice = createSlice({
         )
       );
     },
-    updateQuestions: (state: State) => {
-      // aborts current request to the api, sets fetchAbortController to null, sets mode to EnterQuestions
+    editQuestions: (state: State) => {
+      state.fetchAbortController = null;
+      state.mode = Mode.EnterQuestions;
     },
   },
 });
@@ -130,6 +131,12 @@ const store = configureStore({
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+export const editQuestionsAndAbortFetch =
+  () => (dispatch: AppDispatch, getState: () => RootState) => {
+    getState().general.fetchAbortController?.abort();
+    dispatch(generalSlice.actions.editQuestions());
+  };
 
 export const editCrosswordAndAbortFetch =
   () => (dispatch: AppDispatch, getState: () => RootState) => {
