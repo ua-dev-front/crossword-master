@@ -66,15 +66,15 @@ function getQuestionsFromGrid(grid: State['grid']) {
     for (let column = 0; column < grid[row].length; column++) {
       if (grid[row][column]) {
         const newWordArrays = getNewWordArrays(row, column);
-
-        if (newWordArrays.length) {
-          const initialQuestion = {
-            id: currentId++,
-            question: '',
-            startPosition: { row, column },
-          };
-
-          newWordArrays.forEach((array) => array.push(initialQuestion));
+        if (newWordArrays.length > 0) {
+          newWordArrays.forEach((array) =>
+            array.push({
+              id: currentId,
+              question: '',
+              startPosition: { row, column },
+            })
+          );
+          currentId += 1;
         }
       }
     }
