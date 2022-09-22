@@ -2,8 +2,8 @@ import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { COLUMNS, ROWS } from 'appConstants';
 
 export enum Direction {
-  Row = 'row',
-  Column = 'column',
+  Across = 'across',
+  Down = 'down',
 }
 
 export type CellPosition = {
@@ -35,8 +35,8 @@ export type State = {
   mode: Mode;
   grid: ({ letter: string | null; number: number | null } | null)[][];
   questions: {
-    across: Question[];
-    down: Question[];
+    [Direction.Across]: Question[];
+    [Direction.Down]: Question[];
   } | null;
   fetchAbortController: AbortController | null;
   showConfirmation: boolean;
@@ -55,31 +55,39 @@ const generalSlice = createSlice({
   initialState,
   reducers: {
     fillCell: (state: State, action: PayloadAction<CellPosition>) => {
-      // fills specified cell
+      state.grid[action.payload.row][action.payload.column] = {
+        letter: null,
+        number: null,
+      };
     },
     eraseCell: (state: State, action: PayloadAction<CellPosition>) => {
-      // erases specified cell
+      state.grid[action.payload.row][action.payload.column] = null;
     },
     switchToDrawing: (state: State) => {
-      // switches the mode to Draw
+      state.mode = Mode.Draw;
     },
     switchToErasing: (state: State) => {
-      // switches the mode to Erase
+      state.mode = Mode.Erase;
     },
     switchToAnswer: (state: State) => {
-      // switches the mode to Answer
+      state.mode = Mode.Answer;
     },
     switchToPuzzle: (state: State) => {
-      // switches the mode to Puzzle
+      state.mode = Mode.Puzzle;
     },
     switchToEnteringQuestions: (state: State) => {
       // switches the mode to EnterQuestions, and creates empty questions
     },
     updateQuestion: (
       state: State,
-      action: PayloadAction<UpdateQuestionPayload>
+      {
+        payload: { direction, id, question },
+      }: PayloadAction<UpdateQuestionPayload>
     ) => {
-      // Updates question for specified id
+      state.questions![direction] = state.questions![direction].map(
+        (oldQuestion) =>
+          oldQuestion.id === id ? { ...oldQuestion, question } : oldQuestion
+      );
     },
     generateQuestions: (state: State) => {
       // creates new AbortController and assignes it to fetchAbortController, makes API call to generate questions and,
@@ -92,14 +100,21 @@ const generalSlice = createSlice({
       // updates grid according to API response
     },
     showConfirmation: (state: State) => {
-      // sets showConfirmation to true
+      state.showConfirmation = true;
     },
     dismissConfirmation: (state: State) => {
-      // sets showConfirmation to false
+      state.showConfirmation = false;
     },
     editCrossword: (state: State) => {
-      // aborts current request to the api, sets fetchAbortController to null, sets showConfirmation to false,
-      // sets mode to Draw, resets questions and removes letters & numbers from grid
+      state.fetchAbortController = null;
+      state.showConfirmation = false;
+      state.mode = Mode.Draw;
+      state.questions = null;
+      state.grid = state.grid.map((row) =>
+        row.map((cell) =>
+          cell ? { ...cell, letter: null, number: null } : null
+        )
+      );
     },
     editQuestions: (state: State) => {
       state.fetchAbortController = null;
@@ -123,4 +138,21 @@ export const editQuestionsAndAbortFetch =
     dispatch(generalSlice.actions.editQuestions());
   };
 
+export const editCrosswordAndAbortFetch =
+  () => (dispatch: AppDispatch, getState: () => RootState) => {
+    getState().general.fetchAbortController?.abort();
+    dispatch(generalSlice.actions.editCrossword());
+  };
+
+export const {
+  fillCell,
+  eraseCell,
+  switchToDrawing,
+  switchToErasing,
+  switchToAnswer,
+  switchToPuzzle,
+  updateQuestion,
+  showConfirmation,
+  dismissConfirmation,
+} = generalSlice.actions;
 export default store;
