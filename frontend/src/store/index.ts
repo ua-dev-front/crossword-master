@@ -46,28 +46,38 @@ function getQuestionsFromGrid(grid: State['grid']) {
   const acrossQuestions: Question[] = [];
   const downQuestions: Question[] = [];
 
-  const getNewWordArrays = (row: number, column: number) => {
-    const arrays = [];
-
-    if (!grid?.[row]?.[column - 1] && grid?.[row]?.[column + 1]) {
-      arrays.push(acrossQuestions);
-    }
-
-    if (!grid?.[row - 1]?.[column] && grid?.[row + 1]?.[column]) {
-      arrays.push(downQuestions);
-    }
-
-    return arrays;
-  };
+  const shifts = [
+    {
+      array: acrossQuestions,
+      shift: [0, 1],
+    },
+    {
+      array: downQuestions,
+      shift: [1, 0],
+    },
+  ];
 
   let currentId = 1;
 
   for (let row = 0; row < grid.length; row++) {
     for (let column = 0; column < grid[row].length; column++) {
       if (grid[row][column]) {
-        const newWordArrays = getNewWordArrays(row, column);
-        if (newWordArrays.length > 0) {
-          newWordArrays.forEach((array) =>
+        const arrays = [];
+
+        for (const {
+          array,
+          shift: [rowShift, columnShift],
+        } of shifts) {
+          if (
+            !grid[row - rowShift]?.[column - columnShift] &&
+            grid[row + rowShift]?.[column + columnShift]
+          ) {
+            arrays.push(array);
+          }
+        }
+
+        if (arrays.length > 0) {
+          arrays.forEach((array) =>
             array.push({
               id: currentId,
               question: '',
