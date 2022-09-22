@@ -37,7 +37,7 @@ class WordLocation:
 class GenerateWord:
     answer: Answer
     question: Question
-    start_position: Position
+    startPosition: Position
 
 
 @dataclass

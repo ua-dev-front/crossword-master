@@ -50,7 +50,7 @@ export type State = {
 type GenerateResponseDirection = {
   answer: string;
   question: string;
-  start_position: CellPosition;
+  startPosition: CellPosition;
 }[];
 
 type GenerateResponse = {
@@ -258,13 +258,13 @@ const generalSlice = createSlice({
           (question) => ({
             question: question.question,
             id: Math.floor(Math.random() * 100), // Shouldn't the id be generated on backend?
-            startPosition: question.start_position,
+            startPosition: question.startPosition,
           })
         );
 
         questions.forEach((question) => {
           question.answer.split('').forEach((letter, index) => {
-            let { row, column } = question.start_position;
+            let { row, column } = question.startPosition;
             if (direction === Direction.Across) {
               column += index;
             } else {
