@@ -83,6 +83,57 @@ export const generateQuestions = createAsyncThunk<
   return response.json();
 });
 
+function getQuestionsFromGrid(grid: State['grid']) {
+  const acrossQuestions: Question[] = [];
+  const downQuestions: Question[] = [];
+
+  const shifts = [
+    {
+      array: acrossQuestions,
+      shift: [0, 1],
+    },
+    {
+      array: downQuestions,
+      shift: [1, 0],
+    },
+  ];
+
+  let currentId = 1;
+
+  for (let row = 0; row < grid.length; row++) {
+    for (let column = 0; column < grid[row].length; column++) {
+      if (grid[row][column]) {
+        const arrays = [];
+
+        for (const {
+          array,
+          shift: [rowShift, columnShift],
+        } of shifts) {
+          if (
+            !grid[row - rowShift]?.[column - columnShift] &&
+            grid[row + rowShift]?.[column + columnShift]
+          ) {
+            arrays.push(array);
+          }
+        }
+
+        if (arrays.length > 0) {
+          arrays.forEach((array) =>
+            array.push({
+              id: currentId,
+              question: '',
+              startPosition: { row, column },
+            })
+          );
+          currentId += 1;
+        }
+      }
+    }
+  }
+
+  return { across: acrossQuestions, down: downQuestions };
+}
+
 const initialState: State = {
   mode: Mode.Draw,
   grid: [
@@ -197,7 +248,18 @@ const generalSlice = createSlice({
       state.mode = Mode.Puzzle;
     },
     switchToEnteringQuestions: (state: State) => {
-      // switches the mode to EnterQuestions, and creates empty questions
+      state.mode = Mode.EnterQuestions;
+
+      const { across, down } = getQuestionsFromGrid(state.grid);
+
+      state.questions = {
+        across,
+        down,
+      };
+
+      [...across, ...down].forEach(({ id, startPosition: { row, column } }) => {
+        state.grid[row][column]!.number = id;
+      });
     },
     updateQuestion: (
       state: State,
@@ -237,8 +299,9 @@ const generalSlice = createSlice({
         )
       );
     },
-    updateQuestions: (state: State) => {
-      // aborts current request to the api, sets fetchAbortController to null, sets mode to EnterQuestions
+    editQuestions: (state: State) => {
+      state.fetchAbortController = null;
+      state.mode = Mode.EnterQuestions;
     },
   },
   extraReducers: (builder) => {
@@ -296,6 +359,12 @@ const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
+export const editQuestionsAndAbortFetch =
+  () => (dispatch: AppDispatch, getState: () => RootState) => {
+    getState().general.fetchAbortController?.abort();
+    dispatch(generalSlice.actions.editQuestions());
+  };
+
 export const editCrosswordAndAbortFetch =
   () => (dispatch: AppDispatch, getState: () => RootState) => {
     getState().general.fetchAbortController?.abort();
@@ -309,8 +378,10 @@ export const {
   switchToErasing,
   switchToAnswer,
   switchToPuzzle,
+  switchToEnteringQuestions,
   updateQuestion,
   showConfirmation,
   dismissConfirmation,
 } = generalSlice.actions;
+
 export default store;
