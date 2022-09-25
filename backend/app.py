@@ -1,8 +1,9 @@
+from dataclasses import asdict
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from typing import TypedDict
 
-from app_types import Direction, GenerateResponse, Position, SolveResponse, SolveWord, Table
+from app_types import Answer, Direction, Position, Question, SolveResponse, SolveWord, Table
 from generate import generate_words_and_questions
 from solve import solve_questions
 
@@ -33,6 +34,21 @@ class SolveData(TypedDict):
     words: SolveDataWords
 
 
+class GenerateResponseWord(TypedDict):
+    answer: Answer
+    question: Question
+    startPosition: Position
+
+
+class GenerateResponseWords(TypedDict):
+    across: list[GenerateResponseWord]
+    down: list[GenerateResponseWord]
+
+
+class GenerateResponse(TypedDict):
+    words: GenerateResponseWords | None
+
+
 # Endpoints
 app = Flask(__name__)
 CORS(app, resources={r'*': {'origins': ['http://localhost:3000', 'https://crossword-master.org']}})
@@ -50,7 +66,17 @@ def request_handler(func: callable):
 @app.route('/generate', methods=['POST'], endpoint='generate')
 @request_handler
 def generate(data: GenerateData) -> GenerateResponse:
-    return GenerateResponse(generate_words_and_questions(data['table']))
+    answer = generate_words_and_questions(data['table'])
+    if answer is None:
+        return {'words': None}
+
+    parsed_answer = {Direction.ACROSS.value: [], Direction.DOWN.value: []}
+    for direction, words in asdict(answer).items():
+        for word in words:
+            parsed_answer[direction].append({
+                'answer': word['answer'], 'question': word['question'], 'startPosition': word['start_position']})
+
+    return {'words': parsed_answer}
 
 
 @app.route('/solve', methods=['POST'], endpoint='solve')

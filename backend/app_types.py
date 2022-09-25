@@ -47,11 +47,6 @@ class GenerateWords:
 
 
 @dataclass
-class GenerateResponse:
-    words: GenerateWords | None
-
-
-@dataclass
 class SolveWord:
     question: Question
     start_position: Position
