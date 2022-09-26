@@ -1,0 +1,15 @@
+.option-buttons {
+    flex-direction: column;
+    width: 100%;
+    gap: 27px;
+    padding: 0 48px;
+    box-sizing: border-box;
+
+    & > *:first-child {
+        align-self: flex-start;
+    }
+
+    & > *:last-child {
+        align-self: flex-end;
+    }
+}
