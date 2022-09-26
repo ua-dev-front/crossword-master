@@ -1,7 +1,7 @@
 import React from 'react';
 import useAppSelector from 'hooks/useAppSelector';
 import useAppDispatch from 'hooks/useAppDispatch';
-import { Mode as StoreMode } from 'store';
+import { Mode } from 'store';
 import DrawingView from 'views/DrawingView';
 import ErasingView from 'views/ErasingView';
 import Layout from 'components/Layout';
@@ -12,11 +12,11 @@ function App() {
   const grid = useAppSelector((state) => state.general.grid);
 
   const viewByMode = {
-    [StoreMode.Draw]: <DrawingView grid={grid} dispatch={dispatch} />,
-    [StoreMode.Erase]: <ErasingView grid={grid} dispatch={dispatch} />,
-    [StoreMode.EnterQuestions]: <></>,
-    [StoreMode.Answer]: <></>,
-    [StoreMode.Puzzle]: <></>,
+    [Mode.Draw]: <DrawingView grid={grid} dispatch={dispatch} />,
+    [Mode.Erase]: <ErasingView grid={grid} dispatch={dispatch} />,
+    [Mode.EnterQuestions]: <></>,
+    [Mode.Answer]: <></>,
+    [Mode.Puzzle]: <></>,
   };
 
   const CurrentView = viewByMode[mode];
