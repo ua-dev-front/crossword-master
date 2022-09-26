@@ -1,0 +1,19 @@
+.tabs {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0px 0px;
+    margin: 15px 0;
+
+    & > *:first-child {
+        justify-self: left;
+    }
+
+    & > *:nth-child(2) {
+        justify-self: center;
+    }
+
+    & > *:last-child {
+        justify-self: end;
+    }
+}
