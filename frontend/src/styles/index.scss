@@ -24,7 +24,7 @@ $rgb_colors: (
 
   --transition-duration: 0.2s;
   --transition-function: ease-in-out;
-  
+
   --cell-border-radius: 10px;
 
   --text-field-font-size: 18px;
@@ -44,4 +44,11 @@ body {
   font-family: var(--font-straight);
   margin: 0;
   padding: 0;
+
+  .center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+  }
 }
