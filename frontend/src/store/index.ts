@@ -4,7 +4,13 @@ import {
   createSlice,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import { API_URL, COLUMNS, GENERATE_ENDPOINT, ROWS } from 'appConstants';
+import {
+  API_URL,
+  COLUMNS,
+  GENERATE_ENDPOINT,
+  ROWS,
+  SOLVE_ENDPOINT,
+} from 'appConstants';
 
 export enum Direction {
   Across = 'across',
@@ -60,6 +66,18 @@ type GenerateResponse = {
   };
 };
 
+type SolveResponseDirection = {
+  id: number;
+  answer: string;
+}[];
+
+type SolveResponse = {
+  answers: {
+    [Direction.Across]: SolveResponseDirection;
+    [Direction.Down]: SolveResponseDirection;
+  };
+};
+
 export const generateQuestions = createAsyncThunk<
   GenerateResponse,
   void,
@@ -76,6 +94,30 @@ export const generateQuestions = createAsyncThunk<
     method: 'POST',
     body: JSON.stringify({
       table: grid.map((row) => row.map((cell) => (cell ? 1 : 0))),
+    }),
+    signal: fetchAbortController?.signal,
+  });
+
+  return response.json();
+});
+
+export const solveQuestions = createAsyncThunk<
+  SolveResponse,
+  void,
+  { state: RootState }
+>('solveQuestions', async (_, { getState }) => {
+  const {
+    general: { fetchAbortController, grid, questions },
+  } = getState();
+
+  const response = await fetch(`${API_URL}${SOLVE_ENDPOINT}`, {
+    headers: {
+      'Content-type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify({
+      table: grid.map((row) => row.map((cell) => (cell ? 1 : 0))),
+      words: questions,
     }),
     signal: fetchAbortController?.signal,
   });
@@ -306,11 +348,9 @@ const generalSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(generateQuestions.pending, (state) => {
-      const fetchAbortController = new AbortController();
-      state.fetchAbortController = fetchAbortController;
+      state.fetchAbortController = new AbortController();
     });
     builder.addCase(generateQuestions.rejected, (state, { error }) => {
-      state.fetchAbortController = null;
       console.error(`Generating questions failed: ${error.stack}`);
     });
     builder.addCase(generateQuestions.fulfilled, (state, action) => {
@@ -333,6 +373,38 @@ const generalSlice = createSlice({
             } else {
               row += index;
             }
+            state.grid[row][column] = {
+              letter,
+              number: index === 0 ? Math.floor(Math.random() * 100) : null, // again, should the id be generated on backend?
+            };
+          });
+        });
+      });
+    });
+    builder.addCase(solveQuestions.pending, (state) => {
+      state.fetchAbortController = new AbortController();
+    });
+    builder.addCase(solveQuestions.rejected, (state, { error }) => {
+      console.error(`Solving questions failed: ${error.stack}`);
+    });
+    builder.addCase(solveQuestions.fulfilled, (state, action) => {
+      state.fetchAbortController = null;
+
+      Object.entries(action.payload.answers).forEach(([direction, answers]) => {
+        answers.forEach((answer) => {
+          answer.answer.split('').forEach((letter, index) => {
+            let {
+              startPosition: { row, column },
+            } = state.questions![direction as Direction].find(
+              (question) => question.id === answer.id
+            )!;
+
+            if (direction === Direction.Across) {
+              column += index;
+            } else {
+              row += index;
+            }
+
             state.grid[row][column] = {
               letter,
               number: index === 0 ? Math.floor(Math.random() * 100) : null, // again, should the id be generated on backend?
