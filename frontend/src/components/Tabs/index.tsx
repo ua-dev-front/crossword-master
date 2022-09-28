@@ -16,7 +16,11 @@ type Props = {
   onEditClick?: () => void;
 };
 
-export default function Tabs({ selectedTab, secondaryTab, onEditClick }: Props) {
+export default function Tabs({
+  selectedTab,
+  secondaryTab,
+  onEditClick,
+}: Props) {
   return (
     <div className='tabs'>
       {onEditClick ? (
@@ -30,17 +34,15 @@ export default function Tabs({ selectedTab, secondaryTab, onEditClick }: Props) 
         // Adds an empty div to keep the selected tab in the middle
         <div />
       )}
-      <Tab
-        label={selectedTab.label}
-        isSelected={true}
-        icon={selectedTab.icon}
-      />
-      <Tab
-        label={secondaryTab.label}
-        isSelected={false}
-        onClick={secondaryTab.onClick}
-        icon={secondaryTab.icon}
-      />
+      {[selectedTab, secondaryTab].map((tab, index) => (
+        <Tab
+          key={index}
+          label={tab.label}
+          isSelected={tab === selectedTab}
+          {...(tab === secondaryTab && { onClick: secondaryTab.onClick })}
+          icon={tab.icon}
+        />
+      ))}
     </div>
   );
 }
