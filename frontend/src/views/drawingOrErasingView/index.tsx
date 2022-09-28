@@ -48,7 +48,7 @@ export default function DrawingOrErasingView({ mode, grid, dispatch }: Props) {
                   label: 'Drawing',
                   icon: drawingIcon,
                 },
-                secondTab: {
+                secondaryTab: {
                   label: 'Erase',
                   onClick: () => dispatch(switchToErasing()),
                   icon: erasingIcon,
@@ -59,7 +59,7 @@ export default function DrawingOrErasingView({ mode, grid, dispatch }: Props) {
                   label: 'Erasing',
                   icon: erasingIcon,
                 },
-                secondTab: {
+                secondaryTab: {
                   label: 'Draw',
                   onClick: () => dispatch(switchToDrawing()),
                   icon: drawingIcon,

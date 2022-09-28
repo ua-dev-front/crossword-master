@@ -8,7 +8,7 @@ type Props = {
     label: string;
     icon: React.ReactNode;
   };
-  secondTab: {
+  secondaryTab: {
     label: string;
     onClick: () => void;
     icon: React.ReactNode;
@@ -16,7 +16,7 @@ type Props = {
   onEditClick?: () => void;
 };
 
-export default function Tabs({ selectedTab, secondTab, onEditClick }: Props) {
+export default function Tabs({ selectedTab, secondaryTab, onEditClick }: Props) {
   return (
     <div className='tabs'>
       {onEditClick ? (
@@ -36,10 +36,10 @@ export default function Tabs({ selectedTab, secondTab, onEditClick }: Props) {
         icon={selectedTab.icon}
       />
       <Tab
-        label={secondTab.label}
+        label={secondaryTab.label}
         isSelected={false}
-        onClick={secondTab.onClick}
-        icon={secondTab.icon}
+        onClick={secondaryTab.onClick}
+        icon={secondaryTab.icon}
       />
     </div>
   );
