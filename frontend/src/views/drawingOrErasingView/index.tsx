@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   Mode,
   State,
@@ -26,14 +26,20 @@ export default function DrawingOrErasingView({ mode, grid, dispatch }: Props) {
   const drawingIcon = <Square isFilled={false} />;
   const erasingIcon = <Square isFilled={true} />;
 
-  const getBooleanGrid = (gridToTransform: State['grid']) =>
-    gridToTransform.map((row) => row.map((cell) => !!cell));
+  const booleanGrid = useMemo(
+    () => grid.map((row) => row.map((cell) => !!cell)),
+    [grid]
+  );
+
+  const isGridEmpty = useMemo(() => {
+    return booleanGrid.every((row) => row.every((cell) => !cell));
+  }, [booleanGrid]);
 
   return (
     <>
       <GridWrapper
         gridProps={{
-          matrix: getBooleanGrid(grid),
+          matrix: booleanGrid,
           mode: mode === Mode.Draw ? GridMode.Draw : GridMode.Erase,
           onChange: (row, column) =>
             dispatch(
@@ -67,7 +73,7 @@ export default function DrawingOrErasingView({ mode, grid, dispatch }: Props) {
               })}
         />
       </GridWrapper>
-      {grid.every((row) => row.every((cell) => !cell)) ? (
+      {isGridEmpty ? (
         <div className='center'>
           <Label
             content='Let’s draw some squares first!'
