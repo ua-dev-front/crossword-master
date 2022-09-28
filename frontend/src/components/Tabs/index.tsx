@@ -39,7 +39,7 @@ export default function Tabs({
           key={index}
           label={tab.label}
           isSelected={tab === selectedTab}
-          {...(tab === secondaryTab && { onClick: secondaryTab.onClick })}
+          onClick={tab === secondaryTab ? secondaryTab.onClick : undefined}
           icon={tab.icon}
         />
       ))}
