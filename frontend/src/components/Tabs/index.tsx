@@ -27,6 +27,7 @@ export default function Tabs({ selectedTab, secondTab, onEditClick }: Props) {
           icon={<LeftArrow />}
         />
       ) : (
+        // Adds an empty div to keep the selected tab in the middle
         <div />
       )}
       <Tab
