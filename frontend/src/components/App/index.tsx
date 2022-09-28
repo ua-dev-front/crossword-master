@@ -2,7 +2,7 @@ import React from 'react';
 import { Mode } from 'store';
 import useAppDispatch from 'hooks/useAppDispatch';
 import useAppSelector from 'hooks/useAppSelector';
-import DrawingOrErasingView from 'views/drawingOrErasingView';
+import DrawingOrErasingView from 'views/DrawingOrErasingView';
 import Layout from 'components/Layout';
 
 function App() {
@@ -10,17 +10,13 @@ function App() {
   const mode = useAppSelector((state) => state.general.mode);
   const grid = useAppSelector((state) => state.general.grid);
 
+  const getDrawingOrErasingView = () => (
+    <DrawingOrErasingView mode={mode} grid={grid} dispatch={dispatch} />
+  );
+
   const viewByMode = {
-    ...[Mode.Draw, Mode.Erase].reduce((acc, currentMode) => {
-      acc[currentMode] = (
-        <DrawingOrErasingView
-          mode={currentMode}
-          grid={grid}
-          dispatch={dispatch}
-        />
-      );
-      return acc;
-    }, {} as Record<Mode, JSX.Element>),
+    [Mode.Draw]: getDrawingOrErasingView(),
+    [Mode.Erase]: getDrawingOrErasingView(),
     [Mode.EnterQuestions]: <></>,
     [Mode.Answer]: <></>,
     [Mode.Puzzle]: <></>,
