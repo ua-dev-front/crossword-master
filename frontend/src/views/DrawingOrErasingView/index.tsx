@@ -1,13 +1,5 @@
 import React, { useMemo } from 'react';
-import {
-  Mode,
-  State,
-  AppDispatch,
-  fillCell,
-  eraseCell,
-  switchToDrawing,
-  switchToErasing,
-} from 'store';
+import { Mode, State } from 'store';
 import Button from 'components/Button';
 import GridWrapper from 'components/GridWrapper';
 import Label, { LabelSize } from 'components/Label';
@@ -16,13 +8,19 @@ import Tabs from 'components/Tabs';
 import Square from 'icons/Square';
 import './styles.scss';
 
-type Props = {
+export type Props = {
   mode: Mode;
   grid: State['grid'];
-  dispatch: AppDispatch;
+  onModeChange: () => void;
+  onCellChange: (row: number, column: number) => void;
 };
 
-export default function DrawingOrErasingView({ mode, grid, dispatch }: Props) {
+export default function DrawingOrErasingView({
+  mode,
+  grid,
+  onModeChange,
+  onCellChange,
+}: Props) {
   const drawingIcon = <Square isFilled={false} />;
   const erasingIcon = <Square isFilled={true} />;
 
@@ -41,10 +39,7 @@ export default function DrawingOrErasingView({ mode, grid, dispatch }: Props) {
         gridProps={{
           matrix: booleanGrid,
           mode: mode === Mode.Draw ? GridMode.Draw : GridMode.Erase,
-          onChange: (row, column) =>
-            dispatch(
-              (mode === Mode.Draw ? fillCell : eraseCell)({ row, column })
-            ),
+          onChange: (row, column) => onCellChange(row, column),
         }}
       >
         <Tabs
@@ -56,7 +51,7 @@ export default function DrawingOrErasingView({ mode, grid, dispatch }: Props) {
                 },
                 secondaryTab: {
                   label: 'Erase',
-                  onClick: () => dispatch(switchToErasing()),
+                  onClick: () => onModeChange(),
                   icon: erasingIcon,
                 },
               }
@@ -67,7 +62,7 @@ export default function DrawingOrErasingView({ mode, grid, dispatch }: Props) {
                 },
                 secondaryTab: {
                   label: 'Draw',
-                  onClick: () => dispatch(switchToDrawing()),
+                  onClick: () => onModeChange(),
                   icon: drawingIcon,
                 },
               })}
