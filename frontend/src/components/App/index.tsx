@@ -2,8 +2,7 @@ import React from 'react';
 import useAppSelector from 'hooks/useAppSelector';
 import useAppDispatch from 'hooks/useAppDispatch';
 import { Mode } from 'store';
-import DrawingView from 'views/DrawingView';
-import ErasingView from 'views/ErasingView';
+import DrawingOrErasingView from 'views/drawingOrErasingView';
 import Layout from 'components/Layout';
 
 function App() {
@@ -12,16 +11,20 @@ function App() {
   const grid = useAppSelector((state) => state.general.grid);
 
   const viewByMode = {
-    [Mode.Draw]: <DrawingView grid={grid} dispatch={dispatch} />,
-    [Mode.Erase]: <ErasingView grid={grid} dispatch={dispatch} />,
+    ...[Mode.Draw, Mode.Erase].reduce((acc, currentMode) => {
+      acc[currentMode] = (
+        <DrawingOrErasingView mode={currentMode} grid={grid} dispatch={dispatch} />
+      );
+      return acc;
+    }, {} as Record<Mode, JSX.Element>),
     [Mode.EnterQuestions]: <></>,
     [Mode.Answer]: <></>,
     [Mode.Puzzle]: <></>,
   };
 
-  const CurrentView = viewByMode[mode];
+  const currentView = viewByMode[mode];
 
-  return <Layout title='Crossword Generator & Solver'>{CurrentView}</Layout>;
+  return <Layout title='Crossword Generator & Solver'>{currentView}</Layout>;
 }
 
 export default App;
