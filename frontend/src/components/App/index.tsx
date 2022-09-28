@@ -1,7 +1,7 @@
 import React from 'react';
 import { Mode } from 'store';
-import useAppSelector from 'hooks/useAppSelector';
 import useAppDispatch from 'hooks/useAppDispatch';
+import useAppSelector from 'hooks/useAppSelector';
 import DrawingOrErasingView from 'views/drawingOrErasingView';
 import Layout from 'components/Layout';
 
