@@ -70,8 +70,9 @@ def generate(data: GenerateData) -> GenerateResponse:
     if answer is None:
         return {'words': None}
 
-    parsed_answer = {Direction.ACROSS.value: [], Direction.DOWN.value: []}
+    parsed_answer = {}
     for direction, words in asdict(answer).items():
+        parsed_answer[direction] = []
         for word in words:
             parsed_answer[direction].append({
                 'answer': word['answer'], 'question': word['question'], 'startPosition': word['start_position']})
