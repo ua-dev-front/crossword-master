@@ -5,15 +5,14 @@ import {
   AppDispatch,
   fillCell,
   eraseCell,
-  switchToErasing,
   switchToDrawing,
+  switchToErasing,
 } from 'store';
 import Button from 'components/Button';
 import GridWrapper from 'components/GridWrapper';
 import Label, { LabelSize } from 'components/Label';
 import { Mode as GridMode } from 'components/Grid';
 import Tabs from 'components/Tabs';
-import getBooleanGrid from 'utils/getBooleanGrid';
 import Square from 'icons/Square';
 import './styles.scss';
 
@@ -26,6 +25,9 @@ type Props = {
 export default function DrawingOrErasingView({ mode, grid, dispatch }: Props) {
   const drawingIcon = <Square isFilled={false} />;
   const erasingIcon = <Square isFilled={true} />;
+
+  const getBooleanGrid = (gridToTransform: State['grid']) =>
+    gridToTransform.map((row) => row.map((cell) => !!cell));
 
   return (
     <>
