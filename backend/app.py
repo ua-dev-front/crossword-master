@@ -1,7 +1,8 @@
 from dataclasses import asdict
+from typing import TypedDict
+
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from typing import TypedDict
 
 from app_types import Answer, Direction, Position, Question, SolveResponse, SolveWord, Table
 from generate import generate_words_and_questions
@@ -70,14 +71,11 @@ def generate(data: GenerateData) -> GenerateResponse:
     if answer is None:
         return {'words': None}
 
-    parsed_answer = {}
-    for direction, words in asdict(answer).items():
-        parsed_answer[direction] = []
-        for word in words:
-            parsed_answer[direction].append({
-                'answer': word['answer'], 'question': word['question'], 'startPosition': word['start_position']})
-
-    return {'words': parsed_answer}
+    return {'words': {direction: [
+        {'answer': word['answer'],
+         'question': word['question'],
+         'startPosition': word['start_position']}
+        for word in words] for direction, words in asdict(answer).items()}}
 
 
 @app.route('/solve', methods=['POST'], endpoint='solve')
