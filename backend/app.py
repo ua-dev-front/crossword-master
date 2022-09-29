@@ -68,14 +68,14 @@ def request_handler(func: callable):
 @request_handler
 def generate(data: GenerateData) -> GenerateResponse:
     answer = generate_words_and_questions(data['table'])
-    if answer is None:
-        return {'words': None}
 
-    return {'words': {direction: [
-        {'answer': word['answer'],
-         'question': word['question'],
-         'startPosition': word['start_position']}
-        for word in words] for direction, words in asdict(answer).items()}}
+    return {'words': None if answer is None else {direction: [
+        {
+            'answer': word['answer'],
+            'question': word['question'],
+            'startPosition': word['start_position']
+        } for word in words
+    ] for direction, words in asdict(answer).items()}}
 
 
 @app.route('/solve', methods=['POST'], endpoint='solve')
