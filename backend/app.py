@@ -73,7 +73,7 @@ def generate(data: GenerateData) -> GenerateResponse:
         {
             'answer': word['answer'],
             'question': word['question'],
-            'startPosition': word['start_position']
+            'startPosition': word['start_position'],
         } for word in words
     ] for direction, words in asdict(answer).items()}}
 
