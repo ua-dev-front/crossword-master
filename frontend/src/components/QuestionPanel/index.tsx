@@ -13,7 +13,7 @@ export type Question = {
   question: string;
 };
 
-type Props = {
+export type Props = {
   questions: Question[];
   isEditable: boolean;
   color: QuestionPanelColor;

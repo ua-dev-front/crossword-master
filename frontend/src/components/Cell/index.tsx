@@ -21,7 +21,7 @@ export type CellData =
       content: { letter: string | null; number: number | null } | null;
     };
 
-type Props = {
+export type Props = {
   data: CellData;
   roundedCorners?: Corner[];
   onEdited?: () => void;

@@ -7,7 +7,7 @@ export enum LabelSize {
   Large = 'large',
 }
 
-type Props = {
+export type Props = {
   content: string;
   size: LabelSize;
 };

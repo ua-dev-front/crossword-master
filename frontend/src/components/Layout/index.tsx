@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import TitleLabel, { TitleLabelSize } from 'components/TitleLabel';
 import './styles.scss';
 
-type Props = {
+export type Props = {
   children: ReactNode;
   title: string;
 };

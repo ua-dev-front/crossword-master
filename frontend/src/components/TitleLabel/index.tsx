@@ -7,7 +7,7 @@ export enum TitleLabelSize {
   Large = 'large',
 }
 
-type Props = {
+export type Props = {
   content: string;
   size: TitleLabelSize;
   tag: 'h1' | 'p';
