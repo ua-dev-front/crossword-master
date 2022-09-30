@@ -1,5 +1,5 @@
 from api import get_possible_word_answers_and_questions
-from app_types import Direction, GenerateResponse, GenerateWord, GenerateWords, Pattern, Position, Table, WordLocation
+from app_types import Direction, GenerateWord, GenerateWords, Pattern, Position, Table, WordLocation
 from backtracking import solve
 from helpers import get_axes, shift_position
 
@@ -60,7 +60,7 @@ def get_parsed_response(raw_response: list[str] | None, words: list[WordLocation
     return GenerateWords(parsed_response[Direction.ACROSS], parsed_response[Direction.DOWN])
 
 
-def generate_words_and_questions(table: Table) -> GenerateResponse | None:
+def generate_words_and_questions(table: Table) -> GenerateWords | None:
     cache = {}
 
     def load_word_answers_and_questions(pattern: Pattern, _word_index: int) -> list[str]:
