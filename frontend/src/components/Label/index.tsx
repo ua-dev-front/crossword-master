@@ -7,15 +7,17 @@ export enum LabelSize {
   Large = 'large',
 }
 
-type Props = {
+export type Props = {
   content: string;
   size: LabelSize;
 };
 
 export default function Label({ content, size }: Props) {
   return (
-    <p className={`label label_${size}`}>{content.split('\n').flatMap(
-      (line, index) => [index > 0 && <br key={index} />, line]
-    )}</p>
+    <p className={`label label_${size}`}>
+      {content
+        .split('\n')
+        .flatMap((line, index) => [index > 0 && <br key={index} />, line])}
+    </p>
   );
 }

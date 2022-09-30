@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import './styles.scss';
 
-type Props = {
+export type Props = {
   isFilled: boolean;
   content?: string;
 };
