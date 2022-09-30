@@ -4,7 +4,7 @@ from typing import TypedDict
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
-from app_types import Answer, Direction, Position, Question, SolveResponse, SolveWord, Table
+from app_types import Answer, Direction, Position, Question, SolveWord, Table
 from generate import generate_words_and_questions
 from solve import solve_questions
 
@@ -47,6 +47,7 @@ class SolveResponseAnswers(TypedDict):
 
 class SolveResponse(TypedDict):
     answers: SolveResponseAnswers | None
+
 
 class GenerateResponseWord(TypedDict):
     answer: Answer
@@ -102,13 +103,7 @@ def solve(data: SolveData) -> SolveResponse:
                              Direction(direction)) for direction, value in words.items() for word in value]
     answers = solve_questions(table, solve_words)
 
-    if answers is None:
-        return {"answers": None}
-
-    parsed_answers = {}
-    for direction, value in words.items():
-        parsed_answers[direction] = []
-        for index, word in enumerate(value):
-            parsed_answers[direction].append({"answer": getattr(answers, direction)[index], "id": word['id']})
-
-    return {"answers": parsed_answers}
+    return {"answers": None if answers is None else {
+        direction: [{
+            "answer": getattr(answers, direction)[index], "id": word['id']
+        } for index, word in enumerate(value)] for direction, value in words.items()}}
