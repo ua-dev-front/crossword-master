@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import TitleLabel, { TitleLabelSize } from 'components/TitleLabel';
 import './styles.scss';
 
-type Props = {
+export type Props = {
   label: string;
   isLoading: boolean; // is needed to display the animation, shows the loader when true
 };

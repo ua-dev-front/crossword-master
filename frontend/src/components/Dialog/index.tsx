@@ -3,7 +3,7 @@ import Button from '../Button';
 import Label, { LabelSize } from '../Label';
 import './styles.scss';
 
-type Props = {
+export type Props = {
   label: string;
   buttons: {
     label: string;
