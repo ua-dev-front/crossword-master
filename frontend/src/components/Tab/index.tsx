@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import classNames from 'classnames';
+import classnames from 'classnames';
 import './styles.scss';
 
 type Props = {
@@ -7,10 +7,17 @@ type Props = {
   icon: ReactNode;
   label: string;
   onClick?: () => void;
+  alternativeLabel?: string;
 };
 
-export default function Tab({ label, icon, onClick, isSelected }: Props) {
-  const classes = classNames('tab', isSelected && 'tab_selected');
+export default function Tab({
+  label,
+  icon,
+  onClick,
+  isSelected,
+  alternativeLabel,
+}: Props) {
+  const classes = classnames('tab', isSelected && 'tab_selected');
 
   return (
     <button
@@ -19,7 +26,12 @@ export default function Tab({ label, icon, onClick, isSelected }: Props) {
       disabled={isSelected}
     >
       <div className='tab__icon'>{icon}</div>
-      <span className='tab__label'>{label}</span>
+      <div className='tab__content'>
+        <span className='tab__label'>{label}</span>
+        <span className={classnames('tab__label', 'tab__hidden-label')}>
+          {alternativeLabel}
+        </span>
+      </div>
     </button>
   );
 }

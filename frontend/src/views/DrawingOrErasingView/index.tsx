@@ -8,6 +8,13 @@ import Tabs from 'components/Tabs';
 import Square from 'icons/Square';
 import './styles.scss';
 
+export enum TabLabels {
+  Draw = 'Draw',
+  Erase = 'Erase',
+  Drawing = 'Drawing',
+  Erasing = 'Erasing',
+}
+
 export type Props = {
   mode: Mode;
   grid: State['grid'];
@@ -46,24 +53,28 @@ export default function DrawingOrErasingView({
           {...(mode === Mode.Draw
             ? {
                 selectedTab: {
-                  label: 'Drawing',
+                  label: TabLabels.Drawing,
                   icon: drawingIcon,
+                  alternativeLabel: TabLabels.Erasing,
                 },
                 secondaryTab: {
-                  label: 'Erase',
+                  label: TabLabels.Erase,
                   onClick: () => onModeChange(),
                   icon: erasingIcon,
+                  alternativeLabel: TabLabels.Draw,
                 },
               }
             : {
                 selectedTab: {
-                  label: 'Erasing',
+                  label: TabLabels.Erasing,
                   icon: erasingIcon,
+                  alternativeLabel: TabLabels.Drawing,
                 },
                 secondaryTab: {
-                  label: 'Draw',
+                  label: TabLabels.Draw,
                   onClick: () => onModeChange(),
                   icon: drawingIcon,
+                  alternativeLabel: TabLabels.Erase,
                 },
               })}
         />

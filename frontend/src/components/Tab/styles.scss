@@ -28,7 +28,13 @@
     }
   }
 
+  &__content {
+    display: grid;
+  }
+
   &__label {
+    grid-area: tab;
+    text-align: left;
     transition-duration: var(--transition-duration);
     transition-timing-function: var(--transition-function);
     transition-property: color, font-size, border-color;
@@ -37,6 +43,10 @@
     line-height: 19px;
     color: cl(dark);
     border-bottom: 1px dashed cl(dark);
+  }
+
+  &__hidden-label {
+    visibility: hidden;
   }
 
   &_selected {

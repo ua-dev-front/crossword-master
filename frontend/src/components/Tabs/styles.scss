@@ -5,19 +5,6 @@
     justify-items: center;
     margin: 15px 0;
 
-    &__item {
-        display: grid;
-        width: fit-content;
-    }
-
-    &__tab {
-        grid-area: tab;
-
-        &_hidden {
-            visibility: hidden;
-        }
-    }
-
     & > *:first-child {
         justify-self: left;
     }
