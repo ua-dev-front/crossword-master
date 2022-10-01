@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import classnames from 'classnames';
 import Tab from 'components/Tab';
 import LeftArrow from 'icons/LeftArrow';
@@ -7,12 +7,12 @@ import './styles.scss';
 type Props = {
   selectedTab: {
     label: string;
-    icon: React.ReactNode;
+    icon: ReactNode;
   };
   secondaryTab: {
     label: string;
     onClick: () => void;
-    icon: React.ReactNode;
+    icon: ReactNode;
   };
   onEditClick?: () => void;
 };
