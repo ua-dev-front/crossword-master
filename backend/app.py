@@ -100,12 +100,12 @@ def solve(data: SolveData) -> SolveResponse:
 
     solve_words = [SolveWord(word['question'],
                              Position(word['startPosition']['row'], word['startPosition']['column']),
-                             Direction(direction)) for direction, words_list in words.items() for word in words_list]
+                             Direction(direction)) for direction, word_list in words.items() for word in word_list]
     answers = solve_questions(table, solve_words)
 
     return {'answers': None if answers is None else {direction: [
         {
             'answer': getattr(answers, direction)[index],
-            'id': word['id']
-        } for index, word in enumerate(words_list)
-    ] for direction, words_list in words.items()}}
+            'id': word['id'],
+        } for index, word in enumerate(word_list)
+    ] for direction, word_list in words.items()}}
