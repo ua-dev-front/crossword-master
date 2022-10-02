@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react';
-import classnames from 'classnames';
 import Tab from 'components/Tab';
 import LeftArrow from 'icons/LeftArrow';
 import './styles.scss';
