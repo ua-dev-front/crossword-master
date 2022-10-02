@@ -28,7 +28,7 @@ export default function Tab({
       <div className='tab__icon'>{icon}</div>
       <div className='tab__content'>
         <span className='tab__label'>{label}</span>
-        <span className={classnames('tab__label', 'tab__hidden-label')}>
+        <span className={classnames('tab__label', 'tab__label-hidden')}>
           {alternativeLabel}
         </span>
       </div>
