@@ -43,7 +43,7 @@ export default function Tabs({
           isSelected={tab === selectedTab}
           onClick={tab === secondaryTab ? secondaryTab.onClick : undefined}
           icon={tab.icon}
-          alternativeLabel={tab?.alternativeLabel}
+          alternativeLabel={tab.alternativeLabel}
         />
       ))}
     </div>
