@@ -44,10 +44,10 @@
     line-height: 19px;
     color: cl(dark);
     border-bottom: 1px dashed cl(dark);
-  }
 
-  &__label-hidden {
-    visibility: hidden;
+    &-hidden {
+      visibility: hidden;
+    }
   }
 
   &_selected {
