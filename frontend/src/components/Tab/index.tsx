@@ -15,7 +15,7 @@ export default function Tab({
   icon,
   onClick,
   isSelected,
-  alternativeLabel,
+  alternativeLabel, // used to make width of tab consistent
 }: Props) {
   const classes = classnames('tab', isSelected && 'tab_selected');
 
