@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import classNames from 'classnames';
 import './styles.scss';
 
-type Props = {
+export type Props = {
   isSelected: boolean;
   icon: ReactNode;
   label: string;

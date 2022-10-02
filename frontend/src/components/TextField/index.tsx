@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import usePreviousValue from 'hooks/usePreviousValue';
 import './styles.scss';
 
-type Props = {
+export type Props = {
   content: string;
   isEditable?: boolean;
   onChange?: (value: string) => void;

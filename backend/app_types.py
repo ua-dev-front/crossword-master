@@ -47,11 +47,6 @@ class GenerateWords:
 
 
 @dataclass
-class GenerateResponse:
-    words: GenerateWords | None
-
-
-@dataclass
 class SolveWord:
     question: Question
     start_position: Position
@@ -62,17 +57,6 @@ SolveWords = list[SolveWord]
 
 
 @dataclass
-class SolveAnswer:
-    id: int
-    answer: Answer
-
-
-@dataclass
 class SolveAnswers:
-    across: list[SolveAnswer]
-    down: list[SolveAnswer]
-
-
-@dataclass
-class SolveResponse:
-    answers: SolveAnswers | None
+    across: list[Answer]
+    down: list[Answer]

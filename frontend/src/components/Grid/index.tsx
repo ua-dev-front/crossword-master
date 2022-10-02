@@ -9,7 +9,7 @@ export enum Mode {
   Puzzle = 'puzzle',
 }
 
-type Props =
+export type Props =
   | {
       mode: Mode.Draw | Mode.Erase;
       matrix: boolean[][];

@@ -1,8 +1,10 @@
-from flask import Flask, jsonify, request
-from flask_cors import CORS
+from dataclasses import asdict
 from typing import TypedDict
 
-from app_types import Direction, GenerateResponse, Position, SolveResponse, SolveWord, Table
+from flask import Flask, jsonify, request
+from flask_cors import CORS
+
+from app_types import Answer, Direction, Position, Question, SolveWord, Table
 from generate import generate_words_and_questions
 from solve import solve_questions
 
@@ -33,6 +35,35 @@ class SolveData(TypedDict):
     words: SolveDataWords
 
 
+class SolveResponseAnswer(TypedDict):
+    id: int
+    answer: Answer
+
+
+class SolveResponseAnswers(TypedDict):
+    across: list[SolveResponseAnswer]
+    down: list[SolveResponseAnswer]
+
+
+class SolveResponse(TypedDict):
+    answers: SolveResponseAnswers | None
+
+
+class GenerateResponseWord(TypedDict):
+    answer: Answer
+    question: Question
+    startPosition: Position
+
+
+class GenerateResponseWords(TypedDict):
+    across: list[GenerateResponseWord]
+    down: list[GenerateResponseWord]
+
+
+class GenerateResponse(TypedDict):
+    words: GenerateResponseWords | None
+
+
 # Endpoints
 app = Flask(__name__)
 CORS(app, resources={r'*': {'origins': ['http://localhost:3000', 'https://crossword-master.org']}})
@@ -50,7 +81,15 @@ def request_handler(func: callable):
 @app.route('/generate', methods=['POST'], endpoint='generate')
 @request_handler
 def generate(data: GenerateData) -> GenerateResponse:
-    return GenerateResponse(generate_words_and_questions(data['table']))
+    answer = generate_words_and_questions(data['table'])
+
+    return {'words': None if answer is None else {direction: [
+        {
+            'answer': word['answer'],
+            'question': word['question'],
+            'startPosition': word['start_position'],
+        } for word in words
+    ] for direction, words in asdict(answer).items()}}
 
 
 @app.route('/solve', methods=['POST'], endpoint='solve')
@@ -61,6 +100,12 @@ def solve(data: SolveData) -> SolveResponse:
 
     solve_words = [SolveWord(word['question'],
                              Position(word['startPosition']['row'], word['startPosition']['column']),
-                             Direction(direction)) for direction, value in words.items() for word in value]
+                             Direction(direction)) for direction, word_list in words.items() for word in word_list]
+    answers = solve_questions(table, solve_words)
 
-    return SolveResponse(solve_questions(table, solve_words))
+    return {'answers': None if answers is None else {direction: [
+        {
+            'answer': getattr(answers, direction)[index],
+            'id': word['id'],
+        } for index, word in enumerate(word_list)
+    ] for direction, word_list in words.items()}}
