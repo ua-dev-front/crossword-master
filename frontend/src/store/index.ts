@@ -11,6 +11,7 @@ import {
   ROWS,
   SOLVE_ENDPOINT,
 } from 'appConstants';
+import { getQuestionId, getQuestionsFromGrid } from './helpers';
 
 export enum Direction {
   Across = 'across',
@@ -53,25 +54,25 @@ export type State = {
   showConfirmation: boolean;
 };
 
-type GenerateResponseDirection = {
+export type GenerateResponseDirection = {
   answer: string;
   question: string;
   startPosition: CellPosition;
 }[];
 
-type GenerateResponse = {
+export type GenerateResponse = {
   words: {
     [Direction.Across]: GenerateResponseDirection;
     [Direction.Down]: GenerateResponseDirection;
   };
 };
 
-type SolveResponseDirection = {
+export type SolveResponseDirection = {
   id: number;
   answer: string;
 }[];
 
-type SolveResponse = {
+export type SolveResponse = {
   answers: {
     [Direction.Across]: SolveResponseDirection;
     [Direction.Down]: SolveResponseDirection;
@@ -124,57 +125,6 @@ export const solveQuestions = createAsyncThunk<
 
   return response.json();
 });
-
-function getQuestionsFromGrid(grid: State['grid']) {
-  const acrossQuestions: Question[] = [];
-  const downQuestions: Question[] = [];
-
-  const shifts = [
-    {
-      array: acrossQuestions,
-      shift: [0, 1],
-    },
-    {
-      array: downQuestions,
-      shift: [1, 0],
-    },
-  ];
-
-  let currentId = 1;
-
-  for (let row = 0; row < grid.length; row++) {
-    for (let column = 0; column < grid[row].length; column++) {
-      if (grid[row][column]) {
-        const arrays = [];
-
-        for (const {
-          array,
-          shift: [rowShift, columnShift],
-        } of shifts) {
-          if (
-            !grid[row - rowShift]?.[column - columnShift] &&
-            grid[row + rowShift]?.[column + columnShift]
-          ) {
-            arrays.push(array);
-          }
-        }
-
-        if (arrays.length > 0) {
-          arrays.forEach((array) =>
-            array.push({
-              id: currentId,
-              question: '',
-              startPosition: { row, column },
-            })
-          );
-          currentId += 1;
-        }
-      }
-    }
-  }
-
-  return { across: acrossQuestions, down: downQuestions };
-}
 
 const initialState: State = {
   mode: Mode.Draw,
@@ -270,7 +220,7 @@ const generalSlice = createSlice({
         state.questions![direction as Direction] = questions.map(
           (question) => ({
             question: question.question,
-            id: Math.floor(Math.random() * 100), // Shouldn't the id be generated on backend?
+            id: getQuestionId(direction as Direction, question, state.grid),
             startPosition: question.startPosition,
           })
         );
@@ -285,7 +235,10 @@ const generalSlice = createSlice({
             }
             state.grid[row][column] = {
               letter,
-              number: index === 0 ? Math.floor(Math.random() * 100) : null, // again, should the id be generated on backend?
+              number:
+                index === 0
+                  ? getQuestionId(direction as Direction, question, state.grid)
+                  : null,
             };
           });
         });
@@ -303,11 +256,13 @@ const generalSlice = createSlice({
       Object.entries(action.payload.answers).forEach(([direction, answers]) => {
         answers.forEach((answer) => {
           answer.answer.split('').forEach((letter, index) => {
+            const currentQuestion = state.questions![
+              direction as Direction
+            ].find((question) => question.id === answer.id)!;
             let {
               startPosition: { row, column },
-            } = state.questions![direction as Direction].find(
-              (question) => question.id === answer.id
-            )!;
+            } = currentQuestion;
+            const { id } = currentQuestion;
 
             if (direction === Direction.Across) {
               column += index;
@@ -317,7 +272,7 @@ const generalSlice = createSlice({
 
             state.grid[row][column] = {
               letter,
-              number: index === 0 ? Math.floor(Math.random() * 100) : null, // again, should the id be generated on backend?
+              number: id,
             };
           });
         });
