@@ -54,27 +54,27 @@ export default function DrawingOrErasingView({
             ? {
                 selectedTab: {
                   label: TabLabels.Drawing,
-                  icon: drawingIcon,
                   alternativeLabel: TabLabels.Erasing,
+                  icon: drawingIcon,
                 },
                 secondaryTab: {
                   label: TabLabels.Erase,
+                  alternativeLabel: TabLabels.Draw,
                   onClick: () => onModeChange(),
                   icon: erasingIcon,
-                  alternativeLabel: TabLabels.Draw,
                 },
               }
             : {
                 selectedTab: {
                   label: TabLabels.Erasing,
-                  icon: erasingIcon,
                   alternativeLabel: TabLabels.Drawing,
+                  icon: erasingIcon,
                 },
                 secondaryTab: {
                   label: TabLabels.Draw,
+                  alternativeLabel: TabLabels.Erase,
                   onClick: () => onModeChange(),
                   icon: drawingIcon,
-                  alternativeLabel: TabLabels.Erase,
                 },
               })}
         />
