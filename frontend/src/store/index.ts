@@ -234,16 +234,6 @@ const generalSlice = createSlice({
           oldQuestion.id === id ? { ...oldQuestion, question } : oldQuestion
       );
     },
-    generateQuestions: (state: State) => {
-      // creates new AbortController and assignes it to fetchAbortController, makes API call to generate questions and,
-      // after data is fetched, sets fetchAbortController to null,
-      // sets questions to API response and updates grid accordingly
-    },
-    solveQuestions: (state: State) => {
-      // creates new AbortController and assignes it to fetchAbortController, makes API call to solve questions and,
-      // after data is fetched, sets fetchAbortController to null,
-      // updates grid according to API response
-    },
     showConfirmation: (state: State) => {
       state.showConfirmation = true;
     },
