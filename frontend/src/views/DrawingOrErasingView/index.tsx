@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Mode, State } from 'store';
 import Button from 'components/Button';
 import GridWrapper from 'components/GridWrapper';
@@ -8,15 +8,8 @@ import Tabs from 'components/Tabs';
 import Square from 'icons/Square';
 import './styles.scss';
 
-export enum TabLabels {
-  Draw = 'Draw',
-  Erase = 'Erase',
-  Drawing = 'Drawing',
-  Erasing = 'Erasing',
-}
-
 export type Props = {
-  mode: Mode;
+  mode: Mode.Draw | Mode.Erase;
   grid: State['grid'];
   onModeChange: () => void;
   onCellChange: (row: number, column: number) => void;
@@ -28,8 +21,51 @@ export default function DrawingOrErasingView({
   onModeChange,
   onCellChange,
 }: Props) {
-  const drawingIcon = <Square isFilled={false} />;
-  const erasingIcon = <Square isFilled={true} />;
+  const getTabByModeAndIsSelected = useCallback(
+    (currentMode: Mode.Draw | Mode.Erase, isSelected: boolean) => {
+      const addGerundToVerb = (verb: string) => {
+        if (verb.endsWith('ing')) {
+          return verb;
+        }
+
+        if (verb.endsWith('e')) {
+          return verb.slice(0, verb.length - 1) + 'ing';
+        }
+
+        if (verb.endsWith('ie')) {
+          return verb.slice(0, verb.length - 2) + 'ying';
+        }
+
+        return verb + 'ing';
+      };
+
+      const normalizeLabel = (label: string) => {
+        const capitalizedLabel = label.charAt(0).toUpperCase() + label.slice(1);
+        return isSelected
+          ? addGerundToVerb(capitalizedLabel)
+          : capitalizedLabel;
+      };
+
+      const normalizedDrawLabel = normalizeLabel(Mode.Draw);
+      const normalizedEraseLabel = normalizeLabel(Mode.Erase);
+
+      switch (currentMode) {
+        case Mode.Draw:
+          return {
+            label: normalizedDrawLabel,
+            alternativeLabel: normalizedEraseLabel,
+            icon: <Square isFilled={false} />,
+          };
+        case Mode.Erase:
+          return {
+            label: normalizedEraseLabel,
+            alternativeLabel: normalizedDrawLabel,
+            icon: <Square isFilled={true} />,
+          };
+      }
+    },
+    []
+  );
 
   const booleanGrid = useMemo(
     () => grid.map((row) => row.map((cell) => !!cell)),
@@ -50,33 +86,14 @@ export default function DrawingOrErasingView({
         }}
       >
         <Tabs
-          {...(mode === Mode.Draw
-            ? {
-                selectedTab: {
-                  label: TabLabels.Drawing,
-                  alternativeLabel: TabLabels.Erasing,
-                  icon: drawingIcon,
-                },
-                secondaryTab: {
-                  label: TabLabels.Erase,
-                  alternativeLabel: TabLabels.Draw,
-                  onClick: () => onModeChange(),
-                  icon: erasingIcon,
-                },
-              }
-            : {
-                selectedTab: {
-                  label: TabLabels.Erasing,
-                  alternativeLabel: TabLabels.Drawing,
-                  icon: erasingIcon,
-                },
-                secondaryTab: {
-                  label: TabLabels.Draw,
-                  alternativeLabel: TabLabels.Erase,
-                  onClick: () => onModeChange(),
-                  icon: drawingIcon,
-                },
-              })}
+          selectedTab={getTabByModeAndIsSelected(mode, true)}
+          secondaryTab={{
+            ...getTabByModeAndIsSelected(
+              mode === Mode.Draw ? Mode.Erase : Mode.Draw,
+              false
+            ),
+            onClick: () => onModeChange(),
+          }}
         />
       </GridWrapper>
       {isGridEmpty ? (
