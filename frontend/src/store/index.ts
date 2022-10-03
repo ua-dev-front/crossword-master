@@ -54,28 +54,28 @@ export type State = {
   showConfirmation: boolean;
 };
 
-export type GenerateResponseDirection = {
+export type GenerateResponseWord = {
   answer: string;
   question: string;
   startPosition: CellPosition;
-}[];
+};
 
 export type GenerateResponse = {
   words: {
-    [Direction.Across]: GenerateResponseDirection;
-    [Direction.Down]: GenerateResponseDirection;
+    [Direction.Across]: GenerateResponseWord[];
+    [Direction.Down]: GenerateResponseWord[];
   };
 };
 
-export type SolveResponseDirection = {
+export type SolveResponseWord = {
   id: number;
   answer: string;
-}[];
+};
 
 export type SolveResponse = {
   answers: {
-    [Direction.Across]: SolveResponseDirection;
-    [Direction.Down]: SolveResponseDirection;
+    [Direction.Across]: SolveResponseWord[];
+    [Direction.Down]: SolveResponseWord[];
   };
 };
 
