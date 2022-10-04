@@ -90,7 +90,7 @@ export default function DrawingOrErasingView({
           secondaryTab={{
             ...getTabByModeAndIsSelected(
               mode === Mode.Draw ? Mode.Erase : Mode.Draw,
-              false
+              false,
             ),
             onClick: () => onModeChange(),
           }}
