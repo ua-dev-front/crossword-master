@@ -11,7 +11,7 @@ import {
   ROWS,
   SOLVE_ENDPOINT,
 } from 'appConstants';
-import { getQuestionId, getQuestionsFromGrid } from './helpers';
+import { getQuestionsFromGrid } from './helpers';
 
 export enum Direction {
   Across = 'across',
@@ -216,11 +216,18 @@ const generalSlice = createSlice({
     builder.addCase(generateQuestions.fulfilled, (state, action) => {
       state.fetchAbortController = null;
 
+      state.questions = getQuestionsFromGrid(state.grid);
       Object.entries(action.payload.words).forEach(([direction, questions]) => {
         state.questions![direction as Direction] = questions.map(
           (question) => ({
             question: question.question,
-            id: getQuestionId(direction as Direction, question, state.grid),
+            id: state.questions![direction as Direction].find(
+              (currentQuestion) =>
+                currentQuestion.startPosition.row ===
+                  question.startPosition.row &&
+                currentQuestion.startPosition.column ===
+                  question.startPosition.column
+            )!.id,
             startPosition: question.startPosition,
           })
         );
@@ -237,7 +244,7 @@ const generalSlice = createSlice({
               letter,
               number:
                 index === 0
-                  ? getQuestionId(direction as Direction, question, state.grid)
+                  ? state.questions![direction as Direction][index].id
                   : null,
             };
           });
@@ -272,7 +279,7 @@ const generalSlice = createSlice({
 
             state.grid[row][column] = {
               letter,
-              number: id,
+              number: index === 0 ? id : null,
             };
           });
         });

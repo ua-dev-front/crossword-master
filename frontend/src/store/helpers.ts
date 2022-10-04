@@ -1,4 +1,4 @@
-import { Direction, GenerateResponseDirection, Question, State } from 'store';
+import { Question, State } from 'store';
 
 function getQuestionsFromGrid(grid: State['grid']) {
   const acrossQuestions: Question[] = [];
@@ -51,15 +51,4 @@ function getQuestionsFromGrid(grid: State['grid']) {
   return { across: acrossQuestions, down: downQuestions };
 }
 
-function getQuestionId(
-  direction: Direction,
-  currentQuestion: GenerateResponseDirection[0],
-  grid: State['grid']
-) {
-  const newQuestions = getQuestionsFromGrid(grid);
-  return newQuestions[direction as Direction].find(
-    (newQuestion) => newQuestion.startPosition === currentQuestion.startPosition
-  )!.id;
-}
-
-export { getQuestionsFromGrid, getQuestionId };
+export { getQuestionsFromGrid };
