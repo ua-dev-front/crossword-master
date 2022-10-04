@@ -23,46 +23,33 @@ export default function DrawingOrErasingView({
 }: Props) {
   const getTabByModeAndIsSelected = useCallback(
     (currentMode: Mode.Draw | Mode.Erase, isSelected: boolean) => {
-      const addGerundToVerb = (verb: string) => {
-        if (verb.endsWith('ing')) {
-          return verb;
-        }
+      const getLabel = (labelMode: Mode.Draw | Mode.Erase) => {
+        const labelByModeAndIsSelected = {
+          [Mode.Draw]: {
+            normal: 'Draw',
+            selected: 'Drawing',
+          },
+          [Mode.Erase]: {
+            normal: 'Erase',
+            selected: 'Erasing',
+          },
+        };
 
-        if (verb.endsWith('e')) {
-          return verb.slice(0, verb.length - 1) + 'ing';
-        }
-
-        if (verb.endsWith('ie')) {
-          return verb.slice(0, verb.length - 2) + 'ying';
-        }
-
-        return verb + 'ing';
+        return labelByModeAndIsSelected[labelMode][
+          isSelected ? 'selected' : 'normal'
+        ];
       };
 
-      const normalizeLabel = (label: string) => {
-        const capitalizedLabel = label.charAt(0).toUpperCase() + label.slice(1);
-        return isSelected
-          ? addGerundToVerb(capitalizedLabel)
-          : capitalizedLabel;
+      const label = getLabel(currentMode);
+      const alternativeLabel = getLabel(
+        currentMode === Mode.Draw ? Mode.Erase : Mode.Draw
+      );
+
+      return {
+        label,
+        alternativeLabel,
+        icon: <Square isFilled={currentMode === Mode.Erase} />,
       };
-
-      const normalizedDrawLabel = normalizeLabel(Mode.Draw);
-      const normalizedEraseLabel = normalizeLabel(Mode.Erase);
-
-      switch (currentMode) {
-        case Mode.Draw:
-          return {
-            label: normalizedDrawLabel,
-            alternativeLabel: normalizedEraseLabel,
-            icon: <Square isFilled={false} />,
-          };
-        case Mode.Erase:
-          return {
-            label: normalizedEraseLabel,
-            alternativeLabel: normalizedDrawLabel,
-            icon: <Square isFilled={true} />,
-          };
-      }
     },
     []
   );
@@ -90,7 +77,7 @@ export default function DrawingOrErasingView({
           secondaryTab={{
             ...getTabByModeAndIsSelected(
               mode === Mode.Draw ? Mode.Erase : Mode.Draw,
-              false,
+              false
             ),
             onClick: () => onModeChange(),
           }}
