@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Mode, State } from 'store';
 import Button from 'components/Button';
 import GridWrapper from 'components/GridWrapper';
@@ -21,38 +21,38 @@ export default function DrawingOrErasingView({
   onModeChange,
   onCellChange,
 }: Props) {
-  const getTabByModeAndIsSelected = useCallback(
-    (currentMode: Mode.Draw | Mode.Erase, isSelected: boolean) => {
-      const getLabel = (labelMode: Mode.Draw | Mode.Erase) => {
-        const labelByModeAndIsSelected = {
-          [Mode.Draw]: {
-            normal: 'Draw',
-            selected: 'Drawing',
-          },
-          [Mode.Erase]: {
-            normal: 'Erase',
-            selected: 'Erasing',
-          },
-        };
-
-        return labelByModeAndIsSelected[labelMode][
-          isSelected ? 'selected' : 'normal'
-        ];
+  const getTabByModeAndIsSelected = (
+    currentMode: Mode.Draw | Mode.Erase,
+    isSelected: boolean
+  ) => {
+    const getLabel = (labelMode: Mode.Draw | Mode.Erase) => {
+      const labelByModeAndIsSelected = {
+        [Mode.Draw]: {
+          normal: 'Draw',
+          selected: 'Drawing',
+        },
+        [Mode.Erase]: {
+          normal: 'Erase',
+          selected: 'Erasing',
+        },
       };
 
-      const label = getLabel(currentMode);
-      const alternativeLabel = getLabel(
-        currentMode === Mode.Draw ? Mode.Erase : Mode.Draw
-      );
+      return labelByModeAndIsSelected[labelMode][
+        isSelected ? 'selected' : 'normal'
+      ];
+    };
 
-      return {
-        label,
-        alternativeLabel,
-        icon: <Square isFilled={currentMode === Mode.Erase} />,
-      };
-    },
-    []
-  );
+    const label = getLabel(currentMode);
+    const alternativeLabel = getLabel(
+      currentMode === Mode.Draw ? Mode.Erase : Mode.Draw
+    );
+
+    return {
+      label,
+      alternativeLabel,
+      icon: <Square isFilled={currentMode === Mode.Erase} />,
+    };
+  };
 
   const booleanGrid = useMemo(
     () => grid.map((row) => row.map((cell) => !!cell)),
