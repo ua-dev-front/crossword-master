@@ -1,5 +1,8 @@
 import { Question, State } from 'store';
 
+const getNumberGrid = (grid: State['grid']) =>
+  grid.map((row) => row.map((cell) => (cell ? 1 : 0)));
+
 function getQuestionsFromGrid(grid: State['grid']) {
   const acrossQuestions: Question[] = [];
   const downQuestions: Question[] = [];
@@ -51,4 +54,4 @@ function getQuestionsFromGrid(grid: State['grid']) {
   return { across: acrossQuestions, down: downQuestions };
 }
 
-export { getQuestionsFromGrid };
+export { getNumberGrid, getQuestionsFromGrid };

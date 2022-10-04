@@ -11,7 +11,7 @@ import {
   ROWS,
   SOLVE_ENDPOINT,
 } from 'appConstants';
-import { getQuestionsFromGrid } from './helpers';
+import { getNumberGrid, getQuestionsFromGrid } from './helpers';
 
 export enum Direction {
   Across = 'across',
@@ -94,7 +94,7 @@ export const generateQuestions = createAsyncThunk<
     },
     method: 'POST',
     body: JSON.stringify({
-      table: grid.map((row) => row.map((cell) => (cell ? 1 : 0))),
+      table: getNumberGrid(grid),
     }),
     signal: fetchAbortController?.signal,
   });
@@ -117,7 +117,7 @@ export const solveQuestions = createAsyncThunk<
     },
     method: 'POST',
     body: JSON.stringify({
-      table: grid.map((row) => row.map((cell) => (cell ? 1 : 0))),
+      table: getNumberGrid(grid),
       words: questions,
     }),
     signal: fetchAbortController?.signal,
