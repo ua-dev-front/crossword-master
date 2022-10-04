@@ -43,13 +43,15 @@ export type Question = {
   startPosition: CellPosition;
 };
 
+export type Questions = {
+  [Direction.Across]: Question[];
+  [Direction.Down]: Question[];
+};
+
 export type State = {
   mode: Mode;
   grid: ({ letter: string | null; number: number | null } | null)[][];
-  questions: {
-    [Direction.Across]: Question[];
-    [Direction.Down]: Question[];
-  } | null;
+  questions: Questions | null;
   fetchAbortController: AbortController | null;
   showConfirmation: boolean;
 };

@@ -1,9 +1,9 @@
-import { Question, State } from 'store';
+import { Question, Questions, State } from 'store';
 
 const getNumberGrid = (grid: State['grid']) =>
   grid.map((row) => row.map((cell) => (cell ? 1 : 0)));
 
-function getQuestionsFromGrid(grid: State['grid']) {
+function getQuestionsFromGrid(grid: State['grid']): Questions {
   const acrossQuestions: Question[] = [];
   const downQuestions: Question[] = [];
 
