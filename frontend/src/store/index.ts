@@ -11,7 +11,11 @@ import {
   ROWS,
   SOLVE_ENDPOINT,
 } from 'appConstants';
-import { getNumberGrid, getQuestionsFromGrid } from './helpers';
+import {
+  getIndexedQuestions,
+  getNumberGrid,
+  getQuestionsFromGrid,
+} from './helpers';
 
 export enum Direction {
   Across = 'across',
@@ -215,21 +219,31 @@ const generalSlice = createSlice({
     builder.addCase(generateQuestions.rejected, (state, { error }) => {
       console.error(`Generating questions failed: ${error.stack}`);
     });
-    builder.addCase(generateQuestions.fulfilled, (state, action) => {
+    builder.addCase(generateQuestions.fulfilled, (state: State, action) => {
       state.fetchAbortController = null;
 
       state.questions = getQuestionsFromGrid(state.grid);
       Object.entries(action.payload.words).forEach(([direction, questions]) => {
+        const getStartPositionString = (startPosition: CellPosition): string =>
+          `${startPosition.row} ${startPosition.column}`;
+
+        const indexedQuestions: {
+          [key: string]: Question;
+        } = state.questions![direction as Direction].reduce(
+          (accumulator, current) => ({
+            ...accumulator,
+            [getStartPositionString(current.startPosition)]: {
+              ...current,
+            },
+          }),
+          {}
+        );
+        console.log(indexedQuestions);
         state.questions![direction as Direction] = questions.map(
           (question) => ({
             question: question.question,
-            id: state.questions![direction as Direction].find(
-              (currentQuestion) =>
-                currentQuestion.startPosition.row ===
-                  question.startPosition.row &&
-                currentQuestion.startPosition.column ===
-                  question.startPosition.column
-            )!.id,
+            id: indexedQuestions[getStartPositionString(question.startPosition)]
+              .id,
             startPosition: question.startPosition,
           })
         );
@@ -242,12 +256,15 @@ const generalSlice = createSlice({
             } else {
               row += index;
             }
+
             state.grid[row][column] = {
               letter,
               number:
                 index === 0
-                  ? state.questions![direction as Direction][index].id
-                  : null,
+                  ? indexedQuestions[
+                      getStartPositionString(question.startPosition)
+                    ].id
+                  : state.grid[row][column]?.number ?? null,
             };
           });
         });
@@ -263,11 +280,13 @@ const generalSlice = createSlice({
       state.fetchAbortController = null;
 
       Object.entries(action.payload.answers).forEach(([direction, answers]) => {
+        const indexedQuestions = getIndexedQuestions(
+          state.questions![direction as Direction]
+        );
+
         answers.forEach((answer) => {
           answer.answer.split('').forEach((letter, index) => {
-            const currentQuestion = state.questions![
-              direction as Direction
-            ].find((question) => question.id === answer.id)!;
+            const currentQuestion = indexedQuestions[answer.id];
             let {
               startPosition: { row, column },
             } = currentQuestion;

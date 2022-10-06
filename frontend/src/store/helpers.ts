@@ -1,5 +1,19 @@
 import { Question, Questions, State } from 'store';
 
+const getIndexedQuestions = (
+  questions: Question[]
+): { [id: number]: Question } => {
+  return questions.reduce(
+    (accumulator, current) => ({
+      ...accumulator,
+      [current.id]: {
+        ...current,
+      },
+    }),
+    {}
+  );
+};
+
 const getNumberGrid = (grid: State['grid']) =>
   grid.map((row) => row.map((cell) => (cell ? 1 : 0)));
 
@@ -54,4 +68,4 @@ function getQuestionsFromGrid(grid: State['grid']): Questions {
   return { across: acrossQuestions, down: downQuestions };
 }
 
-export { getNumberGrid, getQuestionsFromGrid };
+export { getIndexedQuestions, getNumberGrid, getQuestionsFromGrid };
