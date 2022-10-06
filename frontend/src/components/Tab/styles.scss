@@ -1,12 +1,6 @@
 @import 'styles/functions.scss';
 
 .tab {
-  @mixin animation {
-    animation-fill-mode: forwards;
-    animation-duration: var(--transition-duration);
-    animation-timing-function: var(--transition-function);
-  }
-
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -60,37 +54,15 @@
     gap: 7px;
 
     & .tab__label {
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 21px;
+      color: cl(near-black);
       border: 0;
-
-      @keyframes tabLabelSelected {
-        0% {
-          font-weight: 400;
-          font-size: 16px;
-          line-height: 19px;
-          color: cl(dark);
-        }
-        100% {
-          font-weight: 500;
-          font-size: 18px;
-          line-height: 21px;
-          color: cl(near-black);
-        }
-      }
-      @include animation;
-      animation-name: tabLabelSelected;
     }
 
     .icon {
-      @keyframes tabIconSelected {
-        0% {
-          transform: scale(1);
-        }
-        100% {
-          transform: scale(1.125);
-        }
-      }
-      @include animation;
-      animation-name: tabIconSelected;
+      transform: scale(1.125);
 
       --icon-stroke: #{cl(near-black)};
       --icon-fill: #{cl(dark)};
