@@ -89,47 +89,79 @@ export const generateQuestions = createAsyncThunk<
   GenerateResponse,
   void,
   { state: RootState }
->('generateQuestions', async (_, { getState }) => {
+>('generateQuestions', async (_, { getState, dispatch, rejectWithValue }) => {
   const {
     general: { fetchAbortController, grid },
   } = getState();
 
-  const response = await fetch(`${API_URL}${GENERATE_ENDPOINT}`, {
-    headers: {
-      'Content-type': 'application/json',
-    },
-    method: 'POST',
-    body: JSON.stringify({
-      table: getNumberGrid(grid),
-    }),
-    signal: fetchAbortController?.signal,
-  });
+  try {
+    const response = await fetch(`${API_URL}${GENERATE_ENDPOINT}`, {
+      headers: {
+        'Content-type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        table: getNumberGrid(grid),
+      }),
+      signal: fetchAbortController?.signal,
+    });
 
-  return response.json();
+    if (response.status !== 200) {
+      throw new Error(await response.json());
+    }
+
+    return response.json();
+  } catch (error) {
+    if (error instanceof DOMException) {
+      if (error.name === 'AbortError') {
+        return rejectWithValue(error.message);
+      }
+    } else if (error instanceof Error) {
+      console.error(`Solving questions failed: ${error}`);
+      setTimeout(() => dispatch(generateQuestions()), 3000);
+      return rejectWithValue(error.stack);
+    }
+  }
 });
 
 export const solveQuestions = createAsyncThunk<
   SolveResponse,
   void,
   { state: RootState }
->('solveQuestions', async (_, { getState }) => {
+>('solveQuestions', async (_, { getState, dispatch, rejectWithValue }) => {
   const {
     general: { fetchAbortController, grid, questions },
   } = getState();
 
-  const response = await fetch(`${API_URL}${SOLVE_ENDPOINT}`, {
-    headers: {
-      'Content-type': 'application/json',
-    },
-    method: 'POST',
-    body: JSON.stringify({
-      table: getNumberGrid(grid),
-      words: questions,
-    }),
-    signal: fetchAbortController?.signal,
-  });
+  try {
+    const response = await fetch(`${API_URL}${SOLVE_ENDPOINT}`, {
+      headers: {
+        'Content-type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        table: getNumberGrid(grid),
+        words: questions,
+      }),
+      signal: fetchAbortController?.signal,
+    });
 
-  return response.json();
+    if (response.status !== 200) {
+      throw new Error(await response.json());
+    }
+
+    return response.json();
+  } catch (error) {
+    if (error instanceof DOMException) {
+      if (error.name === 'AbortError') {
+        return rejectWithValue(error.message);
+      }
+    } else if (error instanceof Error) {
+      console.error(`Solving questions failed: ${error}`);
+      setTimeout(() => dispatch(generateQuestions()), 3000);
+      return rejectWithValue(error.stack);
+    }
+  }
 });
 
 const initialState: State = {
@@ -216,9 +248,6 @@ const generalSlice = createSlice({
     builder.addCase(generateQuestions.pending, (state) => {
       state.fetchAbortController = new AbortController();
     });
-    builder.addCase(generateQuestions.rejected, (state, { error }) => {
-      console.error(`Generating questions failed: ${error.stack}`);
-    });
     builder.addCase(generateQuestions.fulfilled, (state: State, action) => {
       state.fetchAbortController = null;
 
@@ -238,7 +267,6 @@ const generalSlice = createSlice({
           }),
           {}
         );
-        console.log(indexedQuestions);
         state.questions![direction as Direction] = questions.map(
           (question) => ({
             question: question.question,
@@ -272,9 +300,6 @@ const generalSlice = createSlice({
     });
     builder.addCase(solveQuestions.pending, (state) => {
       state.fetchAbortController = new AbortController();
-    });
-    builder.addCase(solveQuestions.rejected, (state, { error }) => {
-      console.error(`Solving questions failed: ${error.stack}`);
     });
     builder.addCase(solveQuestions.fulfilled, (state, action) => {
       state.fetchAbortController = null;
