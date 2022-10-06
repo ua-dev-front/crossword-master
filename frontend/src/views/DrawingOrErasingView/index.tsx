@@ -23,7 +23,7 @@ export default function DrawingOrErasingView({
 }: Props) {
   const getTabByModeAndIsSelected = (
     currentMode: Mode.Draw | Mode.Erase,
-    isSelected: boolean
+    isSelected: boolean,
   ) => {
     const getLabel = (labelMode: Mode.Draw | Mode.Erase) => {
       const labelByModeAndIsSelected = {
@@ -44,7 +44,7 @@ export default function DrawingOrErasingView({
 
     const label = getLabel(currentMode);
     const alternativeLabel = getLabel(
-      currentMode === Mode.Draw ? Mode.Erase : Mode.Draw
+      currentMode === Mode.Draw ? Mode.Erase : Mode.Draw,
     );
 
     return {
@@ -56,7 +56,7 @@ export default function DrawingOrErasingView({
 
   const booleanGrid = useMemo(
     () => grid.map((row) => row.map((cell) => !!cell)),
-    [grid]
+    [grid],
   );
 
   const isGridEmpty = useMemo(() => {
