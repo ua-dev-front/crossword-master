@@ -13,7 +13,7 @@ export enum Corner {
 
 export type CellData =
   | {
-      editable: true;
+      editable: boolean;
       filled: boolean;
     }
   | {
@@ -29,7 +29,16 @@ export type Props = {
 
 export default function Cell({ data, roundedCorners, onEdited }: Props) {
   const { editable } = data;
-  const content = !editable ? data.content : null;
+  const content = (() => {
+    if ('content' in data) {
+      return data.content;
+    }
+    if (data.filled) {
+      return { letter: null, number: null };
+    }
+
+    return null;
+  })();
   const filled: boolean = (editable && data.filled) || (!editable && !!content);
 
   const handleEdited = () => editable && onEdited && onEdited();
@@ -51,7 +60,7 @@ export default function Cell({ data, roundedCorners, onEdited }: Props) {
     className,
     `${className}_${filled ? 'filled' : 'empty'}`,
     editable && `${className}_editable`,
-    roundedCorners?.map((corner) => `${className}_${corner}`)
+    roundedCorners?.map((corner) => `${className}_${corner}`),
   );
 
   return (
