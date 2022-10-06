@@ -28,17 +28,17 @@ export default function DrawingOrErasingView({
     const getLabel = (labelMode: Mode.Draw | Mode.Erase) => {
       const labelByModeAndIsSelected = {
         [Mode.Draw]: {
-          normal: 'Draw',
+          regular: 'Draw',
           selected: 'Drawing',
         },
         [Mode.Erase]: {
-          normal: 'Erase',
+          regular: 'Erase',
           selected: 'Erasing',
         },
       };
 
       return labelByModeAndIsSelected[labelMode][
-        isSelected ? 'selected' : 'normal'
+        isSelected ? 'selected' : 'regular'
       ];
     };
 
