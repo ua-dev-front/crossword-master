@@ -29,16 +29,10 @@ export type Props = {
 
 export default function Cell({ data, roundedCorners, onEdited }: Props) {
   const { editable } = data;
-  const content = (() => {
-    if ('content' in data) {
-      return data.content;
-    }
-    if (data.filled) {
-      return { letter: null, number: null };
-    }
-
-    return null;
-  })();
+  const content =
+    ('content' in data && data.content) ||
+    ('filled' in data && data.filled && { letter: null, number: null }) ||
+    null;
   const filled: boolean = (editable && data.filled) || (!editable && !!content);
 
   const handleEdited = () => editable && onEdited && onEdited();
