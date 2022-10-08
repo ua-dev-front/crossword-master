@@ -118,7 +118,7 @@ export const generateQuestions = createAsyncThunk<
       }
     } else if (error instanceof Error) {
       console.error(`Solving questions failed: ${error}`);
-      setTimeout(() => dispatch(generateQuestions()), 3000);
+      dispatch(generateQuestions());
       return rejectWithValue(error.stack);
     }
   }
@@ -158,7 +158,7 @@ export const solveQuestions = createAsyncThunk<
       }
     } else if (error instanceof Error) {
       console.error(`Solving questions failed: ${error}`);
-      setTimeout(() => dispatch(generateQuestions()), 3000);
+      dispatch(generateQuestions());
       return rejectWithValue(error.stack);
     }
   }
