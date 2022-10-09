@@ -290,6 +290,7 @@ const generalSlice = createSlice({
           });
         });
       });
+      state.mode = Mode.Puzzle;
     });
     builder.addCase(solveQuestions.pending, (state) => {
       state.fetchAbortController = new AbortController();
@@ -324,6 +325,7 @@ const generalSlice = createSlice({
           });
         });
       });
+      state.mode = Mode.Puzzle;
     });
   },
 });
