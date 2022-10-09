@@ -37,9 +37,7 @@ export default function Grid(props: Props) {
       case Mode.Draw:
       case Mode.Erase:
         return {
-          editable: matrix[row][column]
-            ? mode === Mode.Erase
-            : mode === Mode.Draw,
+          editable: mode === (matrix[row][column] ? Mode.Erase : Mode.Draw),
           filled: matrix[row][column],
         };
       case Mode.Puzzle:
