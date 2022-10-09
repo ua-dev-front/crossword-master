@@ -1,17 +1,26 @@
-import { Question, Questions, State } from 'store';
+import { CellPosition, Question, Questions, State } from 'store';
 
-const getIndexedQuestions = (
-  questions: Question[]
-): { [id: number]: Question } => {
-  return questions.reduce(
-    (accumulator, current) => ({
-      ...accumulator,
-      [current.id]: {
-        ...current,
-      },
-    }),
-    {}
-  );
+const getStartPositionString = (startPosition: CellPosition): string =>
+  `${startPosition.row} ${startPosition.column}`;
+
+const getIndexedQuestions = (questions: Question[]) => {
+  const indexedQuestions: {
+    [id: number]: Question;
+  } = {};
+  questions.forEach((question) => {
+    indexedQuestions[question.id] = question;
+  });
+  return indexedQuestions;
+};
+
+const getIndexedQuestionsByStartPosition = (questions: Question[]) => {
+  const indexedQuestions: {
+    [key: string]: Question;
+  } = {};
+  questions.forEach((question) => {
+    indexedQuestions[getStartPositionString(question.startPosition)] = question;
+  });
+  return indexedQuestions;
 };
 
 const getNumberGrid = (grid: State['grid']) =>
@@ -57,7 +66,7 @@ function getQuestionsFromGrid(grid: State['grid']): Questions {
               id: currentId,
               question: '',
               startPosition: { row, column },
-            })
+            }),
           );
           currentId += 1;
         }
@@ -68,4 +77,10 @@ function getQuestionsFromGrid(grid: State['grid']): Questions {
   return { across: acrossQuestions, down: downQuestions };
 }
 
-export { getIndexedQuestions, getNumberGrid, getQuestionsFromGrid };
+export {
+  getIndexedQuestions,
+  getIndexedQuestionsByStartPosition,
+  getNumberGrid,
+  getQuestionsFromGrid,
+  getStartPositionString,
+};

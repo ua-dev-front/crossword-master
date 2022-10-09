@@ -13,8 +13,10 @@ import {
 } from 'appConstants';
 import {
   getIndexedQuestions,
+  getIndexedQuestionsByStartPosition,
   getNumberGrid,
   getQuestionsFromGrid,
+  getStartPositionString,
 } from './helpers';
 
 export enum Direction {
@@ -254,20 +256,10 @@ const generalSlice = createSlice({
 
       state.questions = getQuestionsFromGrid(state.grid);
       Object.entries(action.payload.words).forEach(([direction, questions]) => {
-        const getStartPositionString = (startPosition: CellPosition): string =>
-          `${startPosition.row} ${startPosition.column}`;
-
-        const indexedQuestions: {
-          [key: string]: Question;
-        } = state.questions![direction as Direction].reduce(
-          (accumulator, current) => ({
-            ...accumulator,
-            [getStartPositionString(current.startPosition)]: {
-              ...current,
-            },
-          }),
-          {},
+        const indexedQuestions = getIndexedQuestionsByStartPosition(
+          state.questions![direction as Direction],
         );
+
         state.questions![direction as Direction] = questions.map(
           (question) => ({
             question: question.question,
@@ -326,7 +318,8 @@ const generalSlice = createSlice({
 
             state.grid[row][column] = {
               letter,
-              number: index === 0 ? id : null,
+              number:
+                index === 0 ? id : state.grid[row][column]?.number ?? null,
             };
           });
         });
