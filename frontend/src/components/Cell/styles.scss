@@ -11,6 +11,9 @@
     box-sizing: border-box;
     border: 2px solid transparent;
     user-select: none;
+    transition-duration: var(--transition-duration);
+    transition-timing-function: var(--transition-function);
+    transition-property: background-color, border-color;
 
     &__letter {
         font-size: 21px;
@@ -29,9 +32,6 @@
 
     &_editable {
         cursor: pointer;
-        transition-duration: var(--transition-duration);
-        transition-timing-function: var(--transition-function);
-        transition-property: background-color, border-color;
 
         &:hover,
         &:focus-visible {

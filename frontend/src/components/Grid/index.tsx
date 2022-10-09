@@ -37,7 +37,7 @@ export default function Grid(props: Props) {
       case Mode.Draw:
       case Mode.Erase:
         return {
-          editable: true,
+          editable: mode === (matrix[row][column] ? Mode.Erase : Mode.Draw),
           filled: matrix[row][column],
         };
       case Mode.Puzzle:
@@ -73,7 +73,7 @@ export default function Grid(props: Props) {
         return row === dimensionRow && column === dimensionColumn
           ? [key as Corner]
           : [];
-      }
+      },
     );
   };
 
@@ -91,7 +91,7 @@ export default function Grid(props: Props) {
                 : undefined
             }
           />
-        ))
+        )),
       )}
     </div>
   );
