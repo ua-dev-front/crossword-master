@@ -85,6 +85,35 @@ export type SolveResponse = {
   };
 };
 
+const makeApiRequest = async <T extends GenerateResponse | SolveResponse>(
+  endpoint: string,
+  body: string,
+  abortSignal: AbortSignal,
+  retryCallback: CallableFunction,
+): Promise<T | undefined> => {
+  try {
+    const response = await fetch(`${API_URL}${endpoint}`, {
+      headers: {
+        'Content-type': 'application/json',
+      },
+      method: 'POST',
+      body,
+      signal: abortSignal,
+    });
+
+    if (response.status !== 200) {
+      throw new Error(await response.json());
+    }
+
+    return response.json();
+  } catch (error) {
+    if (error instanceof Error && error.name !== 'AbortError') {
+      console.error(`Request failed: ${error}`);
+      retryCallback();
+    }
+  }
+};
+
 export const generateQuestions = createAsyncThunk<
   GenerateResponse,
   void,
@@ -94,34 +123,20 @@ export const generateQuestions = createAsyncThunk<
     general: { fetchAbortController, grid },
   } = getState();
 
-  try {
-    const response = await fetch(`${API_URL}${GENERATE_ENDPOINT}`, {
-      headers: {
-        'Content-type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify({
-        table: getNumberGrid(grid),
-      }),
-      signal: fetchAbortController?.signal,
-    });
+  const response = await makeApiRequest<GenerateResponse>(
+    GENERATE_ENDPOINT,
+    JSON.stringify({
+      table: getNumberGrid(grid),
+    }),
+    fetchAbortController!.signal,
+    () => dispatch(generateQuestions()),
+  );
 
-    if (response.status !== 200) {
-      throw new Error(await response.json());
-    }
-
-    return response.json();
-  } catch (error) {
-    if (error instanceof DOMException) {
-      if (error.name === 'AbortError') {
-        return rejectWithValue(error.message);
-      }
-    } else if (error instanceof Error) {
-      console.error(`Solving questions failed: ${error}`);
-      dispatch(generateQuestions());
-      return rejectWithValue(error.stack);
-    }
+  if (!response) {
+    return rejectWithValue(null);
   }
+
+  return response;
 });
 
 export const solveQuestions = createAsyncThunk<
@@ -133,35 +148,21 @@ export const solveQuestions = createAsyncThunk<
     general: { fetchAbortController, grid, questions },
   } = getState();
 
-  try {
-    const response = await fetch(`${API_URL}${SOLVE_ENDPOINT}`, {
-      headers: {
-        'Content-type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify({
-        table: getNumberGrid(grid),
-        words: questions,
-      }),
-      signal: fetchAbortController?.signal,
-    });
+  const response = await makeApiRequest<SolveResponse>(
+    SOLVE_ENDPOINT,
+    JSON.stringify({
+      table: getNumberGrid(grid),
+      words: questions,
+    }),
+    fetchAbortController!.signal,
+    () => dispatch(solveQuestions()),
+  );
 
-    if (response.status !== 200) {
-      throw new Error(await response.json());
-    }
-
-    return response.json();
-  } catch (error) {
-    if (error instanceof DOMException) {
-      if (error.name === 'AbortError') {
-        return rejectWithValue(error.message);
-      }
-    } else if (error instanceof Error) {
-      console.error(`Solving questions failed: ${error}`);
-      dispatch(generateQuestions());
-      return rejectWithValue(error.stack);
-    }
+  if (!response) {
+    return rejectWithValue(null);
   }
+
+  return response;
 });
 
 const initialState: State = {
@@ -215,11 +216,11 @@ const generalSlice = createSlice({
       state: State,
       {
         payload: { direction, id, question },
-      }: PayloadAction<UpdateQuestionPayload>
+      }: PayloadAction<UpdateQuestionPayload>,
     ) => {
       state.questions![direction] = state.questions![direction].map(
         (oldQuestion) =>
-          oldQuestion.id === id ? { ...oldQuestion, question } : oldQuestion
+          oldQuestion.id === id ? { ...oldQuestion, question } : oldQuestion,
       );
     },
     showConfirmation: (state: State) => {
@@ -235,8 +236,8 @@ const generalSlice = createSlice({
       state.questions = null;
       state.grid = state.grid.map((row) =>
         row.map((cell) =>
-          cell ? { ...cell, letter: null, number: null } : null
-        )
+          cell ? { ...cell, letter: null, number: null } : null,
+        ),
       );
     },
     editQuestions: (state: State) => {
@@ -265,7 +266,7 @@ const generalSlice = createSlice({
               ...current,
             },
           }),
-          {}
+          {},
         );
         state.questions![direction as Direction] = questions.map(
           (question) => ({
@@ -273,7 +274,7 @@ const generalSlice = createSlice({
             id: indexedQuestions[getStartPositionString(question.startPosition)]
               .id,
             startPosition: question.startPosition,
-          })
+          }),
         );
 
         questions.forEach((question) => {
@@ -306,7 +307,7 @@ const generalSlice = createSlice({
 
       Object.entries(action.payload.answers).forEach(([direction, answers]) => {
         const indexedQuestions = getIndexedQuestions(
-          state.questions![direction as Direction]
+          state.questions![direction as Direction],
         );
 
         answers.forEach((answer) => {
