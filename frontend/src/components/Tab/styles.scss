@@ -28,7 +28,14 @@
     }
   }
 
+  &__content {
+    display: grid;
+    grid-template-areas: 'tab';
+  }
+
   &__label {
+    grid-area: tab;
+    text-align: left;
     transition-duration: var(--transition-duration);
     transition-timing-function: var(--transition-function);
     transition-property: color, font-size, border-color;
@@ -37,6 +44,10 @@
     line-height: 19px;
     color: cl(dark);
     border-bottom: 1px dashed cl(dark);
+
+    &-hidden {
+      visibility: hidden;
+    }
   }
 
   &_selected {

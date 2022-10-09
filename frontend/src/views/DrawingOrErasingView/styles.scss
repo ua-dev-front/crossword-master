@@ -1,0 +1,23 @@
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.option-buttons {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 27px;
+    padding: 0 48px;
+    box-sizing: border-box;
+
+    & > *:first-child {
+        align-self: flex-start;
+    }
+
+    & > *:last-child {
+        align-self: flex-end;
+    }
+}
