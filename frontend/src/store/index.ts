@@ -13,10 +13,8 @@ import {
 } from 'appConstants';
 import {
   getIndexedQuestions,
-  getIndexedQuestionsByStartPosition,
   getNumberGrid,
   getQuestionsFromGrid,
-  getStartPositionString,
 } from './helpers';
 
 export enum Direction {
@@ -89,17 +87,17 @@ export type SolveResponse = {
 
 const makeApiRequest = async <T extends GenerateResponse | SolveResponse>(
   endpoint: string,
-  body: string,
+  body: unknown,
   abortSignal: AbortSignal,
   retryCallback: CallableFunction,
-): Promise<T | undefined> => {
+): Promise<T | null> => {
   try {
     const response = await fetch(`${API_URL}${endpoint}`, {
       headers: {
         'Content-type': 'application/json',
       },
       method: 'POST',
-      body,
+      body: JSON.stringify(body),
       signal: abortSignal,
     });
 
@@ -110,10 +108,12 @@ const makeApiRequest = async <T extends GenerateResponse | SolveResponse>(
     return response.json();
   } catch (error) {
     if (error instanceof Error && error.name !== 'AbortError') {
-      console.error(`Request failed: ${error}`);
+      console.error(error);
       retryCallback();
     }
   }
+
+  return null;
 };
 
 export const generateQuestions = createAsyncThunk<
@@ -127,9 +127,7 @@ export const generateQuestions = createAsyncThunk<
 
   const response = await makeApiRequest<GenerateResponse>(
     GENERATE_ENDPOINT,
-    JSON.stringify({
-      table: getNumberGrid(grid),
-    }),
+    { table: getNumberGrid(grid) },
     fetchAbortController!.signal,
     () => dispatch(generateQuestions()),
   );
@@ -152,10 +150,10 @@ export const solveQuestions = createAsyncThunk<
 
   const response = await makeApiRequest<SolveResponse>(
     SOLVE_ENDPOINT,
-    JSON.stringify({
+    {
       table: getNumberGrid(grid),
       words: questions,
-    }),
+    },
     fetchAbortController!.signal,
     () => dispatch(solveQuestions()),
   );
@@ -254,10 +252,14 @@ const generalSlice = createSlice({
     builder.addCase(generateQuestions.fulfilled, (state: State, action) => {
       state.fetchAbortController = null;
 
+      const getStartPositionString = (startPosition: CellPosition): string =>
+        `${startPosition.row} ${startPosition.column}`;
+
       state.questions = getQuestionsFromGrid(state.grid);
       Object.entries(action.payload.words).forEach(([direction, questions]) => {
-        const indexedQuestions = getIndexedQuestionsByStartPosition(
+        const indexedQuestions = getIndexedQuestions(
           state.questions![direction as Direction],
+          (question) => getStartPositionString(question.startPosition),
         );
 
         state.questions![direction as Direction] = questions.map(
@@ -301,6 +303,7 @@ const generalSlice = createSlice({
       Object.entries(action.payload.answers).forEach(([direction, answers]) => {
         const indexedQuestions = getIndexedQuestions(
           state.questions![direction as Direction],
+          (question) => question.id,
         );
 
         answers.forEach((answer) => {

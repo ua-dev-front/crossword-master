@@ -1,25 +1,19 @@
-import { CellPosition, Question, Questions, State } from 'store';
+import { Question, Questions, State } from 'store';
 
-const getStartPositionString = (startPosition: CellPosition): string =>
-  `${startPosition.row} ${startPosition.column}`;
-
-const getIndexedQuestions = (questions: Question[]) => {
-  const indexedQuestions: {
-    [id: number]: Question;
-  } = {};
-  questions.forEach((question) => {
-    indexedQuestions[question.id] = question;
-  });
-  return indexedQuestions;
+export type IndexedQuestions<T extends string | number | symbol> = {
+  [id in T]: Question;
 };
 
-const getIndexedQuestionsByStartPosition = (questions: Question[]) => {
-  const indexedQuestions: {
-    [key: string]: Question;
-  } = {};
-  questions.forEach((question) => {
-    indexedQuestions[getStartPositionString(question.startPosition)] = question;
-  });
+const getIndexedQuestions = <T extends string | number | symbol>(
+  questions: Question[],
+  getQuestionIndex: (question: Question) => T,
+): IndexedQuestions<T> => {
+  const indexedQuestions: IndexedQuestions<T> = {} as IndexedQuestions<T>;
+
+  for (const question of questions) {
+    indexedQuestions[getQuestionIndex(question)] = question;
+  }
+
   return indexedQuestions;
 };
 
@@ -77,10 +71,4 @@ function getQuestionsFromGrid(grid: State['grid']): Questions {
   return { across: acrossQuestions, down: downQuestions };
 }
 
-export {
-  getIndexedQuestions,
-  getIndexedQuestionsByStartPosition,
-  getNumberGrid,
-  getQuestionsFromGrid,
-  getStartPositionString,
-};
+export { getIndexedQuestions, getNumberGrid, getQuestionsFromGrid };
