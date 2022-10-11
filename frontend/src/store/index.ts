@@ -107,10 +107,12 @@ const makeApiRequest = async <T extends GenerateResponse | SolveResponse>(
 
     return response.json();
   } catch (error) {
-    if (error instanceof Error && error.name !== 'AbortError') {
-      console.error(error);
-      retryCallback();
+    if (!(error instanceof Error && error.name !== 'AbortError')) {
+      return null;
     }
+
+    console.error(error);
+    retryCallback();
   }
 
   return null;
