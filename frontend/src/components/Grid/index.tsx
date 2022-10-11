@@ -36,8 +36,8 @@ export default function Grid(props: Props) {
   const [isMouseDown, setIsMouseDown] = useState(false);
 
   useGlobalMouseClickToggle((event) => {
-    const changeDocumentOverflow = (overflow: string) => {
-      document.documentElement.style.overflow = overflow;
+    const changeDocumentOverflow = (value: string) => {
+      document.documentElement.style.overflow = value;
     };
 
     setIsMouseDown(() => {
