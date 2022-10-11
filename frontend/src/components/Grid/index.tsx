@@ -128,7 +128,7 @@ export default function Grid(props: Props) {
       onTouchMove={(event) => handleTouch(event)}
     >
       {props.matrix.map((row, rowIndex) =>
-        row.map((cell, columnIndex) => (
+        row.map((_cell, columnIndex) => (
           <Cell
             key={`${rowIndex}-${columnIndex}`}
             data={getData(rowIndex, columnIndex)}
