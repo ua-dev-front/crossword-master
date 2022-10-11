@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
-import { Mode, State } from 'store';
+import { generateQuestions, Mode, State } from 'store';
+import useAppDispatch from 'hooks/useAppDispatch';
 import Button from 'components/Button';
 import GridWrapper from 'components/GridWrapper';
 import Label, { LabelSize } from 'components/Label';
@@ -21,6 +22,7 @@ export default function DrawingOrErasingView({
   onModeChange,
   onCellChange,
 }: Props) {
+  const dispatch = useAppDispatch();
   const getTabByModeAndIsSelected = (
     currentMode: Mode.Draw | Mode.Erase,
     isSelected: boolean,
@@ -94,7 +96,7 @@ export default function DrawingOrErasingView({
         <div className='center option-buttons'>
           <Button
             label='Generate questions'
-            onClick={() => console.log('test')}
+            onClick={() => dispatch(generateQuestions())}
           />
           <Button
             label='Enter questions & solve'
