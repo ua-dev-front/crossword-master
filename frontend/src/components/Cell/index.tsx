@@ -25,9 +25,15 @@ export type Props = {
   data: CellData;
   roundedCorners?: Corner[];
   onEdited?: () => void;
+  isMouseDown?: boolean;
 };
 
-export default function Cell({ data, roundedCorners, onEdited }: Props) {
+export default function Cell({
+  data,
+  roundedCorners,
+  onEdited,
+  isMouseDown,
+}: Props) {
   const { editable } = data;
   const content =
     ('content' in data && data.content) ||
@@ -39,6 +45,12 @@ export default function Cell({ data, roundedCorners, onEdited }: Props) {
 
   const handleClick = () => {
     handleEdited();
+  };
+
+  const handleMove = () => {
+    if (isMouseDown) {
+      handleClick();
+    }
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
@@ -61,6 +73,7 @@ export default function Cell({ data, roundedCorners, onEdited }: Props) {
     <div
       className={classes}
       onClick={() => handleClick()}
+      onMouseMove={() => handleMove()}
       onKeyDown={(event) => handleKeyDown(event)}
       tabIndex={editable ? 0 : undefined}
     >
