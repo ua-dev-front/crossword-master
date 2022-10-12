@@ -52,11 +52,8 @@ export default function Grid(props: Props) {
 
   const { mode, matrix } = props;
 
-  const handleEdited = (row: number, column: number) => {
-    return mode === Mode.Draw || mode === Mode.Erase
-      ? props.onChange(row, column)
-      : undefined;
-  };
+  const handleEdited = (row: number, column: number) =>
+    (mode === Mode.Draw || mode === Mode.Erase) && props.onChange(row, column);
 
   const handleTouch = (event: TouchEvent<HTMLElement>) => {
     const { clientX, clientY } = event.touches[0];
