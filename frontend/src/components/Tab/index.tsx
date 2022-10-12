@@ -3,9 +3,9 @@ import classnames from 'classnames';
 import './styles.scss';
 
 export type Props = {
-  isSelected: boolean;
-  icon: ReactNode;
   label: string;
+  icon: ReactNode;
+  isSelected: boolean;
   onClick?: () => void;
   alternativeLabel?: string;
 };
@@ -13,8 +13,8 @@ export type Props = {
 export default function Tab({
   label,
   icon,
-  onClick,
   isSelected,
+  onClick,
   alternativeLabel, // used to make width of tab consistent
 }: Props) {
   const classes = classnames('tab', isSelected && 'tab_selected');
