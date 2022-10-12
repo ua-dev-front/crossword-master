@@ -1,5 +1,10 @@
 import React, { useMemo } from 'react';
-import { generateQuestions, Mode, State } from 'store';
+import {
+  generateQuestions,
+  Mode,
+  State,
+  switchToEnteringQuestions,
+} from 'store';
 import useAppDispatch from 'hooks/useAppDispatch';
 import Button from 'components/Button';
 import GridWrapper from 'components/GridWrapper';
@@ -100,7 +105,7 @@ export default function DrawingOrErasingView({
           />
           <Button
             label='Enter questions & solve'
-            onClick={() => console.log('test')}
+            onClick={() => dispatch(switchToEnteringQuestions())}
           />
         </div>
       )}
