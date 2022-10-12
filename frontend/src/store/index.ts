@@ -85,12 +85,16 @@ export type SolveResponse = {
   };
 };
 
-const makeApiRequest = async <T extends GenerateResponse | SolveResponse>(
+const makeApiRequest = async <
+  FullfilledType extends GenerateResponse | SolveResponse,
+  RejectedType,
+>(
   endpoint: string,
   body: object,
   abortSignal: AbortSignal,
   retryCallback: CallableFunction,
-): Promise<T | null> => {
+  reject: (value: unknown) => RejectedType,
+): Promise<FullfilledType | RejectedType> => {
   try {
     const response = await fetch(`${API_URL}${endpoint}`, {
       headers: {
@@ -108,14 +112,14 @@ const makeApiRequest = async <T extends GenerateResponse | SolveResponse>(
     return response.json();
   } catch (error) {
     if (error instanceof Error && error.name === 'AbortError') {
-      return null;
+      return reject(null);
     }
 
     console.error(error);
     retryCallback();
   }
 
-  return null;
+  return reject(null);
 };
 
 export const generateQuestions = createAsyncThunk<
@@ -127,18 +131,13 @@ export const generateQuestions = createAsyncThunk<
     general: { fetchAbortController, grid },
   } = getState();
 
-  const response = await makeApiRequest<GenerateResponse>(
+  return makeApiRequest<GenerateResponse, ReturnType<typeof rejectWithValue>>(
     GENERATE_ENDPOINT,
     { table: getNumberGrid(grid) },
     fetchAbortController!.signal,
     () => dispatch(generateQuestions()),
+    (value: unknown) => rejectWithValue(value),
   );
-
-  if (!response) {
-    return rejectWithValue(null);
-  }
-
-  return response;
 });
 
 export const solveQuestions = createAsyncThunk<
@@ -150,7 +149,7 @@ export const solveQuestions = createAsyncThunk<
     general: { fetchAbortController, grid, questions },
   } = getState();
 
-  const response = await makeApiRequest<SolveResponse>(
+  return makeApiRequest<SolveResponse, ReturnType<typeof rejectWithValue>>(
     SOLVE_ENDPOINT,
     {
       table: getNumberGrid(grid),
@@ -158,13 +157,8 @@ export const solveQuestions = createAsyncThunk<
     },
     fetchAbortController!.signal,
     () => dispatch(solveQuestions()),
+    (value: unknown) => rejectWithValue(value),
   );
-
-  if (!response) {
-    return rejectWithValue(null);
-  }
-
-  return response;
 });
 
 const initialState: State = {
