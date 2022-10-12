@@ -55,7 +55,7 @@ export default function Grid(props: Props) {
   const handleEdited = (row: number, column: number) =>
     (mode === Mode.Draw || mode === Mode.Erase) && props.onChange(row, column);
 
-  const handleTouch = (event: TouchEvent<HTMLElement>) => {
+  const handleTouchMove = (event: TouchEvent<HTMLElement>) => {
     const { clientX, clientY } = event.touches[0];
     const target = document.elementFromPoint(clientX, clientY);
 
@@ -122,7 +122,7 @@ export default function Grid(props: Props) {
     <div
       className='grid'
       ref={gridRef}
-      onTouchMove={(event) => handleTouch(event)}
+      onTouchMove={(event) => handleTouchMove(event)}
     >
       {props.matrix.map((row, rowIndex) =>
         row.map((_cell, columnIndex) => (
