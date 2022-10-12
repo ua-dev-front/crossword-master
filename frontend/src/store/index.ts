@@ -107,7 +107,7 @@ const makeApiRequest = async <T extends GenerateResponse | SolveResponse>(
 
     return response.json();
   } catch (error) {
-    if (!(error instanceof Error && error.name !== 'AbortError')) {
+    if (error instanceof Error && error.name === 'AbortError') {
       return null;
     }
 
