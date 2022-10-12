@@ -87,7 +87,7 @@ export type SolveResponse = {
 
 const makeApiRequest = async <T extends GenerateResponse | SolveResponse>(
   endpoint: string,
-  body: unknown,
+  body: object,
   abortSignal: AbortSignal,
   retryCallback: CallableFunction,
 ): Promise<T | null> => {

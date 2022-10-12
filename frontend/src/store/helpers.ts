@@ -8,7 +8,7 @@ const getIndexedQuestions = <T extends string | number | symbol>(
   questions: Question[],
   getQuestionIndex: (question: Question) => T,
 ): IndexedQuestions<T> => {
-  const indexedQuestions: IndexedQuestions<T> = {} as IndexedQuestions<T>;
+  const indexedQuestions = {} as IndexedQuestions<T>;
 
   for (const question of questions) {
     indexedQuestions[getQuestionIndex(question)] = question;
