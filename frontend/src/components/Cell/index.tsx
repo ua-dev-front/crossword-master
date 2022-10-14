@@ -1,4 +1,4 @@
-import React, { KeyboardEvent } from 'react';
+import React, { KeyboardEvent, PointerEvent } from 'react';
 import classnames from 'classnames';
 import './styles.scss';
 
@@ -47,9 +47,20 @@ export default function Cell({
     handleEdited();
   };
 
-  const handleMove = () => {
+  const handleMove = (event: PointerEvent) => {
+    event.preventDefault();
+
     if (isMouseDown) {
       handleClick();
+    }
+  };
+
+  const handleReleaseCapture = (event: PointerEvent) => {
+    const target = event.target as HTMLElement;
+    const pointerId = event.pointerId;
+
+    if (target.hasPointerCapture(pointerId)) {
+      target.releasePointerCapture(pointerId);
     }
   };
 
@@ -73,7 +84,8 @@ export default function Cell({
     <div
       className={classes}
       onClick={() => handleClick()}
-      onMouseMove={() => handleMove()}
+      onPointerMove={(event) => handleMove(event)}
+      onPointerDown={(event) => handleReleaseCapture(event)}
       onKeyDown={(event) => handleKeyDown(event)}
       tabIndex={editable ? 0 : undefined}
     >

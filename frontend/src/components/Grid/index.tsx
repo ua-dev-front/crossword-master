@@ -1,6 +1,5 @@
-import React, { useState, useRef, TouchEvent } from 'react';
+import React, { useState } from 'react';
 import useGlobalMouseClickToggle from 'hooks/useGlobalMouseClickToggle';
-import { ROWS, COLUMNS } from 'appConstants';
 import Cell, { CellData, Corner } from 'components/Cell';
 import './styles.scss';
 
@@ -32,46 +31,14 @@ export type Props =
     };
 
 export default function Grid(props: Props) {
-  const gridRef = useRef<HTMLDivElement>(null);
   const [isMouseDown, setIsMouseDown] = useState(false);
 
-  useGlobalMouseClickToggle((event) => {
-    const changeDocumentOverflow = (value: string) => {
-      document.documentElement.style.overflow = value;
-    };
-
-    setIsMouseDown(() => {
-      if (gridRef.current?.contains(event.target as Node)) {
-        changeDocumentOverflow('hidden');
-        return !isMouseDown;
-      }
-      changeDocumentOverflow('auto');
-      return false;
-    });
-  });
+  useGlobalMouseClickToggle(() => setIsMouseDown(!isMouseDown));
 
   const { mode, matrix } = props;
 
   const handleEdited = (row: number, column: number) =>
     (mode === Mode.Draw || mode === Mode.Erase) && props.onChange(row, column);
-
-  const handleTouchMove = (event: TouchEvent<HTMLElement>) => {
-    const { clientX, clientY } = event.touches[0];
-    const target = document.elementFromPoint(clientX, clientY);
-
-    if (target && gridRef.current) {
-      const cells = gridRef.current.querySelectorAll('.cell');
-      const index = Array.from(cells).findIndex((cell) =>
-        cell.contains(target),
-      );
-      const row = Math.floor(index / ROWS);
-      const column = index % COLUMNS;
-
-      if (row !== -1 && column !== -1) {
-        handleEdited(row, column);
-      }
-    }
-  };
 
   const getData = (row: number, column: number): CellData => {
     switch (mode) {
@@ -119,11 +86,7 @@ export default function Grid(props: Props) {
   };
 
   return (
-    <div
-      className='grid'
-      ref={gridRef}
-      onTouchMove={(event) => handleTouchMove(event)}
-    >
+    <div className='grid'>
       {props.matrix.map((row, rowIndex) =>
         row.map((_cell, columnIndex) => (
           <Cell
