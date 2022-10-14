@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import useGlobalMouseClickToggle from 'hooks/useGlobalMouseClickToggle';
+import useGlobalPointerClickToggle from 'hooks/useGlobalPointerClickToggle';
 import Cell, { CellData, Corner } from 'components/Cell';
 import './styles.scss';
 
@@ -34,7 +34,7 @@ export default function Grid(props: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   const [isPointerDown, setIsPointerDown] = useState(false);
-  useGlobalMouseClickToggle((event, isDownEvent) => {
+  useGlobalPointerClickToggle((event, isDownEvent) => {
     setIsPointerDown(
       isDownEvent && !!ref.current?.contains(event.target as HTMLElement),
     );
