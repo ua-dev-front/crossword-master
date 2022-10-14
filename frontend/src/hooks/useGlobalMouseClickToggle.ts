@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const EVENTS = ['mousedown', 'mouseup', 'touchstart', 'touchend'];
+const EVENTS = ['pointerdown', 'pointerup'];
 
 const useGlobalMouseClickToggle = (callback: (event: Event) => void) => {
   const documentMethodHandler = (
