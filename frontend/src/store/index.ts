@@ -1,5 +1,21 @@
-import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { COLUMNS, ROWS } from 'appConstants';
+import {
+  configureStore,
+  createAsyncThunk,
+  createSlice,
+  PayloadAction,
+} from '@reduxjs/toolkit';
+import {
+  API_URL,
+  COLUMNS,
+  GENERATE_ENDPOINT,
+  ROWS,
+  SOLVE_ENDPOINT,
+} from 'appConstants';
+import {
+  getIndexedQuestions,
+  getNumberGrid,
+  getQuestionsFromGrid,
+} from './helpers';
 
 export enum Direction {
   Across = 'across',
@@ -31,67 +47,119 @@ export type Question = {
   startPosition: CellPosition;
 };
 
+export type Questions = {
+  [Direction.Across]: Question[];
+  [Direction.Down]: Question[];
+};
+
 export type State = {
   mode: Mode;
   grid: ({ letter: string | null; number: number | null } | null)[][];
-  questions: {
-    [Direction.Across]: Question[];
-    [Direction.Down]: Question[];
-  } | null;
+  questions: Questions | null;
   fetchAbortController: AbortController | null;
   showConfirmation: boolean;
 };
 
-function getQuestionsFromGrid(grid: State['grid']) {
-  const acrossQuestions: Question[] = [];
-  const downQuestions: Question[] = [];
+export type GenerateResponseWord = {
+  answer: string;
+  question: string;
+  startPosition: CellPosition;
+};
 
-  const shifts = [
-    {
-      array: acrossQuestions,
-      shift: [0, 1],
-    },
-    {
-      array: downQuestions,
-      shift: [1, 0],
-    },
-  ];
+export type GenerateResponse = {
+  words: {
+    [Direction.Across]: GenerateResponseWord[];
+    [Direction.Down]: GenerateResponseWord[];
+  };
+};
 
-  let currentId = 1;
+export type SolveResponseWord = {
+  id: number;
+  answer: string;
+};
 
-  for (let row = 0; row < grid.length; row++) {
-    for (let column = 0; column < grid[row].length; column++) {
-      if (grid[row][column]) {
-        const arrays = [];
+export type SolveResponse = {
+  answers: {
+    [Direction.Across]: SolveResponseWord[];
+    [Direction.Down]: SolveResponseWord[];
+  };
+};
 
-        for (const {
-          array,
-          shift: [rowShift, columnShift],
-        } of shifts) {
-          if (
-            !grid[row - rowShift]?.[column - columnShift] &&
-            grid[row + rowShift]?.[column + columnShift]
-          ) {
-            arrays.push(array);
-          }
-        }
+const makeApiRequest = async <
+  FullfilledType extends GenerateResponse | SolveResponse,
+  RejectedType,
+>(
+  endpoint: string,
+  body: object,
+  abortSignal: AbortSignal,
+  retryCallback: CallableFunction,
+  reject: (value: unknown) => RejectedType,
+): Promise<FullfilledType | RejectedType> => {
+  try {
+    const response = await fetch(`${API_URL}${endpoint}`, {
+      headers: {
+        'Content-type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(body),
+      signal: abortSignal,
+    });
 
-        if (arrays.length > 0) {
-          arrays.forEach((array) =>
-            array.push({
-              id: currentId,
-              question: '',
-              startPosition: { row, column },
-            })
-          );
-          currentId += 1;
-        }
-      }
+    if (response.status !== 200) {
+      throw new Error(await response.json());
     }
+
+    return response.json();
+  } catch (error) {
+    if (error instanceof Error && error.name === 'AbortError') {
+      return reject(null);
+    }
+
+    console.error(error);
+    retryCallback();
   }
 
-  return { across: acrossQuestions, down: downQuestions };
-}
+  return reject(null);
+};
+
+export const generateQuestions = createAsyncThunk<
+  GenerateResponse,
+  void,
+  { state: RootState }
+>('generateQuestions', async (_, { getState, dispatch, rejectWithValue }) => {
+  const {
+    general: { fetchAbortController, grid },
+  } = getState();
+
+  return makeApiRequest<GenerateResponse, ReturnType<typeof rejectWithValue>>(
+    GENERATE_ENDPOINT,
+    { table: getNumberGrid(grid) },
+    fetchAbortController!.signal,
+    () => dispatch(generateQuestions()),
+    (value: unknown) => rejectWithValue(value),
+  );
+});
+
+export const solveQuestions = createAsyncThunk<
+  SolveResponse,
+  void,
+  { state: RootState }
+>('solveQuestions', async (_, { getState, dispatch, rejectWithValue }) => {
+  const {
+    general: { fetchAbortController, grid, questions },
+  } = getState();
+
+  return makeApiRequest<SolveResponse, ReturnType<typeof rejectWithValue>>(
+    SOLVE_ENDPOINT,
+    {
+      table: getNumberGrid(grid),
+      words: questions,
+    },
+    fetchAbortController!.signal,
+    () => dispatch(solveQuestions()),
+    (value: unknown) => rejectWithValue(value),
+  );
+});
 
 const initialState: State = {
   mode: Mode.Draw,
@@ -144,22 +212,12 @@ const generalSlice = createSlice({
       state: State,
       {
         payload: { direction, id, question },
-      }: PayloadAction<UpdateQuestionPayload>
+      }: PayloadAction<UpdateQuestionPayload>,
     ) => {
       state.questions![direction] = state.questions![direction].map(
         (oldQuestion) =>
-          oldQuestion.id === id ? { ...oldQuestion, question } : oldQuestion
+          oldQuestion.id === id ? { ...oldQuestion, question } : oldQuestion,
       );
-    },
-    generateQuestions: (state: State) => {
-      // creates new AbortController and assignes it to fetchAbortController, makes API call to generate questions and,
-      // after data is fetched, sets fetchAbortController to null,
-      // sets questions to API response and updates grid accordingly
-    },
-    solveQuestions: (state: State) => {
-      // creates new AbortController and assignes it to fetchAbortController, makes API call to solve questions and,
-      // after data is fetched, sets fetchAbortController to null,
-      // updates grid according to API response
     },
     showConfirmation: (state: State) => {
       state.showConfirmation = true;
@@ -174,8 +232,8 @@ const generalSlice = createSlice({
       state.questions = null;
       state.grid = state.grid.map((row) =>
         row.map((cell) =>
-          cell ? { ...cell, letter: null, number: null } : null
-        )
+          cell ? { ...cell, letter: null, number: null } : null,
+        ),
       );
     },
     editQuestions: (state: State) => {
@@ -183,12 +241,104 @@ const generalSlice = createSlice({
       state.mode = Mode.EnterQuestions;
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(generateQuestions.pending, (state) => {
+      state.fetchAbortController = new AbortController();
+    });
+    builder.addCase(generateQuestions.fulfilled, (state: State, action) => {
+      state.fetchAbortController = null;
+
+      const getStartPositionString = (startPosition: CellPosition): string =>
+        `${startPosition.row} ${startPosition.column}`;
+
+      state.questions = getQuestionsFromGrid(state.grid);
+      Object.entries(action.payload.words).forEach(([direction, questions]) => {
+        const indexedQuestions = getIndexedQuestions(
+          state.questions![direction as Direction],
+          (question) => getStartPositionString(question.startPosition),
+        );
+
+        state.questions![direction as Direction] = questions.map(
+          (question) => ({
+            question: question.question,
+            id: indexedQuestions[getStartPositionString(question.startPosition)]
+              .id,
+            startPosition: question.startPosition,
+          }),
+        );
+
+        questions.forEach((question) => {
+          question.answer.split('').forEach((letter, index) => {
+            let { row, column } = question.startPosition;
+            if (direction === Direction.Across) {
+              column += index;
+            } else {
+              row += index;
+            }
+
+            state.grid[row][column] = {
+              letter,
+              number:
+                index === 0
+                  ? indexedQuestions[
+                      getStartPositionString(question.startPosition)
+                    ].id
+                  : state.grid[row][column]?.number ?? null,
+            };
+          });
+        });
+      });
+      state.mode = Mode.Puzzle;
+    });
+    builder.addCase(solveQuestions.pending, (state) => {
+      state.fetchAbortController = new AbortController();
+    });
+    builder.addCase(solveQuestions.fulfilled, (state, action) => {
+      state.fetchAbortController = null;
+
+      Object.entries(action.payload.answers).forEach(([direction, answers]) => {
+        const indexedQuestions = getIndexedQuestions(
+          state.questions![direction as Direction],
+          (question) => question.id,
+        );
+
+        answers.forEach((answer) => {
+          answer.answer.split('').forEach((letter, index) => {
+            const currentQuestion = indexedQuestions[answer.id];
+            let {
+              startPosition: { row, column },
+            } = currentQuestion;
+            const { id } = currentQuestion;
+
+            if (direction === Direction.Across) {
+              column += index;
+            } else {
+              row += index;
+            }
+
+            state.grid[row][column] = {
+              letter,
+              number:
+                index === 0 ? id : state.grid[row][column]?.number ?? null,
+            };
+          });
+        });
+      });
+      state.mode = Mode.Puzzle;
+    });
+  },
 });
 
 const store = configureStore({
   reducer: {
     general: generalSlice.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredPaths: ['general.fetchAbortController'],
+      },
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
