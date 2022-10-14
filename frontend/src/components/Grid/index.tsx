@@ -34,14 +34,11 @@ export default function Grid(props: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   const [isPointerDown, setIsPointerDown] = useState(false);
-  useGlobalMouseClickToggle((event) =>
+  useGlobalMouseClickToggle((event, isDownEvent) => {
     setIsPointerDown(
-      !!(
-        event.type === 'pointerdown' &&
-        ref.current?.contains(event.target as HTMLElement)
-      ),
-    ),
-  );
+      isDownEvent && !!ref.current?.contains(event.target as HTMLElement),
+    );
+  });
 
   const { mode, matrix } = props;
 

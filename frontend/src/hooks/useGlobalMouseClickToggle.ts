@@ -1,13 +1,20 @@
 import { useEffect } from 'react';
 
-const EVENTS = ['pointerdown', 'pointerup'];
+const EVENTS = {
+  pointerDown: 'pointerdown',
+  pointerUp: 'pointerup',
+};
 
-const useGlobalMouseClickToggle = (callback: (event: Event) => void) => {
+const useGlobalMouseClickToggle = (
+  callback: (event: Event, isDownEvent: boolean) => void,
+) => {
   const documentMethodHandler = (
     method: Document['addEventListener'] | Document['removeEventListener'],
   ) => {
-    EVENTS.forEach((event) => {
-      method(event, callback);
+    Object.values(EVENTS).forEach((eventType) => {
+      method(eventType, (event) =>
+        callback(event, eventType === EVENTS.pointerDown),
+      );
     });
   };
 
