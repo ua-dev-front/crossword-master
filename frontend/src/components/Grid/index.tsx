@@ -32,7 +32,6 @@ export type Props =
 
 export default function Grid(props: Props) {
   const [isMouseDown, setIsMouseDown] = useState(false);
-
   useGlobalMouseClickToggle(() => setIsMouseDown(!isMouseDown));
 
   const { mode, matrix } = props;
