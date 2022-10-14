@@ -34,11 +34,11 @@ export default function Grid(props: Props) {
   const ref = useRef<HTMLElement>(null);
 
   const [isPointerDown, setIsPointerDown] = useState(false);
-  useGlobalPointerClickToggle((event, isDownEvent) => {
+  useGlobalPointerClickToggle((event, isDownEvent) =>
     setIsPointerDown(
       isDownEvent && !!ref.current?.contains(event.target as HTMLElement),
-    );
-  });
+    ),
+  );
 
   const { mode, matrix } = props;
 
