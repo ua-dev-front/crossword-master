@@ -25,14 +25,14 @@ export type Props = {
   data: CellData;
   roundedCorners?: Corner[];
   onEdited?: () => void;
-  isMouseDown?: boolean;
+  isPointerDown?: boolean;
 };
 
 export default function Cell({
   data,
   roundedCorners,
   onEdited,
-  isMouseDown,
+  isPointerDown,
 }: Props) {
   const { editable } = data;
   const content =
@@ -50,8 +50,8 @@ export default function Cell({
   const handleMove = (event: PointerEvent) => {
     event.preventDefault();
 
-    if (isMouseDown) {
-      handleClick();
+    if (isPointerDown) {
+      handleEdited();
     }
   };
 

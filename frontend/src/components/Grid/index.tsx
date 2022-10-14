@@ -31,9 +31,9 @@ export type Props =
     };
 
 export default function Grid(props: Props) {
-  const [isMouseDown, setIsMouseDown] = useState(false);
+  const [isPointerDown, setIsPointerDown] = useState(false);
   useGlobalMouseClickToggle((event) =>
-    setIsMouseDown(event.type === 'pointerdown' ? true : false),
+  setIsPointerDown(event.type === 'pointerdown' ? true : false),
   );
 
   const { mode, matrix } = props;
@@ -95,7 +95,7 @@ export default function Grid(props: Props) {
             data={getData(rowIndex, columnIndex)}
             roundedCorners={getRoundedCorners(rowIndex, columnIndex)}
             onEdited={() => handleEdited(rowIndex, columnIndex)}
-            isMouseDown={isMouseDown}
+            isPointerDown={isPointerDown}
           />
         )),
       )}
