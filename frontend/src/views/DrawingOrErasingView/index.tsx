@@ -28,6 +28,7 @@ export default function DrawingOrErasingView({
   onCellChange,
 }: Props) {
   const dispatch = useAppDispatch();
+
   const getTabByModeAndIsSelected = (
     currentMode: Mode.Draw | Mode.Erase,
     isSelected: boolean,
