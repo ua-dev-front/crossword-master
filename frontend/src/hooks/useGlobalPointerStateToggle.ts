@@ -1,26 +1,19 @@
 import { useEffect } from 'react';
 
-const EVENTS = {
-  pointerDown: 'pointerdown',
-  pointerUp: 'pointerup',
-};
-
 const useGlobalPointerStateToggle = (
   callback: (event: Event, isDownEvent: boolean) => void,
 ) => {
-  const documentMethodHandler = (
-    method: Document['addEventListener'] | Document['removeEventListener'],
-  ) => {
-    Object.values(EVENTS).forEach((eventType) => {
-      method(eventType, (event) =>
-        callback(event, eventType === EVENTS.pointerDown),
-      );
-    });
-  };
-
   useEffect(() => {
-    documentMethodHandler(document.addEventListener);
-    return () => documentMethodHandler(document.removeEventListener);
+    document.addEventListener('pointerdown', (event) => callback(event, true));
+    document.addEventListener('pointerup', (event) => callback(event, false));
+    return () => {
+      document.removeEventListener('pointerdown', (event) =>
+        callback(event, true),
+      );
+      document.removeEventListener('pointerup', (event) =>
+        callback(event, false),
+      );
+    };
   }, [callback]);
 };
 
