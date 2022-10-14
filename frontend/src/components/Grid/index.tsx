@@ -38,6 +38,7 @@ export default function Grid(props: Props) {
   const { fetchAbortController, apiFailed } = useAppSelector(
     (state) => state.general,
   );
+  const showOverlay = !!fetchAbortController || !!apiFailed;
 
   const getData = (row: number, column: number): CellData => {
     switch (mode) {
@@ -103,13 +104,10 @@ export default function Grid(props: Props) {
         <div
           className={classnames(
             'grid__overlay',
-            (fetchAbortController || apiFailed) && 'grid__overlay_visible',
+            showOverlay && 'grid__overlay_visible',
           )}
         >
-          <Loader
-            label={getLoaderLabel()}
-            isLoading={!!fetchAbortController || !!apiFailed}
-          />
+          <Loader label={getLoaderLabel()} isLoading={showOverlay} />
         </div>
         {props.matrix.map((row, rowIndex) =>
           row.map((cell, columnIndex) => (
