@@ -47,7 +47,7 @@ export default function Cell({
     handleEdited();
   };
 
-  const handleMove = (event: PointerEvent) => {
+  const handlePointerMove = (event: PointerEvent) => {
     event.preventDefault();
 
     if (isPointerDown) {
@@ -55,7 +55,7 @@ export default function Cell({
     }
   };
 
-  const handleReleaseCapture = (event: PointerEvent) => {
+  const handlePointerDown = (event: PointerEvent) => {
     const target = event.target as HTMLElement;
     target.releasePointerCapture(event.pointerId);
   };
@@ -80,8 +80,8 @@ export default function Cell({
     <div
       className={classes}
       onClick={() => handleClick()}
-      onPointerMove={(event) => handleMove(event)}
-      onPointerDown={(event) => handleReleaseCapture(event)}
+      onPointerMove={(event) => handlePointerMove(event)}
+      onPointerDown={(event) => handlePointerDown(event)}
       onKeyDown={(event) => handleKeyDown(event)}
       tabIndex={editable ? 0 : undefined}
     >
