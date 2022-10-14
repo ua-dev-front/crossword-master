@@ -1,5 +1,5 @@
 import React, { RefObject, useRef, useState } from 'react';
-import useGlobalPointerClickToggle from 'hooks/useGlobalPointerClickToggle';
+import useGlobalPointerStateToggle from 'hooks/useGlobalPointerStateToggle';
 import Cell, { CellData, Corner } from 'components/Cell';
 import './styles.scss';
 
@@ -34,7 +34,7 @@ export default function Grid(props: Props) {
   const ref = useRef<HTMLElement>(null);
 
   const [isPointerDown, setIsPointerDown] = useState(false);
-  useGlobalPointerClickToggle((event, isDownEvent) =>
+  useGlobalPointerStateToggle((event, isDownEvent) =>
     setIsPointerDown(
       isDownEvent && !!ref.current?.contains(event.target as HTMLElement),
     ),

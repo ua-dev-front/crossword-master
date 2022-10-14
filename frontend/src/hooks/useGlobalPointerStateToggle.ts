@@ -5,7 +5,7 @@ const EVENTS = {
   pointerUp: 'pointerup',
 };
 
-const useGlobalPointerClickToggle = (
+const useGlobalPointerStateToggle = (
   callback: (event: Event, isDownEvent: boolean) => void,
 ) => {
   const documentMethodHandler = (
@@ -24,4 +24,4 @@ const useGlobalPointerClickToggle = (
   }, [callback]);
 };
 
-export default useGlobalPointerClickToggle;
+export default useGlobalPointerStateToggle;
