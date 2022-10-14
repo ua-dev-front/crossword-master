@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { RefObject, useRef, useState } from 'react';
 import useGlobalPointerClickToggle from 'hooks/useGlobalPointerClickToggle';
 import Cell, { CellData, Corner } from 'components/Cell';
 import './styles.scss';
@@ -31,7 +31,7 @@ export type Props =
     };
 
 export default function Grid(props: Props) {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLElement>(null);
 
   const [isPointerDown, setIsPointerDown] = useState(false);
   useGlobalPointerClickToggle((event, isDownEvent) => {
@@ -91,7 +91,7 @@ export default function Grid(props: Props) {
   };
 
   return (
-    <div className='grid' ref={ref}>
+    <div className='grid' ref={ref as RefObject<HTMLDivElement>}>
       {props.matrix.map((row, rowIndex) =>
         row.map((_cell, columnIndex) => (
           <Cell
