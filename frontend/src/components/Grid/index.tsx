@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import useGlobalMouseClickToggle from 'hooks/useGlobalMouseClickToggle';
 import Cell, { CellData, Corner } from 'components/Cell';
 import './styles.scss';
@@ -31,9 +31,16 @@ export type Props =
     };
 
 export default function Grid(props: Props) {
+  const ref = useRef<HTMLDivElement>(null);
+
   const [isPointerDown, setIsPointerDown] = useState(false);
   useGlobalMouseClickToggle((event) =>
-  setIsPointerDown(event.type === 'pointerdown' ? true : false),
+    setIsPointerDown(
+      !!(
+        event.type === 'pointerdown' &&
+        ref.current?.contains(event.target as HTMLElement)
+      ),
+    ),
   );
 
   const { mode, matrix } = props;
@@ -87,7 +94,7 @@ export default function Grid(props: Props) {
   };
 
   return (
-    <div className='grid'>
+    <div className='grid' ref={ref}>
       {props.matrix.map((row, rowIndex) =>
         row.map((_cell, columnIndex) => (
           <Cell
