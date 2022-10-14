@@ -80,8 +80,8 @@ export default function Cell({
     <div
       className={classes}
       onClick={() => handleClick()}
-      onPointerMove={(event) => handlePointerMove(event)}
       onPointerDown={(event) => handlePointerDown(event)}
+      onPointerMove={(event) => handlePointerMove(event)}
       onKeyDown={(event) => handleKeyDown(event)}
       tabIndex={editable ? 0 : undefined}
     >
