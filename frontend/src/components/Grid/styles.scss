@@ -2,8 +2,22 @@
     --grid-size: 10;
     --grid-gap: 4px;
 
+    position: relative; // For the overlay
     display: grid;
     grid-template-columns: repeat(var(--grid-size), 1fr);
     gap: var(--grid-gap);
     width: min-content;
+
+    &__overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        z-index: -1;
+
+        &_visible {
+            z-index: 1;
+        }
+    }
 }
