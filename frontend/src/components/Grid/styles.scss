@@ -6,4 +6,5 @@
     grid-template-columns: repeat(var(--grid-size), 1fr);
     gap: var(--grid-gap);
     width: min-content;
+    touch-action: none;
 }

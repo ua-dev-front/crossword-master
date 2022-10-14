@@ -14,7 +14,6 @@
     transition-duration: var(--transition-duration);
     transition-timing-function: var(--transition-function);
     transition-property: background-color, border-color;
-    touch-action: none;
 
     &__letter {
         font-size: 21px;
