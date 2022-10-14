@@ -57,11 +57,7 @@ export default function Cell({
 
   const handleReleaseCapture = (event: PointerEvent) => {
     const target = event.target as HTMLElement;
-    const pointerId = event.pointerId;
-
-    if (target.hasPointerCapture(pointerId)) {
-      target.releasePointerCapture(pointerId);
-    }
+    target.releasePointerCapture(event.pointerId);
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
