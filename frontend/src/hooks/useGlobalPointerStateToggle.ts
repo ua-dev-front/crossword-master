@@ -1,20 +1,30 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 const useGlobalPointerStateToggle = (
   callback: (event: Event, isDownEvent: boolean) => void,
 ) => {
+  const callbackRef = useRef(callback);
   useEffect(() => {
-    document.addEventListener('pointerdown', (event) => callback(event, true));
-    document.addEventListener('pointerup', (event) => callback(event, false));
-    return () => {
-      document.removeEventListener('pointerdown', (event) =>
-        callback(event, true),
-      );
-      document.removeEventListener('pointerup', (event) =>
-        callback(event, false),
-      );
-    };
+    callbackRef.current = callback;
   }, [callback]);
+
+  const handlePointerDown = useCallback(
+    (event: Event) => callbackRef.current(event, true),
+    [callbackRef],
+  );
+  const handlePointerUp = useCallback(
+    (event: Event) => callbackRef.current(event, false),
+    [callbackRef],
+  );
+
+  useEffect(() => {
+    document.addEventListener('pointerdown', handlePointerDown);
+    document.addEventListener('pointerup', handlePointerUp);
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown);
+      document.removeEventListener('pointerup', handlePointerUp);
+    };
+  }, [handlePointerDown, handlePointerUp]);
 };
 
 export default useGlobalPointerStateToggle;
