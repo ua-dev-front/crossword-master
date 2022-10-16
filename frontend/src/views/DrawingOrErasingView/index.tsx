@@ -109,8 +109,8 @@ export default function DrawingOrErasingView({
         <div
           className={classnames(
             `${className}__buttons-wrapper-item`,
-            `${className}__buttons`,
             isGridEmpty && `${className}__buttons-wrapper-item_hidden`,
+            `${className}__buttons`,
           )}
         >
           <Button
