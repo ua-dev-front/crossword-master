@@ -18,11 +18,14 @@ const useGlobalPointerStateToggle = (
   );
 
   useEffect(() => {
-    document.addEventListener('pointerdown', handlePointerDown);
-    document.addEventListener('pointerup', handlePointerUp);
+    const pointerDownListener = (event: Event) => handlePointerDown(event);
+    const pointerUpListener = (event: Event) => handlePointerUp(event);
+
+    document.addEventListener('pointerdown', pointerDownListener);
+    document.addEventListener('pointerup', pointerUpListener);
     return () => {
-      document.removeEventListener('pointerdown', handlePointerDown);
-      document.removeEventListener('pointerup', handlePointerUp);
+      document.removeEventListener('pointerdown', pointerDownListener);
+      document.removeEventListener('pointerup', pointerUpListener);
     };
   }, [handlePointerDown, handlePointerUp]);
 };
