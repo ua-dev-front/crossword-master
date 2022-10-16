@@ -11,7 +11,7 @@ export type Props = {
 };
 
 export default function GridWrapper({ gridProps, children }: Props) {
-  const { fetchAbortController, apiFailed } = useAppSelector(
+  const { fetchAbortController, apiFailed, mode } = useAppSelector(
     (state) => state.general,
   );
   const showOverlay = !!fetchAbortController || !!apiFailed;
@@ -19,7 +19,9 @@ export default function GridWrapper({ gridProps, children }: Props) {
 
   const getLoaderLabel = (): string | null => {
     if (fetchAbortController) {
-      return 'Solving...';
+      return mode === GlobalMode.EnterQuestions
+        ? 'Solving...'
+        : 'Generating...';
     }
     if (apiFailed === GlobalMode.Draw) {
       return 'We were unable to generate the questions :(';
