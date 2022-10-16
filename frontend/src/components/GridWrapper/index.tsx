@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import classnames from 'classnames';
 import { Mode as GlobalMode } from 'store';
 import useAppSelector from 'hooks/useAppSelector';
@@ -16,8 +16,9 @@ export default function GridWrapper({ gridProps, children }: Props) {
     (state) => state.general,
   );
   const showOverlay = !!fetchAbortController || !!apiFailed;
+  const [loaderLabel, setLoaderLabel] = useState('');
 
-  const getLoaderLabel = (): string => {
+  const getLoaderLabel = (): string | null => {
     if (fetchAbortController) {
       return 'Solving...';
     }
@@ -27,8 +28,13 @@ export default function GridWrapper({ gridProps, children }: Props) {
     if (apiFailed === GlobalMode.EnterQuestions) {
       return 'We couldn’t solve the crossword :(';
     }
-    return '';
+
+    return null;
   };
+
+  useEffect(() => {
+    setLoaderLabel(getLoaderLabel() ?? loaderLabel);
+  }, [fetchAbortController, apiFailed]);
 
   return (
     <div className='grid-wrapper'>
@@ -39,7 +45,7 @@ export default function GridWrapper({ gridProps, children }: Props) {
             showOverlay && 'grid-wrapper__overlay_visible',
           )}
         >
-          <Loader label={getLoaderLabel()} isLoading={showOverlay} />
+          <Loader label={loaderLabel} isLoading={showOverlay} />
         </div>
         <Grid {...gridProps} />
       </div>
