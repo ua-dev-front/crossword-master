@@ -47,7 +47,7 @@ export default function GridWrapper({ gridProps, children }: Props) {
             !showOverlay && 'grid-wrapper__overlay_hidden',
           )}
         >
-          <Loader label={loaderLabel} isLoading={showOverlay} />
+          <Loader label={loaderLabel} display={showOverlay} />
         </div>
         <Grid {...gridProps} />
       </div>
