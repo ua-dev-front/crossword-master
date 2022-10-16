@@ -1,9 +1,5 @@
 import React from 'react';
-import classnames from 'classnames';
-import { Mode as GlobalMode } from 'store';
-import useAppSelector from 'hooks/useAppSelector';
 import Cell, { CellData, Corner } from 'components/Cell';
-import Loader from 'components/Loader';
 import './styles.scss';
 
 export enum Mode {
@@ -35,10 +31,6 @@ export type Props =
 
 export default function Grid(props: Props) {
   const { mode, matrix } = props;
-  const { fetchAbortController, apiFailed } = useAppSelector(
-    (state) => state.general,
-  );
-  const showOverlay = !!fetchAbortController || !!apiFailed;
 
   const getData = (row: number, column: number): CellData => {
     switch (mode) {
@@ -85,45 +77,22 @@ export default function Grid(props: Props) {
     );
   };
 
-  const getLoaderLabel = (): string => {
-    if (fetchAbortController) {
-      return 'Solving...';
-    }
-    if (apiFailed === GlobalMode.Draw) {
-      return 'We were unable to generate the questions :(';
-    }
-    if (apiFailed === GlobalMode.EnterQuestions) {
-      return 'We couldn’t solve the crossword :(';
-    }
-    return '';
-  };
-
   return (
-    <>
-      <div className='grid'>
-        <div
-          className={classnames(
-            'grid__overlay',
-            showOverlay && 'grid__overlay_visible',
-          )}
-        >
-          <Loader label={getLoaderLabel()} isLoading={showOverlay} />
-        </div>
-        {props.matrix.map((row, rowIndex) =>
-          row.map((cell, columnIndex) => (
-            <Cell
-              key={`${rowIndex}-${columnIndex}`}
-              data={getData(rowIndex, columnIndex)}
-              roundedCorners={getRoundedCorners(rowIndex, columnIndex)}
-              onEdited={
-                mode === Mode.Draw || mode === Mode.Erase
-                  ? () => props.onChange(rowIndex, columnIndex)
-                  : undefined
-              }
-            />
-          )),
-        )}
-      </div>
-    </>
+    <div className='grid'>
+      {props.matrix.map((row, rowIndex) =>
+        row.map((cell, columnIndex) => (
+          <Cell
+            key={`${rowIndex}-${columnIndex}`}
+            data={getData(rowIndex, columnIndex)}
+            roundedCorners={getRoundedCorners(rowIndex, columnIndex)}
+            onEdited={
+              mode === Mode.Draw || mode === Mode.Erase
+                ? () => props.onChange(rowIndex, columnIndex)
+                : undefined
+            }
+          />
+        )),
+      )}
+    </div>
   );
 }
