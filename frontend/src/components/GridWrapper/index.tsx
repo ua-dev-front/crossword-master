@@ -1,4 +1,5 @@
 import React, { ReactNode, useEffect, useState } from 'react';
+import classnames from 'classnames';
 import { Mode as GlobalMode } from 'store';
 import useAppSelector from 'hooks/useAppSelector';
 import Grid, { Props as GridProps } from 'components/Grid';
@@ -40,7 +41,12 @@ export default function GridWrapper({ gridProps, children }: Props) {
   return (
     <div className='grid-wrapper'>
       <div className='grid-wrapper__grid'>
-        <div className='grid-wrapper__overlay'>
+        <div
+          className={classnames(
+            'grid-wrapper__overlay',
+            showOverlay && 'grid-wrapper__overlay_visible',
+          )}
+        >
           <Loader label={loaderLabel} isLoading={showOverlay} />
         </div>
         <Grid {...gridProps} />
