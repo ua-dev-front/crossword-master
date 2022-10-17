@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import classnames from 'classnames';
 import {
   generateQuestions,
   Mode,
@@ -71,8 +72,10 @@ export default function DrawingOrErasingView({
     return booleanGrid.every((row) => row.every((cell) => !cell));
   }, [booleanGrid]);
 
+  const className = 'drawing-or-erasing-view';
+
   return (
-    <>
+    <div className={className}>
       <GridWrapper
         gridProps={{
           matrix: booleanGrid,
@@ -91,15 +94,25 @@ export default function DrawingOrErasingView({
           }}
         />
       </GridWrapper>
-      {isGridEmpty ? (
-        <div className='center'>
+      <div className={`${className}__buttons-wrapper`}>
+        <div
+          className={classnames(
+            `${className}__buttons-wrapper-item`,
+            !isGridEmpty && `${className}__buttons-wrapper-item_hidden`,
+          )}
+        >
           <Label
             content='Let’s draw some squares first!'
             size={LabelSize.Large}
           />
         </div>
-      ) : (
-        <div className='center option-buttons'>
+        <div
+          className={classnames(
+            `${className}__buttons-wrapper-item`,
+            isGridEmpty && `${className}__buttons-wrapper-item_hidden`,
+            `${className}__buttons`,
+          )}
+        >
           <Button
             label='Generate questions'
             onClick={() => dispatch(generateQuestions())}
@@ -109,7 +122,7 @@ export default function DrawingOrErasingView({
             onClick={() => dispatch(switchToEnteringQuestions())}
           />
         </div>
-      )}
-    </>
+      </div>
+    </div>
   );
 }
