@@ -92,7 +92,7 @@ export default function Grid(props: Props) {
 
   return (
     <div className='grid' ref={ref as RefObject<HTMLDivElement>}>
-      {props.matrix.map((row, rowIndex) =>
+      {matrix.map((row, rowIndex) =>
         row.map((_cell, columnIndex) => (
           <Cell
             key={`${rowIndex}-${columnIndex}`}
