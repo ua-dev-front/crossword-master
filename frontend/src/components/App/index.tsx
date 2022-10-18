@@ -13,8 +13,9 @@ import Layout from 'components/Layout';
 
 function App() {
   const dispatch = useAppDispatch();
-  const mode = useAppSelector((state) => state.general.mode);
-  const grid = useAppSelector((state) => state.general.grid);
+  const { grid, fetchAbortController, apiFailed, mode } = useAppSelector(
+    (state) => state.general,
+  );
 
   const getCurrentView = () => {
     switch (mode) {
@@ -24,6 +25,8 @@ function App() {
           <DrawingOrErasingView
             mode={mode}
             grid={grid}
+            fetchAbortController={fetchAbortController}
+            apiFailed={apiFailed}
             onModeChange={() =>
               dispatch(
                 (mode === Mode.Draw ? switchToErasing : switchToDrawing)(),

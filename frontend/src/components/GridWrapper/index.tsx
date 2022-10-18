@@ -1,7 +1,6 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import classnames from 'classnames';
-import { Mode as GlobalMode } from 'store';
-import useAppSelector from 'hooks/useAppSelector';
+import { Mode as GlobalMode, State } from 'store';
 import Grid, { Props as GridProps } from 'components/Grid';
 import Loader from 'components/Loader';
 import './styles.scss';
@@ -9,12 +8,18 @@ import './styles.scss';
 export type Props = {
   gridProps: GridProps;
   children: ReactNode;
+  apiFailed: State['apiFailed'];
+  fetchAbortController: State['fetchAbortController'];
+  mode: GlobalMode;
 };
 
-export default function GridWrapper({ gridProps, children }: Props) {
-  const { fetchAbortController, apiFailed, mode } = useAppSelector(
-    (state) => state.general,
-  );
+export default function GridWrapper({
+  gridProps,
+  children,
+  apiFailed,
+  fetchAbortController,
+  mode,
+}: Props) {
   const showOverlay = !!fetchAbortController || !!apiFailed;
   const [loaderLabel, setLoaderLabel] = useState('');
 
