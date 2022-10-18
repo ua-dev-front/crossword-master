@@ -13,7 +13,7 @@ import Layout from 'components/Layout';
 
 function App() {
   const dispatch = useAppDispatch();
-  const { grid, fetchAbortController, apiFailed, mode } = useAppSelector(
+  const { grid, mode, fetchAbortController, apiFailed } = useAppSelector(
     (state) => state.general,
   );
 
