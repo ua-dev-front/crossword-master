@@ -127,9 +127,7 @@ export const generateQuestions = createAsyncThunk<
   void,
   { state: RootState }
 >('generateQuestions', async (_, { getState, dispatch, rejectWithValue }) => {
-  const {
-    general: { fetchAbortController, grid },
-  } = getState();
+  const { fetchAbortController, grid } = getState();
 
   return makeApiRequest<GenerateResponse, ReturnType<typeof rejectWithValue>>(
     GENERATE_ENDPOINT,
@@ -145,9 +143,7 @@ export const solveQuestions = createAsyncThunk<
   void,
   { state: RootState }
 >('solveQuestions', async (_, { getState, dispatch, rejectWithValue }) => {
-  const {
-    general: { fetchAbortController, grid, questions },
-  } = getState();
+  const { fetchAbortController, grid, questions } = getState();
 
   return makeApiRequest<SolveResponse, ReturnType<typeof rejectWithValue>>(
     SOLVE_ENDPOINT,
@@ -330,13 +326,11 @@ const generalSlice = createSlice({
 });
 
 const store = configureStore({
-  reducer: {
-    general: generalSlice.reducer,
-  },
+  reducer: generalSlice.reducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredPaths: ['general.fetchAbortController'],
+        ignoredPaths: ['fetchAbortController'],
       },
     }),
 });
@@ -346,13 +340,13 @@ export type AppDispatch = typeof store.dispatch;
 
 export const editQuestionsAndAbortFetch =
   () => (dispatch: AppDispatch, getState: () => RootState) => {
-    getState().general.fetchAbortController?.abort();
+    getState().fetchAbortController?.abort();
     dispatch(generalSlice.actions.editQuestions());
   };
 
 export const editCrosswordAndAbortFetch =
   () => (dispatch: AppDispatch, getState: () => RootState) => {
-    getState().general.fetchAbortController?.abort();
+    getState().fetchAbortController?.abort();
     dispatch(generalSlice.actions.editCrossword());
   };
 

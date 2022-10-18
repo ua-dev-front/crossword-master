@@ -13,8 +13,8 @@ import Layout from 'components/Layout';
 
 function App() {
   const dispatch = useAppDispatch();
-  const mode = useAppSelector((state) => state.general.mode);
-  const grid = useAppSelector((state) => state.general.grid);
+  const mode = useAppSelector((state) => state.mode);
+  const grid = useAppSelector((state) => state.grid);
 
   const getCurrentView = () => {
     switch (mode) {
