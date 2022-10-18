@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { RefObject, useRef, useState } from 'react';
+import useGlobalPointerStateToggle from 'hooks/useGlobalPointerStateToggle';
 import Cell, { CellData, Corner } from 'components/Cell';
 import './styles.scss';
 
@@ -30,7 +31,19 @@ export type Props =
     };
 
 export default function Grid(props: Props) {
+  const ref = useRef<HTMLElement>(null);
+
+  const [isPointerDown, setIsPointerDown] = useState(false);
+  useGlobalPointerStateToggle((event, isDownEvent) =>
+    setIsPointerDown(
+      isDownEvent && !!ref.current?.contains(event.target as HTMLElement),
+    ),
+  );
+
   const { mode, matrix } = props;
+
+  const handleEdited = (row: number, column: number) =>
+    (mode === Mode.Draw || mode === Mode.Erase) && props.onChange(row, column);
 
   const getData = (row: number, column: number): CellData => {
     switch (mode) {
@@ -78,18 +91,15 @@ export default function Grid(props: Props) {
   };
 
   return (
-    <div className='grid'>
-      {props.matrix.map((row, rowIndex) =>
-        row.map((cell, columnIndex) => (
+    <div className='grid' ref={ref as RefObject<HTMLDivElement>}>
+      {matrix.map((row, rowIndex) =>
+        row.map((_cell, columnIndex) => (
           <Cell
             key={`${rowIndex}-${columnIndex}`}
             data={getData(rowIndex, columnIndex)}
             roundedCorners={getRoundedCorners(rowIndex, columnIndex)}
-            onEdited={
-              mode === Mode.Draw || mode === Mode.Erase
-                ? () => props.onChange(rowIndex, columnIndex)
-                : undefined
-            }
+            onEdited={() => handleEdited(rowIndex, columnIndex)}
+            isPointerDown={isPointerDown}
           />
         )),
       )}

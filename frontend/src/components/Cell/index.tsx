@@ -1,4 +1,4 @@
-import React, { KeyboardEvent } from 'react';
+import React, { KeyboardEvent, PointerEvent } from 'react';
 import classnames from 'classnames';
 import './styles.scss';
 
@@ -25,9 +25,15 @@ export type Props = {
   data: CellData;
   roundedCorners?: Corner[];
   onEdited?: () => void;
+  isPointerDown?: boolean;
 };
 
-export default function Cell({ data, roundedCorners, onEdited }: Props) {
+export default function Cell({
+  data,
+  roundedCorners,
+  onEdited,
+  isPointerDown,
+}: Props) {
   const { editable } = data;
   const content =
     ('content' in data && data.content) ||
@@ -39,6 +45,19 @@ export default function Cell({ data, roundedCorners, onEdited }: Props) {
 
   const handleClick = () => {
     handleEdited();
+  };
+
+  const handlePointerMove = (event: PointerEvent) => {
+    event.preventDefault();
+
+    if (isPointerDown) {
+      handleEdited();
+    }
+  };
+
+  const handlePointerDown = (event: PointerEvent) => {
+    const target = event.target as HTMLElement;
+    target.releasePointerCapture(event.pointerId);
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
@@ -61,6 +80,8 @@ export default function Cell({ data, roundedCorners, onEdited }: Props) {
     <div
       className={classes}
       onClick={() => handleClick()}
+      onPointerDown={(event) => handlePointerDown(event)}
+      onPointerMove={(event) => handlePointerMove(event)}
       onKeyDown={(event) => handleKeyDown(event)}
       tabIndex={editable ? 0 : undefined}
     >
