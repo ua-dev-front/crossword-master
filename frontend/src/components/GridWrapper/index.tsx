@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useLayoutEffect, useState } from 'react';
 import classnames from 'classnames';
 import Grid, { Props as GridProps } from 'components/Grid';
 import Loader from 'components/Loader';
@@ -16,7 +16,7 @@ export default function GridWrapper({
   loaderLabel,
 }: Props) {
   const [currentLoaderLabel, setCurrentLoaderLabel] = useState('');
-  useEffect(() => {
+  useLayoutEffect(() => {
     setCurrentLoaderLabel(loaderLabel ?? currentLoaderLabel);
   }, [loaderLabel]);
 
