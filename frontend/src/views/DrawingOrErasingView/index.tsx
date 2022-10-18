@@ -105,37 +105,37 @@ export default function DrawingOrErasingView({
               })}
         />
       </GridWrapper>
-      {!onEditTabClick && (
-        <div className={`${className}__buttons-wrapper`}>
-          <div
-            className={classnames(
-              `${className}__buttons-wrapper-item`,
-              !isGridEmpty && `${className}__buttons-wrapper-item_hidden`,
-            )}
-          >
-            <Label
-              content='Let’s draw some squares first!'
-              size={LabelSize.Large}
-            />
-          </div>
-          <div
-            className={classnames(
-              `${className}__buttons-wrapper-item`,
-              isGridEmpty && `${className}__buttons-wrapper-item_hidden`,
-              `${className}__buttons`,
-            )}
-          >
-            <Button
-              label='Generate questions'
-              onClick={() => dispatch(generateQuestions())}
-            />
-            <Button
-              label='Enter questions & solve'
-              onClick={() => dispatch(switchToEnteringQuestions())}
-            />
-          </div>
+      <div className={`${className}__buttons-wrapper`}>
+        <div
+          className={classnames(
+            `${className}__buttons-wrapper-item`,
+            (onEditTabClick || !isGridEmpty) &&
+              `${className}__buttons-wrapper-item_hidden`,
+          )}
+        >
+          <Label
+            content='Let’s draw some squares first!'
+            size={LabelSize.Large}
+          />
         </div>
-      )}
+        <div
+          className={classnames(
+            `${className}__buttons-wrapper-item`,
+            (onEditTabClick || isGridEmpty) &&
+              `${className}__buttons-wrapper-item_hidden`,
+            `${className}__buttons`,
+          )}
+        >
+          <Button
+            label='Generate questions'
+            onClick={() => dispatch(generateQuestions())}
+          />
+          <Button
+            label='Enter questions & solve'
+            onClick={() => dispatch(switchToEnteringQuestions())}
+          />
+        </div>
+      </div>
     </div>
   );
 }
