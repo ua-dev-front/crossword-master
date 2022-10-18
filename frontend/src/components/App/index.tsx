@@ -5,6 +5,7 @@ import {
   eraseCell,
   switchToErasing,
   switchToDrawing,
+  editCrosswordAndAbortFetch,
 } from 'store';
 import useAppDispatch from 'hooks/useAppDispatch';
 import useAppSelector from 'hooks/useAppSelector';
@@ -50,6 +51,10 @@ function App() {
               )
             }
             loaderLabel={getLoaderLabel()}
+            onEditTabClick={
+              fetchAbortController &&
+              (() => dispatch(editCrosswordAndAbortFetch()))
+            }
           />
         );
       case Mode.EnterQuestions:

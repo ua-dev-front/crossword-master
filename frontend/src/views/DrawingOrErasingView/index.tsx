@@ -20,6 +20,7 @@ export type Props = {
   grid: State['grid'];
   onModeChange: () => void;
   onCellChange: (row: number, column: number) => void;
+  onEditTabClick: (() => void) | null;
   loaderLabel: string | null;
 };
 
@@ -28,6 +29,7 @@ export default function DrawingOrErasingView({
   grid,
   onModeChange,
   onCellChange,
+  onEditTabClick,
   loaderLabel,
 }: Props) {
   const dispatch = useAppDispatch();
@@ -87,45 +89,53 @@ export default function DrawingOrErasingView({
         loaderLabel={loaderLabel}
       >
         <Tabs
-          selectedTab={getTabByModeAndIsSelected(mode, true)}
-          secondaryTab={{
-            ...getTabByModeAndIsSelected(
-              mode === Mode.Draw ? Mode.Erase : Mode.Draw,
-              false,
-            ),
-            onClick: () => onModeChange(),
-          }}
+          {...(onEditTabClick
+            ? {
+                onEditClick: () => onEditTabClick(),
+              }
+            : {
+                selectedTab: getTabByModeAndIsSelected(mode, true),
+                secondaryTab: {
+                  ...getTabByModeAndIsSelected(
+                    mode === Mode.Draw ? Mode.Erase : Mode.Draw,
+                    false,
+                  ),
+                  onClick: () => onModeChange(),
+                },
+              })}
         />
       </GridWrapper>
-      <div className={`${className}__buttons-wrapper`}>
-        <div
-          className={classnames(
-            `${className}__buttons-wrapper-item`,
-            !isGridEmpty && `${className}__buttons-wrapper-item_hidden`,
-          )}
-        >
-          <Label
-            content='Let’s draw some squares first!'
-            size={LabelSize.Large}
-          />
+      {!onEditTabClick && (
+        <div className={`${className}__buttons-wrapper`}>
+          <div
+            className={classnames(
+              `${className}__buttons-wrapper-item`,
+              !isGridEmpty && `${className}__buttons-wrapper-item_hidden`,
+            )}
+          >
+            <Label
+              content='Let’s draw some squares first!'
+              size={LabelSize.Large}
+            />
+          </div>
+          <div
+            className={classnames(
+              `${className}__buttons-wrapper-item`,
+              isGridEmpty && `${className}__buttons-wrapper-item_hidden`,
+              `${className}__buttons`,
+            )}
+          >
+            <Button
+              label='Generate questions'
+              onClick={() => dispatch(generateQuestions())}
+            />
+            <Button
+              label='Enter questions & solve'
+              onClick={() => dispatch(switchToEnteringQuestions())}
+            />
+          </div>
         </div>
-        <div
-          className={classnames(
-            `${className}__buttons-wrapper-item`,
-            isGridEmpty && `${className}__buttons-wrapper-item_hidden`,
-            `${className}__buttons`,
-          )}
-        >
-          <Button
-            label='Generate questions'
-            onClick={() => dispatch(generateQuestions())}
-          />
-          <Button
-            label='Enter questions & solve'
-            onClick={() => dispatch(switchToEnteringQuestions())}
-          />
-        </div>
-      </div>
+      )}
     </div>
   );
 }
