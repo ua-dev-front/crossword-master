@@ -10,8 +10,8 @@ type TabProps = {
 };
 
 type Props = {
-  selectedTab: TabProps;
-  secondaryTab: TabProps & {
+  selectedTab?: TabProps;
+  secondaryTab?: TabProps & {
     onClick: () => void;
   };
   onEditClick?: () => void;
@@ -35,16 +35,21 @@ export default function Tabs({
         // Adds an empty div to keep the selected tab in the middle
         <div />
       )}
-      {[selectedTab, secondaryTab].map((tab, index) => (
-        <Tab
-          key={index}
-          label={tab.label}
-          isSelected={tab === selectedTab}
-          onClick={tab === secondaryTab ? secondaryTab.onClick : undefined}
-          icon={tab.icon}
-          alternativeLabel={tab.alternativeLabel}
-        />
-      ))}
+      {[selectedTab, secondaryTab].map((tab, index) =>
+        tab ? (
+          <Tab
+            key={index}
+            label={tab.label}
+            isSelected={tab === selectedTab}
+            onClick={tab === secondaryTab ? secondaryTab.onClick : undefined}
+            icon={tab.icon}
+            alternativeLabel={tab.alternativeLabel}
+          />
+        ) : (
+          // Adds an empty div to keep correct tab positions
+          <div key={index} />
+        ),
+      )}
     </div>
   );
 }
