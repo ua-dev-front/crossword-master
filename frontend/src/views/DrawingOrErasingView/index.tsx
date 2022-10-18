@@ -20,6 +20,7 @@ export type Props = {
   grid: State['grid'];
   onModeChange: () => void;
   onCellChange: (row: number, column: number) => void;
+  loaderLabel: string | null;
 };
 
 export default function DrawingOrErasingView({
@@ -27,6 +28,7 @@ export default function DrawingOrErasingView({
   grid,
   onModeChange,
   onCellChange,
+  loaderLabel,
 }: Props) {
   const dispatch = useAppDispatch();
 
@@ -82,6 +84,7 @@ export default function DrawingOrErasingView({
           mode: mode === Mode.Draw ? GridMode.Draw : GridMode.Erase,
           onChange: (row, column) => onCellChange(row, column),
         }}
+        loaderLabel={loaderLabel}
       >
         <Tabs
           selectedTab={getTabByModeAndIsSelected(mode, true)}
