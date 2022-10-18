@@ -1,12 +1,6 @@
 import React, { useMemo } from 'react';
 import classnames from 'classnames';
-import {
-  generateQuestions,
-  Mode,
-  State,
-  switchToEnteringQuestions,
-} from 'store';
-import useAppDispatch from 'hooks/useAppDispatch';
+import { Mode, State } from 'store';
 import Button from 'components/Button';
 import GridWrapper from 'components/GridWrapper';
 import Label, { LabelSize } from 'components/Label';
@@ -20,6 +14,8 @@ export type Props = {
   grid: State['grid'];
   onModeChange: () => void;
   onCellChange: (row: number, column: number) => void;
+  onGenerateQuestions: () => void;
+  onSwitchToEnteringQuestions: () => void;
   loaderLabel: string | null;
 };
 
@@ -28,10 +24,10 @@ export default function DrawingOrErasingView({
   grid,
   onModeChange,
   onCellChange,
+  onGenerateQuestions,
+  onSwitchToEnteringQuestions,
   loaderLabel,
 }: Props) {
-  const dispatch = useAppDispatch();
-
   const getTabByModeAndIsSelected = (
     currentMode: Mode.Draw | Mode.Erase,
     isSelected: boolean,
@@ -118,11 +114,11 @@ export default function DrawingOrErasingView({
         >
           <Button
             label='Generate questions'
-            onClick={() => dispatch(generateQuestions())}
+            onClick={() => onGenerateQuestions()}
           />
           <Button
             label='Enter questions & solve'
-            onClick={() => dispatch(switchToEnteringQuestions())}
+            onClick={() => onSwitchToEnteringQuestions()}
           />
         </div>
       </div>

@@ -5,6 +5,8 @@ import {
   eraseCell,
   switchToErasing,
   switchToDrawing,
+  switchToEnteringQuestions,
+  generateQuestions,
 } from 'store';
 import useAppDispatch from 'hooks/useAppDispatch';
 import useAppSelector from 'hooks/useAppSelector';
@@ -48,6 +50,10 @@ function App() {
               dispatch(
                 (mode === Mode.Draw ? fillCell : eraseCell)({ row, column }),
               )
+            }
+            onGenerateQuestions={() => dispatch(generateQuestions())}
+            onSwitchToEnteringQuestions={() =>
+              dispatch(switchToEnteringQuestions())
             }
             loaderLabel={getLoaderLabel()}
           />
