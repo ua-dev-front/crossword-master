@@ -19,8 +19,7 @@ export type Props = {
   grid: State['grid'];
   onModeChange: () => void;
   onCellChange: (row: number, column: number) => void;
-  apiFailed: State['apiFailed'];
-  fetchAbortController: State['fetchAbortController'];
+  loaderLabel: string | null;
 };
 
 export default function DrawingOrErasingView({
@@ -28,8 +27,7 @@ export default function DrawingOrErasingView({
   grid,
   onModeChange,
   onCellChange,
-  apiFailed,
-  fetchAbortController,
+  loaderLabel,
 }: Props) {
   const dispatch = useAppDispatch();
 
@@ -83,9 +81,7 @@ export default function DrawingOrErasingView({
           mode: mode === Mode.Draw ? GridMode.Draw : GridMode.Erase,
           onChange: (row, column) => onCellChange(row, column),
         }}
-        mode={mode}
-        apiFailed={apiFailed}
-        fetchAbortController={fetchAbortController}
+        loaderLabel={loaderLabel}
       >
         <Tabs
           selectedTab={getTabByModeAndIsSelected(mode, true)}

@@ -17,6 +17,20 @@ function App() {
     (state) => state.general,
   );
 
+  const getLoaderLabel = (): string | null => {
+    if (fetchAbortController) {
+      return mode === Mode.EnterQuestions ? 'Solving...' : 'Generating...';
+    }
+    if (apiFailed === Mode.Draw) {
+      return 'We were unable to generate the questions :(';
+    }
+    if (apiFailed === Mode.EnterQuestions) {
+      return 'We couldn’t solve the crossword :(';
+    }
+
+    return null;
+  };
+
   const getCurrentView = () => {
     switch (mode) {
       case Mode.Draw:
@@ -25,8 +39,7 @@ function App() {
           <DrawingOrErasingView
             mode={mode}
             grid={grid}
-            fetchAbortController={fetchAbortController}
-            apiFailed={apiFailed}
+            loaderLabel={getLoaderLabel()}
             onModeChange={() =>
               dispatch(
                 (mode === Mode.Draw ? switchToErasing : switchToDrawing)(),
