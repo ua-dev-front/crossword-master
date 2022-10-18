@@ -57,6 +57,7 @@ export type State = {
   grid: ({ letter: string | null; number: number | null } | null)[][];
   questions: Questions | null;
   fetchAbortController: AbortController | null;
+  apiFailed: Mode.Draw | Mode.EnterQuestions | null;
   showConfirmation: boolean;
 };
 
@@ -70,7 +71,7 @@ export type GenerateResponse = {
   words: {
     [Direction.Across]: GenerateResponseWord[];
     [Direction.Down]: GenerateResponseWord[];
-  };
+  } | null;
 };
 
 export type SolveResponseWord = {
@@ -82,7 +83,7 @@ export type SolveResponse = {
   answers: {
     [Direction.Across]: SolveResponseWord[];
     [Direction.Down]: SolveResponseWord[];
-  };
+  } | null;
 };
 
 const makeApiRequest = async <
@@ -162,6 +163,7 @@ const initialState: State = {
   grid: [...Array(ROWS)].map(() => [...Array(COLUMNS)].map(() => null)),
   questions: null,
   fetchAbortController: null,
+  apiFailed: null,
   showConfirmation: false,
 };
 
@@ -223,6 +225,7 @@ const generalSlice = createSlice({
     },
     editCrossword: (state: State) => {
       state.fetchAbortController = null;
+      state.apiFailed = null;
       state.showConfirmation = false;
       state.mode = Mode.Draw;
       state.questions = null;
@@ -234,6 +237,7 @@ const generalSlice = createSlice({
     },
     editQuestions: (state: State) => {
       state.fetchAbortController = null;
+      state.apiFailed = null;
       state.mode = Mode.EnterQuestions;
     },
   },
@@ -243,6 +247,10 @@ const generalSlice = createSlice({
     });
     builder.addCase(generateQuestions.fulfilled, (state: State, action) => {
       state.fetchAbortController = null;
+      if (action.payload.words === null) {
+        state.apiFailed = Mode.Draw;
+        return;
+      }
 
       const getStartPositionString = (startPosition: CellPosition): string =>
         `${startPosition.row} ${startPosition.column}`;
@@ -291,6 +299,10 @@ const generalSlice = createSlice({
     });
     builder.addCase(solveQuestions.fulfilled, (state, action) => {
       state.fetchAbortController = null;
+      if (action.payload.answers === null) {
+        state.apiFailed = Mode.EnterQuestions;
+        return;
+      }
 
       Object.entries(action.payload.answers).forEach(([direction, answers]) => {
         const indexedQuestions = getIndexedQuestions(

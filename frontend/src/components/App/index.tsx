@@ -13,8 +13,23 @@ import Layout from 'components/Layout';
 
 function App() {
   const dispatch = useAppDispatch();
-  const mode = useAppSelector((state) => state.mode);
-  const grid = useAppSelector((state) => state.grid);
+  const { grid, mode, fetchAbortController, apiFailed } = useAppSelector(
+    (state) => state,
+  );
+
+  const getLoaderLabel = (): string | null => {
+    if (fetchAbortController) {
+      return mode === Mode.EnterQuestions ? 'Solving...' : 'Generating...';
+    }
+    if (apiFailed === Mode.Draw) {
+      return 'We were unable to generate the questions :(';
+    }
+    if (apiFailed === Mode.EnterQuestions) {
+      return 'We couldn’t solve the crossword :(';
+    }
+
+    return null;
+  };
 
   const getCurrentView = () => {
     switch (mode) {
@@ -34,6 +49,7 @@ function App() {
                 (mode === Mode.Draw ? fillCell : eraseCell)({ row, column }),
               )
             }
+            loaderLabel={getLoaderLabel()}
           />
         );
       case Mode.EnterQuestions:
