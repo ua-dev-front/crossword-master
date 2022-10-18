@@ -39,7 +39,6 @@ function App() {
           <DrawingOrErasingView
             mode={mode}
             grid={grid}
-            loaderLabel={getLoaderLabel()}
             onModeChange={() =>
               dispatch(
                 (mode === Mode.Draw ? switchToErasing : switchToDrawing)(),
@@ -50,6 +49,7 @@ function App() {
                 (mode === Mode.Draw ? fillCell : eraseCell)({ row, column }),
               )
             }
+            loaderLabel={getLoaderLabel()}
           />
         );
       case Mode.EnterQuestions:
