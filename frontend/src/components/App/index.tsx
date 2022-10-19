@@ -106,27 +106,19 @@ function App() {
               ? () => dispatch(editCrosswordAndAbortFetch())
               : undefined
           }
-          selectedTab={
-            mode === Mode.Draw || mode === Mode.Erase
-              ? getTabByModeAndIsSelected(mode, true)
-              : undefined
-          }
-          secondaryTab={
-            mode === Mode.Draw || mode === Mode.Erase
-              ? {
-                  ...getTabByModeAndIsSelected(
-                    mode === Mode.Draw ? Mode.Erase : Mode.Draw,
-                    false,
-                  ),
-                  onClick: () =>
-                    dispatch(
-                      (mode === Mode.Draw
-                        ? switchToErasing
-                        : switchToDrawing)(),
-                    ),
-                }
-              : undefined
-          }
+          {...((mode === Mode.Draw || mode === Mode.Erase) && {
+            selectedTab: getTabByModeAndIsSelected(mode, true),
+            secondaryTab: {
+              ...getTabByModeAndIsSelected(
+                mode === Mode.Draw ? Mode.Erase : Mode.Draw,
+                false,
+              ),
+              onClick: () =>
+                dispatch(
+                  (mode === Mode.Draw ? switchToErasing : switchToDrawing)(),
+                ),
+            },
+          })}
         />
       </GridWrapper>
       <div className='option-buttons-wrapper'>
