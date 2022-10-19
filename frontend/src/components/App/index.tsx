@@ -57,6 +57,7 @@ function App() {
       label,
       alternativeLabel,
       icon: <Square isFilled={currentMode === Mode.Erase} />,
+      hide: !!fetchAbortController,
     };
   };
 
