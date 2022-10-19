@@ -6,8 +6,8 @@ import {
   eraseCell,
   switchToErasing,
   switchToDrawing,
-  editCrosswordAndAbortFetch,
   switchToEnteringQuestions,
+  editCrosswordAndAbortFetch,
   generateQuestions,
 } from 'store';
 import useAppDispatch from 'hooks/useAppDispatch';
@@ -124,9 +124,9 @@ function App() {
       <div className='option-buttons-wrapper'>
         <div
           className={classnames(
-            'option-buttons-wrapper-item',
+            'option-buttons-wrapper__item',
             (fetchAbortController || !isGridEmpty) &&
-              'option-buttons-wrapper-item_hidden',
+              'option-buttons-wrapper__item_hidden',
           )}
         >
           <Label
@@ -136,10 +136,10 @@ function App() {
         </div>
         <div
           className={classnames(
-            'option-buttons-wrapper-item',
+            'option-buttons-wrapper__item',
             (fetchAbortController || isGridEmpty) &&
-              'option-buttons-wrapper-item_hidden',
-            'option-buttons',
+              'option-buttons-wrapper__item_hidden',
+            'option-buttons-wrapper__buttons',
           )}
         >
           <Button
