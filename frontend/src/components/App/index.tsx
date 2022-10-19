@@ -70,6 +70,8 @@ function App() {
     return booleanGrid.every((row) => row.every((cell) => !cell));
   }, [booleanGrid]);
 
+  const isModeDrawOrErase = mode === Mode.Draw || mode === Mode.Erase;
+
   const getLoaderLabel = (): string | null => {
     if (fetchAbortController) {
       return mode === Mode.EnterQuestions ? 'Solving...' : 'Generating...';
@@ -106,7 +108,7 @@ function App() {
               ? () => dispatch(editCrosswordAndAbortFetch())
               : undefined
           }
-          {...((mode === Mode.Draw || mode === Mode.Erase) && {
+          {...(isModeDrawOrErase && {
             selectedTab: getTabByModeAndIsSelected(mode, true),
             secondaryTab: {
               ...getTabByModeAndIsSelected(
@@ -121,37 +123,39 @@ function App() {
           })}
         />
       </GridWrapper>
-      <div className='option-buttons-wrapper'>
-        <div
-          className={classnames(
-            'option-buttons-wrapper__item',
-            (fetchAbortController || !isGridEmpty) &&
-              'option-buttons-wrapper__item_hidden',
-          )}
-        >
-          <Label
-            content='Let’s draw some squares first!'
-            size={LabelSize.Large}
-          />
+      {isModeDrawOrErase && (
+        <div className='option-buttons-wrapper'>
+          <div
+            className={classnames(
+              'option-buttons-wrapper__item',
+              (fetchAbortController || !isGridEmpty) &&
+                'option-buttons-wrapper__item_hidden',
+            )}
+          >
+            <Label
+              content='Let’s draw some squares first!'
+              size={LabelSize.Large}
+            />
+          </div>
+          <div
+            className={classnames(
+              'option-buttons-wrapper__item',
+              (fetchAbortController || isGridEmpty) &&
+                'option-buttons-wrapper__item_hidden',
+              'option-buttons-wrapper__buttons',
+            )}
+          >
+            <Button
+              label='Generate questions'
+              onClick={() => dispatch(generateQuestions())}
+            />
+            <Button
+              label='Enter questions & solve'
+              onClick={() => dispatch(switchToEnteringQuestions())}
+            />
+          </div>
         </div>
-        <div
-          className={classnames(
-            'option-buttons-wrapper__item',
-            (fetchAbortController || isGridEmpty) &&
-              'option-buttons-wrapper__item_hidden',
-            'option-buttons-wrapper__buttons',
-          )}
-        >
-          <Button
-            label='Generate questions'
-            onClick={() => dispatch(generateQuestions())}
-          />
-          <Button
-            label='Enter questions & solve'
-            onClick={() => dispatch(switchToEnteringQuestions())}
-          />
-        </div>
-      </div>
+      )}
     </Layout>
   );
 }
