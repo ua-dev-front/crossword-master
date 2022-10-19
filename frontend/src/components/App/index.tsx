@@ -70,7 +70,7 @@ function App() {
     return booleanGrid.every((row) => row.every((cell) => !cell));
   }, [booleanGrid]);
 
-  const isModeDrawOrErase = mode === Mode.Draw || mode === Mode.Erase;
+  const isDrawOrEraseMode = mode === Mode.Draw || mode === Mode.Erase;
 
   const getLoaderLabel = (): string | null => {
     if (fetchAbortController) {
@@ -108,7 +108,7 @@ function App() {
               ? () => dispatch(editCrosswordAndAbortFetch())
               : undefined
           }
-          {...(isModeDrawOrErase && {
+          {...(isDrawOrEraseMode && {
             selectedTab: getTabByModeAndIsSelected(mode, true),
             secondaryTab: {
               ...getTabByModeAndIsSelected(
@@ -123,7 +123,7 @@ function App() {
           })}
         />
       </GridWrapper>
-      {isModeDrawOrErase && (
+      {isDrawOrEraseMode && (
         <div className='option-buttons-wrapper'>
           <div
             className={classnames(
