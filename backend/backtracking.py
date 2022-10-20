@@ -33,17 +33,17 @@ def get_table(locations: list[WordLocation]) -> BackTrackTable:
         return shift_position(location.first_letter, location.type, location.length)
 
     def get_table_size() -> int:
-        return max(coord for location in locations for coord in get_last_position(location))
+        return max((coord for location in locations for coord in get_last_position(location)), default=0)
 
     return [[None for _ in range(get_table_size())] for _ in range(get_table_size())]
 
 
 def backtrack(locations: list[WordLocation], table: BackTrackTable, load_options: LoadOptions,
               current_index: int = 0, answers: list[str] = None) -> list[str] | None:
-    if answers is None:
-        answers = []
     if current_index == len(locations):
         return answers
+    if answers is None:
+        answers = []
 
     word = locations[current_index]
     direction = word.type
