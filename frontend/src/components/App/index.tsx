@@ -120,12 +120,12 @@ function App() {
           })}
         />
       </GridWrapper>
-      <div className='option-buttons-wrapper'>
+      <div className='app__option-button-wrapper'>
         <div
           className={classnames(
-            'option-buttons-wrapper__item',
+            'app__option-button-wrapper-item',
             (!isDrawOrEraseMode || fetchAbortController || !isGridEmpty) &&
-              'option-buttons-wrapper__item_hidden',
+              'app__option-button-wrapper-item_hidden',
           )}
         >
           <Label
@@ -135,10 +135,10 @@ function App() {
         </div>
         <div
           className={classnames(
-            'option-buttons-wrapper__item',
+            'app__option-button-wrapper-item',
             (!isDrawOrEraseMode || fetchAbortController || isGridEmpty) &&
-              'option-buttons-wrapper__item_hidden',
-            'option-buttons-wrapper__buttons',
+              'app__option-button-wrapper-item_hidden',
+            'app__option-button-wrapper-buttons',
           )}
         >
           <Button
