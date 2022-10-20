@@ -48,14 +48,11 @@ function App() {
       ];
     };
 
-    const label = getLabel(currentMode);
-    const alternativeLabel = getLabel(
-      currentMode === Mode.Draw ? Mode.Erase : Mode.Draw,
-    );
-
     return {
-      label,
-      alternativeLabel,
+      label: getLabel(currentMode),
+      alternativeLabel: getLabel(
+        currentMode === Mode.Draw ? Mode.Erase : Mode.Draw,
+      ),
       icon: <Square isFilled={currentMode === Mode.Erase} />,
       hide: !!fetchAbortController,
     };
