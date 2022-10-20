@@ -123,39 +123,37 @@ function App() {
           })}
         />
       </GridWrapper>
-      {isDrawOrEraseMode && (
-        <div className='option-buttons-wrapper'>
-          <div
-            className={classnames(
-              'option-buttons-wrapper__item',
-              (fetchAbortController || !isGridEmpty) &&
-                'option-buttons-wrapper__item_hidden',
-            )}
-          >
-            <Label
-              content='Let’s draw some squares first!'
-              size={LabelSize.Large}
-            />
-          </div>
-          <div
-            className={classnames(
-              'option-buttons-wrapper__item',
-              (fetchAbortController || isGridEmpty) &&
-                'option-buttons-wrapper__item_hidden',
-              'option-buttons-wrapper__buttons',
-            )}
-          >
-            <Button
-              label='Generate questions'
-              onClick={() => dispatch(generateQuestions())}
-            />
-            <Button
-              label='Enter questions & solve'
-              onClick={() => dispatch(switchToEnteringQuestions())}
-            />
-          </div>
+      <div className='option-buttons-wrapper'>
+        <div
+          className={classnames(
+            'option-buttons-wrapper__item',
+            (!isDrawOrEraseMode || fetchAbortController || !isGridEmpty) &&
+              'option-buttons-wrapper__item_hidden',
+          )}
+        >
+          <Label
+            content='Let’s draw some squares first!'
+            size={LabelSize.Large}
+          />
         </div>
-      )}
+        <div
+          className={classnames(
+            'option-buttons-wrapper__item',
+            (!isDrawOrEraseMode || fetchAbortController || isGridEmpty) &&
+              'option-buttons-wrapper__item_hidden',
+            'option-buttons-wrapper__buttons',
+          )}
+        >
+          <Button
+            label='Generate questions'
+            onClick={() => dispatch(generateQuestions())}
+          />
+          <Button
+            label='Enter questions & solve'
+            onClick={() => dispatch(switchToEnteringQuestions())}
+          />
+        </div>
+      </div>
     </Layout>
   );
 }
