@@ -24,7 +24,7 @@ import './styles.scss';
 function App() {
   const dispatch = useAppDispatch();
   const { grid, mode, fetchAbortController, apiFailed } = useAppSelector(
-    (state) => state.general,
+    (state) => state,
   );
 
   const getTabByModeAndIsSelected = (
