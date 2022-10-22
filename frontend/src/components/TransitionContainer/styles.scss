@@ -1,0 +1,22 @@
+.transition-container {
+    display: grid;
+    grid-template-areas: 'transitionContainerItem';
+    place-items: center;
+    width: 100%;
+    height: 100%;
+
+    &__item {
+        grid-area: transitionContainerItem;
+        transition: all var(--transition-duration) var(--transition-function);
+
+        &_hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        &:not(&_hidden) {
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+}
