@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import classnames from 'classnames';
 import {
   Mode,
   fillCell,
@@ -18,6 +17,7 @@ import GridWrapper from 'components/GridWrapper';
 import Label, { LabelSize } from 'components/Label';
 import Layout from 'components/Layout';
 import Tabs from 'components/Tabs';
+import TransitionContainer from 'components/TransitionContainer';
 import Square from 'icons/Square';
 import './styles.scss';
 
@@ -135,37 +135,39 @@ function App() {
           })}
         />
       </GridWrapper>
-      <div className='app__option-button-wrapper'>
-        <div
-          className={classnames(
-            'app__option-button-wrapper-item',
-            (!isDrawOrEraseMode || fetchAbortController || !isGridEmpty) &&
-              'app__option-button-wrapper-item_hidden',
-          )}
-        >
-          <Label
-            content='Let’s draw some squares first!'
-            size={LabelSize.Large}
-          />
-        </div>
-        <div
-          className={classnames(
-            'app__option-button-wrapper-item',
-            (!isDrawOrEraseMode || fetchAbortController || isGridEmpty) &&
-              'app__option-button-wrapper-item_hidden',
-            'app__option-button-wrapper-buttons',
-          )}
-        >
-          <Button
-            label='Generate questions'
-            onClick={() => dispatch(generateQuestions())}
-          />
-          <Button
-            label='Enter questions & solve'
-            onClick={() => dispatch(switchToEnteringQuestions())}
-          />
-        </div>
-      </div>
+      <TransitionContainer
+        items={[
+          {
+            content: (
+              <Label
+                content='Let’s draw some squares first!'
+                size={LabelSize.Large}
+              />
+            ),
+            hide: !!(
+              !isDrawOrEraseMode ||
+              fetchAbortController ||
+              !isGridEmpty
+            ),
+          },
+          {
+            content: (
+              <>
+                <Button
+                  label='Generate questions'
+                  onClick={() => dispatch(generateQuestions())}
+                />
+                <Button
+                  label='Enter questions & solve'
+                  onClick={() => dispatch(switchToEnteringQuestions())}
+                />
+              </>
+            ),
+            hide: !!(!isDrawOrEraseMode || fetchAbortController || isGridEmpty),
+            className: 'app__option-buttons',
+          },
+        ]}
+      />
     </Layout>
   );
 }
