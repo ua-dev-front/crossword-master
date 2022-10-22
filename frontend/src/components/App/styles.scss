@@ -1,7 +1,5 @@
-.drawing-or-erasing-view {
-    display: contents;
-
-    &__buttons-wrapper {
+.app {
+    &__option-button-wrapper {
         display: grid;
         grid-template-areas: 'buttonWrapperItem';
         place-items: center;
@@ -22,22 +20,22 @@
                 visibility: visible;
             }
         }
-    }
 
-    &__buttons {
-        display: flex;
-        gap: 27px;
-        flex-direction: column;
-        width: 100%;
-        padding: 0 48px;
-        box-sizing: border-box;
+        &-buttons {
+            display: flex;
+            gap: 27px;
+            flex-direction: column;
+            width: 100%;
+            padding: 0 48px;
+            box-sizing: border-box;
 
-        & > *:first-child {
-            align-self: flex-start;
-        }
+            & > *:first-child {
+                align-self: flex-start;
+            }
 
-        & > *:last-child {
-            align-self: flex-end;
+            & > *:last-child {
+                align-self: flex-end;
+            }
         }
     }
 }

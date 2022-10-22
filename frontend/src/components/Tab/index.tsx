@@ -8,6 +8,7 @@ export type Props = {
   isSelected: boolean;
   onClick?: () => void;
   alternativeLabel?: string;
+  hide?: boolean;
 };
 
 export default function Tab({
@@ -16,8 +17,13 @@ export default function Tab({
   isSelected,
   onClick,
   alternativeLabel, // used to make width of tab consistent
+  hide,
 }: Props) {
-  const classes = classnames('tab', isSelected && 'tab_selected');
+  const classes = classnames(
+    'tab',
+    isSelected && 'tab_selected',
+    hide && 'tab_hidden',
+  );
 
   return (
     <button

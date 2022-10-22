@@ -7,11 +7,12 @@ type TabProps = {
   label: string;
   icon: ReactNode;
   alternativeLabel?: string;
+  hide?: boolean;
 };
 
 type Props = {
-  selectedTab: TabProps;
-  secondaryTab: TabProps & {
+  selectedTab?: TabProps;
+  secondaryTab?: TabProps & {
     onClick: () => void;
   };
   onEditClick?: () => void;
@@ -24,27 +25,29 @@ export default function Tabs({
 }: Props) {
   return (
     <div className='tabs'>
-      {onEditClick ? (
-        <Tab
-          label='Edit'
-          isSelected={false}
-          onClick={() => onEditClick()}
-          icon={<LeftArrow />}
-        />
-      ) : (
-        // Adds an empty div to keep the selected tab in the middle
-        <div />
+      <Tab
+        label='Edit'
+        isSelected={false}
+        onClick={() => onEditClick?.()}
+        icon={<LeftArrow />}
+        hide={!onEditClick}
+      />
+      {[selectedTab, secondaryTab].map((tab, index) =>
+        tab ? (
+          <Tab
+            key={index}
+            label={tab.label}
+            isSelected={tab === selectedTab}
+            onClick={tab === secondaryTab ? secondaryTab.onClick : undefined}
+            icon={tab.icon}
+            alternativeLabel={tab.alternativeLabel}
+            hide={tab.hide}
+          />
+        ) : (
+          // Adds an empty div to keep correct tab positions
+          <div key={index} />
+        ),
       )}
-      {[selectedTab, secondaryTab].map((tab, index) => (
-        <Tab
-          key={index}
-          label={tab.label}
-          isSelected={tab === selectedTab}
-          onClick={tab === secondaryTab ? secondaryTab.onClick : undefined}
-          icon={tab.icon}
-          alternativeLabel={tab.alternativeLabel}
-        />
-      ))}
     </div>
   );
 }
