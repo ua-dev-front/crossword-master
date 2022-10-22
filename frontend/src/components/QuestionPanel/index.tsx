@@ -17,7 +17,7 @@ export type Props = {
   questions: Question[];
   isEditable: boolean;
   color: QuestionPanelColor;
-  onChange?: (value: string, index: number) => void;
+  onChange?: (value: string, id: number) => void;
 };
 
 export default function QuestionPanel({
@@ -32,7 +32,7 @@ export default function QuestionPanel({
   const classes = classnames(
     className,
     isEditable && `${className}_editable`,
-    `${className}_${color}`
+    `${className}_${color}`,
   );
 
   return (
@@ -43,7 +43,7 @@ export default function QuestionPanel({
           itemIdClassName,
           `${itemIdClassName}_${
             id.toString().length === 1 ? 'single' : 'multiple'
-          }-digit`
+          }-digit`,
         );
         const inputId = `${panelId}-${id}`;
 
@@ -67,7 +67,7 @@ export default function QuestionPanel({
               inputId={inputId}
               isEditable={isEditable}
               content={question}
-              onChange={(value) => onChange?.(value, index)}
+              onChange={(value) => onChange?.(value, id)}
             />
           </article>,
         ];
