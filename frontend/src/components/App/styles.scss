@@ -1,4 +1,9 @@
 .app {
+    &__full-size-wrapper {
+        width: 100%;
+        height: 100%;
+    }
+
     &__option-buttons {
         display: flex;
         gap: 27px;
@@ -13,6 +18,14 @@
 
         & > *:last-child {
             align-self: flex-end;
+        }
+    }
+
+    &__questions {
+        &-list {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
         }
     }
 }
