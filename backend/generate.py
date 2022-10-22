@@ -15,7 +15,7 @@ def determine_locations(table: Table) -> list[WordLocation]:
                      getattr(position, axes.changeable)
                      and getattr(current_location.first_letter, axes.fixed) == getattr(position, axes.fixed)), None)
 
-    def is_new_location(position: Position, location_direction: Direction, all_locations: list[WordLocation]) -> bool:
+    def is_new_location(position: Position, location_direction: Direction) -> bool:
         axes = get_axes(location_direction)
         previous_row, previous_column = shift_position(position, location_direction, -1)
         next_row, next_column = shift_position(position, location_direction)
@@ -26,12 +26,9 @@ def determine_locations(table: Table) -> list[WordLocation]:
                    (position.row == len(table) - 1 or table[position.row + 1][position.column] == 0) and \
                    (position.column == len(table[0]) - 1 or table[position.row][position.column + 1] == 0)
 
-        print(position, location_direction, all_locations, any(current_location.first_letter == position for current_location in all_locations))
         return (getattr(position, axes.changeable) == 0 or table[previous_row][previous_column] == 0) and \
-               (getattr(position, axes.changeable) != len(
-                   table) - 1 and table[next_row][next_column] == 1) or \
-               (has_no_filled_neighbours() and
-                not any(current_location.first_letter == position for current_location in all_locations))
+               (getattr(position, axes.changeable) == len(
+                   table) - 1 or table[next_row][next_column] == 1) or has_no_filled_neighbours()
 
     locations = []
 
@@ -41,12 +38,12 @@ def determine_locations(table: Table) -> list[WordLocation]:
                 for direction in [Direction.ACROSS, Direction.DOWN]:
                     location = extract_location(
                         Position(row, column), direction, locations)
-                    if location is None and is_new_location(Position(row, column), direction, locations):
+                    if location is None and is_new_location(Position(row, column), direction):
                         locations.append(WordLocation(
                             Position(row, column), 1, direction))
                     elif location is not None:
                         location.length += 1
-    print(locations)
+
     return locations
 
 

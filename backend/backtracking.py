@@ -33,7 +33,7 @@ def get_table(locations: list[WordLocation]) -> BackTrackTable:
         return shift_position(location.first_letter, location.type, location.length)
 
     def get_table_size() -> int:
-        return max((coord for location in locations for coord in get_last_position(location)), default=0) + 1
+        return max((coord for location in locations for coord in get_last_position(location)), default=0)
 
     return [[None for _ in range(get_table_size())] for _ in range(get_table_size())]
 
