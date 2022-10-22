@@ -7,6 +7,7 @@ export type Props = {
     content: ReactNode;
     hide: boolean;
     className?: string;
+    center?: boolean;
   }[];
   className?: string;
 };
@@ -14,18 +15,21 @@ export type Props = {
 export default function TransitionContainer({ items, className }: Props) {
   return (
     <div className={classnames('transition-container', className)}>
-      {items.map(({ content, hide, className: itemClassName }, index) => (
-        <div
-          key={index}
-          className={classnames(
-            'transition-container__item',
-            hide && 'transition-container__item_hidden',
-            itemClassName,
-          )}
-        >
-          {content}
-        </div>
-      ))}
+      {items.map(
+        ({ content, hide, center, className: itemClassName }, index) => (
+          <div
+            key={index}
+            className={classnames(
+              'transition-container__item',
+              hide && 'transition-container__item_hidden',
+              center && 'transition-container__item_center',
+              itemClassName,
+            )}
+          >
+            {content}
+          </div>
+        ),
+      )}
     </div>
   );
 }

@@ -1,9 +1,6 @@
 .transition-container {
     display: grid;
     grid-template-areas: 'transitionContainerItem';
-    place-items: center;
-    width: 100%;
-    height: 100%;
 
     &__item {
         grid-area: transitionContainerItem;
@@ -17,6 +14,10 @@
         &:not(&_hidden) {
             opacity: 1;
             visibility: visible;
+        }
+
+        &_center {
+            place-self: center;
         }
     }
 }
