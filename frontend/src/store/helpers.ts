@@ -24,6 +24,12 @@ function getQuestionsFromGrid(grid: State['grid']): Questions {
   const acrossQuestions: Question[] = [];
   const downQuestions: Question[] = [];
 
+  const hasNoAdjacentCells = (row: number, column: number): boolean =>
+    grid[row - 1]?.[column] === null &&
+    grid[row]?.[column - 1] === null &&
+    grid[row + 1]?.[column] === null &&
+    grid[row]?.[column + 1] === null;
+
   const shifts = [
     {
       array: acrossQuestions,
@@ -47,8 +53,9 @@ function getQuestionsFromGrid(grid: State['grid']): Questions {
           shift: [rowShift, columnShift],
         } of shifts) {
           if (
-            !grid[row - rowShift]?.[column - columnShift] &&
-            grid[row + rowShift]?.[column + columnShift]
+            (!grid[row - rowShift]?.[column - columnShift] &&
+              grid[row + rowShift]?.[column + columnShift]) ||
+            (hasNoAdjacentCells(row, column) && !arrays.length)
           ) {
             arrays.push(array);
           }
