@@ -220,25 +220,28 @@ function App() {
                       label: 'Down',
                       color: QuestionPanelColor.Yellow,
                     },
-                  ].map(({ direction, label, color }) => (
-                    <div key={direction}>
-                      <Label content={label} size={LabelSize.Medium} />
-                      <QuestionPanel
-                        questions={questions[direction]}
-                        isEditable={true}
-                        color={color}
-                        onChange={(question, index) =>
-                          dispatch(
-                            updateQuestion({
-                              direction,
-                              id: questions[direction][index].id,
-                              question,
-                            }),
-                          )
-                        }
-                      />
-                    </div>
-                  ))}
+                  ].map(
+                    ({ direction, label, color }) =>
+                      questions[direction].length > 0 && (
+                        <div key={direction}>
+                          <Label content={label} size={LabelSize.Medium} />
+                          <QuestionPanel
+                            questions={questions[direction]}
+                            isEditable={true}
+                            color={color}
+                            onChange={(question, index) =>
+                              dispatch(
+                                updateQuestion({
+                                  direction,
+                                  id: questions[direction][index].id,
+                                  question,
+                                }),
+                              )
+                            }
+                          />
+                        </div>
+                      ),
+                  )}
                 </div>
               </>
             ),
