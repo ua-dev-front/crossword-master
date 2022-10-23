@@ -25,7 +25,14 @@
         &-list {
             display: flex;
             flex-direction: row;
-            justify-content: space-between;
+
+            &:has(:only-child) {
+                justify-content: center;
+            }
+
+            &:has(:not(:only-child)) {
+                justify-content: space-between;
+            }
         }
     }
 }
