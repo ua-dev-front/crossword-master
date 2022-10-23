@@ -212,20 +212,17 @@ function App() {
                   {[
                     {
                       direction: Direction.Across,
+                      label: 'Across',
                       color: QuestionPanelColor.Pink,
                     },
                     {
                       direction: Direction.Down,
+                      label: 'Down',
                       color: QuestionPanelColor.Yellow,
                     },
-                  ].map(({ direction, color }) => (
+                  ].map(({ direction, label, color }) => (
                     <div key={direction}>
-                      <Label
-                        content={
-                          direction.charAt(0).toUpperCase() + direction.slice(1)
-                        }
-                        size={LabelSize.Medium}
-                      />
+                      <Label content={label} size={LabelSize.Medium} />
                       <QuestionPanel
                         questions={questions[direction]}
                         isEditable={true}
