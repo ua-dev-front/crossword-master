@@ -17,7 +17,7 @@ export type Props = {
   questions: Question[];
   isEditable: boolean;
   color: QuestionPanelColor;
-  onChange?: (value: string, id: number) => void;
+  onChange?: (value: string, index: number) => void;
 };
 
 export default function QuestionPanel({
@@ -67,7 +67,7 @@ export default function QuestionPanel({
               inputId={inputId}
               isEditable={isEditable}
               content={question}
-              onChange={(value) => onChange?.(value, id)}
+              onChange={(value) => onChange?.(value, index)}
             />
           </article>,
         ];

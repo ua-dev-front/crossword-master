@@ -230,11 +230,11 @@ function App() {
                         questions={questions[direction]}
                         isEditable={true}
                         color={color}
-                        onChange={(question, id) =>
+                        onChange={(question, index) =>
                           dispatch(
                             updateQuestion({
                               direction,
-                              id,
+                              id: questions[direction][index].id,
                               question,
                             }),
                           )
