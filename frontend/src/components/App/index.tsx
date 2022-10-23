@@ -116,10 +116,16 @@ function App() {
           matrix: grid,
           mode: GridMode.Puzzle,
         };
-      default:
+      // TODO:
+      case Mode.Puzzle:
         return {
-          matrix: [],
+          matrix: grid,
           mode: GridMode.Puzzle,
+        };
+      case Mode.Answer:
+        return {
+          matrix: grid as { letter: string; number: number | null }[][],
+          mode: GridMode.Answer,
         };
     }
   };
