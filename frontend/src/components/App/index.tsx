@@ -70,7 +70,7 @@ function App() {
     return booleanGrid.every((row) => row.every((cell) => !cell));
   }, [booleanGrid]);
 
-  const isQuestionsEntered = useMemo(() => {
+  const areQuestionsEntered = useMemo(() => {
     if (!questions) {
       return false;
     }
@@ -194,7 +194,7 @@ function App() {
                           size={LabelSize.Small}
                         />
                       ),
-                      hide: isQuestionsEntered,
+                      hide: areQuestionsEntered,
                     },
                     {
                       content: (
@@ -203,7 +203,7 @@ function App() {
                           onClick={() => dispatch(solveQuestions())}
                         />
                       ),
-                      hide: !isQuestionsEntered,
+                      hide: !areQuestionsEntered,
                       center: true,
                     },
                   ]}
