@@ -35,6 +35,14 @@ export default function TransitionContainer({
   };
 
   useEffect(() => {
+    const wereItemsHidden = rawItems.some(
+      (item, index) => item.hide && item.hide !== items[index].hide,
+    );
+    if (!wereItemsHidden) {
+      setItems(rawItems);
+      return;
+    }
+
     const newItems = rawItems.map((item, index) => {
       if (item.hide) {
         return {
