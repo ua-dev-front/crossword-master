@@ -4,7 +4,9 @@
 
     &__item {
         grid-area: transitionContainerItem;
-        transition: all var(--transition-duration) var(--transition-function);
+        transition-duration: var(--transition-duration);
+        transition-timing-function: var(--transition-function);
+        transition-property: opacity, visibility;
 
         &_hidden {
             opacity: 0;
