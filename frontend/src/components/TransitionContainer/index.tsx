@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import classnames from 'classnames';
 import './styles.scss';
 
@@ -12,7 +12,46 @@ export type Props = {
   className?: string;
 };
 
-export default function TransitionContainer({ items, className }: Props) {
+export default function TransitionContainer({
+  items: rawItems,
+  className,
+}: Props) {
+  const [items, setItems] = useState(rawItems);
+
+  const getTransitionDuration = () => {
+    const transitionDuration = getComputedStyle(document.documentElement)
+      .getPropertyValue('--transition-duration')
+      .trim();
+    const unit = transitionDuration.replace(/[0-9.]/g, '');
+
+    switch (unit) {
+      case 's':
+        return parseFloat(transitionDuration) * 1000;
+      case 'ms':
+        return parseFloat(transitionDuration);
+      default:
+        return 0;
+    }
+  };
+
+  useEffect(() => {
+    const newItems = rawItems.map((item, index) => {
+      if (item.hide) {
+        return {
+          ...items[index],
+          hide: true,
+        };
+      }
+      return item;
+    });
+    setItems(newItems);
+
+    const timeout = setTimeout(() => {
+      setItems(rawItems);
+    }, getTransitionDuration());
+    return () => clearTimeout(timeout);
+  }, [rawItems]);
+
   return (
     <div className={classnames('transition-container', className)}>
       {items.map(
