@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import Tab from 'components/Tab';
+import TransitionContainer from 'components/TransitionContainer';
 import LeftArrow from 'icons/LeftArrow';
 import './styles.scss';
 
@@ -32,22 +33,31 @@ export default function Tabs({
         icon={<LeftArrow />}
         hide={!onEditClick}
       />
-      {[selectedTab, secondaryTab].map((tab, index) =>
-        tab ? (
-          <Tab
-            key={index}
-            label={tab.label}
-            isSelected={tab === selectedTab}
-            onClick={tab === secondaryTab ? secondaryTab.onClick : undefined}
-            icon={tab.icon}
-            alternativeLabel={tab.alternativeLabel}
-            hide={tab.hide}
-          />
-        ) : (
-          // Adds an empty div to keep correct tab positions
-          <div key={index} />
-        ),
-      )}
+      {[selectedTab, secondaryTab].map((tab, index) => (
+        <TransitionContainer
+          key={index}
+          items={[
+            {
+              content: tab && (
+                <Tab
+                  label={tab.label}
+                  isSelected={tab === selectedTab}
+                  onClick={
+                    tab === secondaryTab ? secondaryTab.onClick : undefined
+                  }
+                  icon={tab.icon}
+                  alternativeLabel={tab.alternativeLabel}
+                />
+              ),
+              hide: !tab || !!tab.hide,
+            },
+            {
+              content: <div />,
+              hide: !!tab,
+            },
+          ]}
+        />
+      ))}
     </div>
   );
 }

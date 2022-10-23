@@ -16,10 +16,6 @@
   border: 1px solid transparent;
   border-radius: 2px;
 
-  transition-duration: var(--transition-duration);
-  transition-timing-function: var(--transition-function);
-  transition-property: visibility, opacity;
-
   &__icon {
     display: flex;
     align-items: center;
@@ -93,15 +89,5 @@
     &:focus-visible {
       border-color: cl(selected);
     }
-  }
-
-  &_hidden {
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  &:not(&_hidden) {
-    opacity: 1;
-    visibility: visible;
   }
 }
