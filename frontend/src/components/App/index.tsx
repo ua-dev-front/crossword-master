@@ -76,7 +76,7 @@ function App() {
     }
 
     return [...questions[Direction.Across], ...questions[Direction.Down]].every(
-      ({ question }) => !!question,
+      ({ question }) => !!question.trim(),
     );
   }, [questions]);
 
