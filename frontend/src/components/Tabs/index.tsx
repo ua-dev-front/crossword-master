@@ -9,13 +9,12 @@ type TabProps = {
   icon: ReactNode;
   alternativeLabel?: string;
   hide?: boolean;
+  onClick?: () => void;
 };
 
 type Props = {
   selectedTab?: TabProps;
-  secondaryTab?: TabProps & {
-    onClick: () => void;
-  };
+  secondaryTab?: TabProps;
   onEditClick?: () => void;
 };
 
@@ -26,14 +25,16 @@ export default function Tabs({
 }: Props) {
   return (
     <div className='tabs'>
-      <Tab
-        label='Edit'
-        isSelected={false}
-        onClick={() => onEditClick?.()}
-        icon={<LeftArrow />}
-        hide={!onEditClick}
-      />
-      {[selectedTab, secondaryTab].map((tab, index) => (
+      {[
+        {
+          label: 'Edit',
+          onClick: onEditClick,
+          icon: <LeftArrow />,
+          hide: !onEditClick,
+        } as TabProps,
+        selectedTab,
+        secondaryTab,
+      ].map((tab, index) => (
         <TransitionContainer
           key={index}
           items={[
@@ -42,9 +43,7 @@ export default function Tabs({
                 <Tab
                   label={tab.label}
                   isSelected={tab === selectedTab}
-                  onClick={
-                    tab === secondaryTab ? secondaryTab.onClick : undefined
-                  }
+                  onClick={tab.onClick}
                   icon={tab.icon}
                   alternativeLabel={tab.alternativeLabel}
                 />
