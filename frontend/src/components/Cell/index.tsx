@@ -1,4 +1,4 @@
-import React, { KeyboardEvent, PointerEvent } from 'react';
+import React, { KeyboardEvent, PointerEvent, useEffect, useState } from 'react';
 import classnames from 'classnames';
 import './styles.scss';
 
@@ -34,6 +34,17 @@ export default function Cell({
   onEdited,
   isPointerDown,
 }: Props) {
+  const [contentState, setContentState] = useState<{
+    letter: string | null;
+    number: number | null;
+  } | null>(null);
+
+  useEffect(() => {
+    if ('content' in data && data.content) {
+      setContentState(data.content);
+    }
+  }, [data]);
+
   const { editable } = data;
   const content =
     ('content' in data && data.content) ||
@@ -87,11 +98,25 @@ export default function Cell({
     >
       {!editable && (
         <>
-          {content?.letter && (
-            <span className='cell__letter'>{content.letter}</span>
+          {contentState?.letter && (
+            <span
+              className={classnames(
+                'cell__letter',
+                !content?.letter && 'cell__letter_hidden',
+              )}
+            >
+              {contentState.letter}
+            </span>
           )}
-          {content?.number && (
-            <span className='cell__number'>{content.number}</span>
+          {contentState?.number && (
+            <span
+              className={classnames(
+                'cell__number',
+                !content?.number && 'cell__number_hidden',
+              )}
+            >
+              {contentState.number}
+            </span>
           )}
         </>
       )}
