@@ -25,13 +25,10 @@
         &-list {
             display: flex;
             flex-direction: row;
+            justify-content: space-between;
 
-            &:has(:only-child) {
+            &:has(&__item:only-of-type) {
                 justify-content: center;
-            }
-
-            &:has(:not(:only-child)) {
-                justify-content: space-between;
             }
         }
     }

@@ -236,7 +236,10 @@ function App() {
                   ].map(
                     ({ direction, label, color }) =>
                       questions[direction].length > 0 && (
-                        <div key={direction}>
+                        <div
+                          key={direction}
+                          className='app__questions-list__item'
+                        >
                           <Label content={label} size={LabelSize.Medium} />
                           <QuestionPanel
                             questions={questions[direction]}
