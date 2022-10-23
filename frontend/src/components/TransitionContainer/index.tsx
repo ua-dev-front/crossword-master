@@ -22,7 +22,7 @@ export default function TransitionContainer({ items, className }: Props) {
             className={classnames(
               'transition-container__item',
               hide && 'transition-container__item_hidden',
-              center && 'transition-container__item_center',
+              center && 'transition-container__item_centered',
               itemClassName,
             )}
           >
