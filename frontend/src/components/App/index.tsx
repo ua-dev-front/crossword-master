@@ -127,25 +127,42 @@ function App() {
   return (
     <Layout title='Crossword Generator & Solver'>
       <GridWrapper gridProps={getGridProps()} loaderLabel={getLoaderLabel()}>
-        <Tabs
-          onEditClick={
-            !isDrawOrEraseMode || fetchAbortController
-              ? () => dispatch(editCrosswordAndAbortFetch())
-              : undefined
-          }
-          {...(isDrawOrEraseMode && {
-            selectedTab: getTabByModeAndIsSelected(mode, true),
-            secondaryTab: {
-              ...getTabByModeAndIsSelected(
-                mode === Mode.Draw ? Mode.Erase : Mode.Draw,
-                false,
+        <TransitionContainer
+          items={[
+            {
+              content: isDrawOrEraseMode && (
+                <Tabs
+                  onEditClick={
+                    fetchAbortController
+                      ? () => dispatch(editCrosswordAndAbortFetch())
+                      : undefined
+                  }
+                  selectedTab={getTabByModeAndIsSelected(mode, true)}
+                  secondaryTab={{
+                    ...getTabByModeAndIsSelected(
+                      mode === Mode.Draw ? Mode.Erase : Mode.Draw,
+                      false,
+                    ),
+                    onClick: () =>
+                      dispatch(
+                        (mode === Mode.Draw
+                          ? switchToErasing
+                          : switchToDrawing)(),
+                      ),
+                  }}
+                />
               ),
-              onClick: () =>
-                dispatch(
-                  (mode === Mode.Draw ? switchToErasing : switchToDrawing)(),
-                ),
+              hide: !isDrawOrEraseMode,
             },
-          })}
+            {
+              content: (
+                <Tabs
+                  onEditClick={() => dispatch(editCrosswordAndAbortFetch())}
+                />
+              ),
+              hide: mode !== Mode.EnterQuestions,
+            },
+          ]}
         />
       </GridWrapper>
       <TransitionContainer
