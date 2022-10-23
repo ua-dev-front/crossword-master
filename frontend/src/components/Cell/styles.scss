@@ -30,35 +30,6 @@
         top: 2px;
     }
 
-    &__letter,
-    &__number {
-        @keyframes appear {
-            from {
-                opacity: 0;
-                visibility: hidden;
-            }
-            to {
-                opacity: 1;
-                visibility: visible;
-            }
-        }
-
-        animation: appear var(--transition-duration) var(--transition-function);
-        transition-property: opacity, visibility;
-        transition-duration: var(--transition-duration);
-        transition-timing-function: var(--transition-function);
-
-        &_hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        &:not(&_hidden) {
-            opacity: 1;
-            visibility: visible;
-        }
-    }
-
     &_editable {
         cursor: pointer;
 

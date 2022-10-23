@@ -1,5 +1,11 @@
-import React, { KeyboardEvent, PointerEvent, useEffect, useState } from 'react';
+import React, {
+  KeyboardEvent,
+  PointerEvent,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import classnames from 'classnames';
+import TransitionContainer from 'components/TransitionContainer';
 import './styles.scss';
 
 const ACCESSIBILITY_KEYS = ['Enter', 'Space'];
@@ -11,6 +17,11 @@ export enum Corner {
   BottomRight = 'bottom-right',
 }
 
+export type CellContent = {
+  letter: string | null;
+  number: number | null;
+} | null;
+
 export type CellData =
   | {
       editable: boolean;
@@ -18,7 +29,7 @@ export type CellData =
     }
   | {
       editable: false;
-      content: { letter: string | null; number: number | null } | null;
+      content: CellContent;
     };
 
 export type Props = {
@@ -34,12 +45,8 @@ export default function Cell({
   onEdited,
   isPointerDown,
 }: Props) {
-  const [contentState, setContentState] = useState<{
-    letter: string | null;
-    number: number | null;
-  } | null>(null);
-
-  useEffect(() => {
+  const [contentState, setContentState] = useState<CellContent>(null);
+  useLayoutEffect(() => {
     if ('content' in data && data.content) {
       setContentState(data.content);
     }
@@ -96,30 +103,18 @@ export default function Cell({
       onKeyDown={(event) => handleKeyDown(event)}
       tabIndex={editable ? 0 : undefined}
     >
-      {!editable && (
-        <>
-          {contentState?.letter && (
-            <span
-              className={classnames(
-                'cell__letter',
-                !content?.letter && 'cell__letter_hidden',
-              )}
-            >
-              {contentState.letter}
-            </span>
-          )}
-          {contentState?.number && (
-            <span
-              className={classnames(
-                'cell__number',
-                !content?.number && 'cell__number_hidden',
-              )}
-            >
-              {contentState.number}
-            </span>
-          )}
-        </>
-      )}
+      {(['letter', 'number'] as (keyof CellContent)[]).map((key) => (
+        <TransitionContainer
+          key={key}
+          className={`cell__${key}`}
+          items={[
+            {
+              content: contentState && key in contentState && contentState[key],
+              hide: editable || !content?.[key],
+            },
+          ]}
+        />
+      ))}
     </div>
   );
 }
