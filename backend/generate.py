@@ -1,7 +1,7 @@
 from api import get_possible_word_answers_and_questions
 from app_types import Direction, GenerateWord, GenerateWords, Pattern, Position, Table, WordLocation
 from backtracking import solve
-from helpers import is_filled_cell, get_axes, shift_position
+from helpers import is_cell_filled, get_axes, shift_position
 
 __all__ = ['generate_words_and_questions']
 
@@ -21,7 +21,7 @@ def determine_locations(table: Table) -> list[WordLocation]:
         next_row, next_column = shift_position(position, location_direction)
 
         def has_no_filled_neighbours() -> bool:
-            return all(not is_filled_cell(Position(position.row+row_shift, position.column+column_shift), table)
+            return all(not is_cell_filled(Position(position.row + row_shift, position.column + column_shift), table)
                        for row_shift, column_shift in [[-1, 0], [0, -1], [1, 0], [0, 1]])
 
         return (getattr(position, axes.changeable) == 0 or table[previous_row][previous_column] == 0) and \
