@@ -65,7 +65,12 @@ function App() {
       alternativeLabel: getLabel(
         currentMode === Mode.Draw ? Mode.Erase : Mode.Draw,
       ),
-      icon: <Square isFilled={currentMode === Mode.Erase} />,
+      icon: (
+        <Square
+          isFilled={currentMode === Mode.Erase}
+          content={currentMode === Mode.Answer ? 'A' : undefined}
+        />
+      ),
       hide: !!fetchAbortController,
     };
   };
