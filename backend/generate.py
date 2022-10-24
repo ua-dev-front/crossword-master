@@ -21,10 +21,8 @@ def determine_locations(table: Table) -> list[WordLocation]:
         next_row, next_column = shift_position(position, location_direction)
 
         def has_no_filled_neighbours() -> bool:
-            shifts = [[-1, 0], [0, -1], [1, 0], [0, 1]]
-
             return all(not is_filled_cell(Position(position.row+row_shift, position.column+column_shift), table)
-                       for row_shift, column_shift in shifts)
+                       for row_shift, column_shift in [[-1, 0], [0, -1], [1, 0], [0, 1]])
 
         return (getattr(position, axes.changeable) == 0 or table[previous_row][previous_column] == 0) and \
                (getattr(position, axes.changeable) == len(
