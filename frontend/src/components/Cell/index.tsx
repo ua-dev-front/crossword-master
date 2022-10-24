@@ -26,6 +26,7 @@ export type Props = {
   roundedCorners?: Corner[];
   onEdited?: () => void;
   isPointerDown?: boolean;
+  hideLetter?: boolean;
 };
 
 export default function Cell({
@@ -33,6 +34,7 @@ export default function Cell({
   roundedCorners,
   onEdited,
   isPointerDown,
+  hideLetter,
 }: Props) {
   const { editable } = data;
   const content =
@@ -88,7 +90,14 @@ export default function Cell({
       {!editable && (
         <>
           {content?.letter && (
-            <span className='cell__letter'>{content.letter}</span>
+            <span
+              className={classnames(
+                'cell__letter',
+                hideLetter && 'cell__letter_hidden',
+              )}
+            >
+              {content.letter}
+            </span>
           )}
           {content?.number && (
             <span className='cell__number'>{content.number}</span>

@@ -17,13 +17,7 @@ export type Props =
       onChange: (row: number, column: number) => void;
     }
   | {
-      mode: Mode.Puzzle;
-      matrix: ({
-        number: number | null;
-      } | null)[][];
-    }
-  | {
-      mode: Mode.Answer;
+      mode: Mode.Answer | Mode.Puzzle;
       matrix: ({
         letter: string;
         number: number | null;
@@ -54,12 +48,6 @@ export default function Grid(props: Props) {
           filled: matrix[row][column],
         };
       case Mode.Puzzle:
-        return {
-          editable: false,
-          content: matrix[row][column]
-            ? { letter: null, number: matrix[row][column]?.number ?? null }
-            : null,
-        };
       case Mode.Answer:
         return {
           editable: false,
@@ -100,6 +88,7 @@ export default function Grid(props: Props) {
             roundedCorners={getRoundedCorners(rowIndex, columnIndex)}
             onEdited={() => handleEdited(rowIndex, columnIndex)}
             isPointerDown={isPointerDown}
+            hideLetter={mode === Mode.Puzzle}
           />
         )),
       )}

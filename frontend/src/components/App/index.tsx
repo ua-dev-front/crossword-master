@@ -79,13 +79,6 @@ function App() {
     () => grid.map((row) => row.map((cell) => !!cell)),
     [grid],
   );
-  const puzzleGrid = useMemo(
-    () =>
-      grid.map((row) =>
-        row.map((cell) => (cell ? { number: cell.number } : null)),
-      ),
-    [grid],
-  );
 
   const isGridEmpty = useMemo(() => {
     return booleanGrid.every((row) => row.every((cell) => !cell));
@@ -126,7 +119,7 @@ function App() {
       case Mode.EnterQuestions:
       case Mode.Puzzle:
         return {
-          matrix: puzzleGrid,
+          matrix: grid as { letter: string; number: number | null }[][],
           mode: GridMode.Puzzle,
         };
       case Mode.Answer:
