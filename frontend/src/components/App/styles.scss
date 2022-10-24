@@ -29,7 +29,7 @@
             flex-direction: row;
             justify-content: space-between;
 
-            &-item {
+            &-item:only-of-type {
                 margin: 0 auto;
             }
         }
