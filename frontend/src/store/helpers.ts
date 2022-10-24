@@ -24,11 +24,25 @@ function getQuestionsFromGrid(grid: State['grid']): Questions {
   const acrossQuestions: Question[] = [];
   const downQuestions: Question[] = [];
 
-  const hasNoAdjacentCells = (row: number, column: number): boolean =>
-    (row === 0 || grid[row - 1][column] === null) &&
-    (column === 0 || grid[row][column - 1] === null) &&
-    (row === grid.length - 1 || grid[row + 1][column] === null) &&
-    (column === grid.length - 1 || grid[row][column + 1] === null);
+  const hasNoAdjacentCells = (row: number, column: number): boolean => {
+    const shifts = [
+      [-1, 0],
+      [0, -1],
+      [1, 0],
+      [0, 1],
+    ];
+    const cellExists = (cellRow: number, cellColumn: number): boolean =>
+      cellRow >= 0 &&
+      cellRow < grid.length &&
+      cellColumn >= 0 &&
+      cellColumn < grid[0].length;
+
+    return shifts.some(
+      (shift) =>
+        cellExists(row + shift[0], column + shift[1]) &&
+        grid[row + shift[0]][column + shift[1]] === null,
+    );
+  };
 
   const shifts = [
     {
