@@ -122,6 +122,7 @@ function App() {
           matrix: grid,
           mode: GridMode.Puzzle,
         };
+      // TODO:
       case Mode.Answer:
         return {
           matrix: grid as { letter: string; number: number | null }[][],
