@@ -12,7 +12,7 @@ import {
 } from 'store';
 import useAppDispatch from 'hooks/useAppDispatch';
 import useAppSelector from 'hooks/useAppSelector';
-import { Mode as GridMode } from 'components/Grid';
+import { Mode as GridMode, Props as GridProps } from 'components/Grid';
 import Button from 'components/Button';
 import GridWrapper from 'components/GridWrapper';
 import Label, { LabelSize } from 'components/Label';
@@ -63,6 +63,14 @@ function App() {
     [grid],
   );
 
+  const puzzleGrid = useMemo(
+    () =>
+      grid.map((row) =>
+        row.map((cell) => (cell ? { number: cell.number } : null)),
+      ),
+    [grid],
+  );
+
   const isGridEmpty = useMemo(() => {
     return booleanGrid.every((row) => row.every((cell) => !cell));
   }, [booleanGrid]);
@@ -83,10 +91,11 @@ function App() {
     return null;
   };
 
-  return (
-    <Layout title='Crossword Generator & Solver'>
-      <GridWrapper
-        gridProps={{
+  const getGridProps = (): GridProps => {
+    switch (mode) {
+      case Mode.Draw:
+      case Mode.Erase:
+        return {
           matrix: booleanGrid,
           mode: mode === Mode.Draw ? GridMode.Draw : GridMode.Erase,
           onChange: (row, column) =>
@@ -96,9 +105,24 @@ function App() {
                 column,
               }),
             ),
-        }}
-        loaderLabel={getLoaderLabel()}
-      >
+        };
+      case Mode.EnterQuestions:
+      case Mode.Puzzle:
+        return {
+          matrix: puzzleGrid,
+          mode: GridMode.Puzzle,
+        };
+      case Mode.Answer:
+        return {
+          matrix: grid as { letter: string; number: number | null }[][],
+          mode: GridMode.Answer,
+        };
+    }
+  };
+
+  return (
+    <Layout title='Crossword Generator & Solver'>
+      <GridWrapper gridProps={getGridProps()} loaderLabel={getLoaderLabel()}>
         <Tabs
           onEditClick={
             fetchAbortController
