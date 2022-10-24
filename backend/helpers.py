@@ -1,8 +1,8 @@
-from app_types import Direction, Position
+from app_types import Direction, Position, Table
 from dataclasses import dataclass
 from enum import Enum
 
-__all__ = ['Axes', 'get_axes', 'shift_position']
+__all__ = ['Axes', 'cell_exists', 'get_axes', 'shift_position']
 
 
 class Axis(Enum):
@@ -14,6 +14,10 @@ class Axis(Enum):
 class Axes:
     changeable: str
     fixed: str
+
+
+def cell_exists(position: Position, table: Table):
+    return position.row in range(len(table)) and position.column in range(len(table[0]))
 
 
 def get_axes(direction: Direction) -> Axes:

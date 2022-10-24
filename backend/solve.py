@@ -1,13 +1,13 @@
 from api import get_possible_word_answers
 from app_types import Direction, Pattern, Position, SolveAnswers, SolveWords, Table, WordLocation
 from backtracking import solve
-from helpers import shift_position
+from helpers import cell_exists, shift_position
 
 __all__ = ['solve_questions']
 
 
 def is_filled_cell(position: Position, table: Table) -> bool:
-    return position.row in range(len(table)) and position.column in range(len(table[0])) \
+    return cell_exists(position, table) \
            and table[position.row][position.column]
 
 
