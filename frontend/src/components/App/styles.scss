@@ -27,8 +27,8 @@
             flex-direction: row;
             justify-content: space-between;
 
-            &:has(&__item:only-of-type) {
-                justify-content: center;
+            &-item {
+                margin: auto;
             }
         }
     }

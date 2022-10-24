@@ -228,7 +228,7 @@ function App() {
                       questions[direction].length > 0 && (
                         <div
                           key={direction}
-                          className='app__questions-list__item'
+                          className='app__questions-list-item'
                         >
                           <Label content={label} size={LabelSize.Medium} />
                           <QuestionPanel
