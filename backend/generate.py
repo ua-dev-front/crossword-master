@@ -23,7 +23,8 @@ def determine_locations(table: Table) -> list[WordLocation]:
         def has_no_filled_neighbours() -> bool:
             shifts = [[-1, 0], [0, -1], [1, 0], [0, 1]]
 
-            return any(cell_exists(position, table) and table[position.row+shift[0]][position.column+shift[1]] == 0
+            return any(cell_exists(Position(position.row+shift[0], position.column+shift[1]), table) and
+                       table[position.row+shift[0]][position.column+shift[1]] == 0
                        for shift in shifts)
 
         return (getattr(position, axes.changeable) == 0 or table[previous_row][previous_column] == 0) and \
