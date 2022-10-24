@@ -183,7 +183,6 @@ function App() {
             ),
             hide: !isDrawOrEraseMode || !!fetchAbortController || isGridEmpty,
             className: 'app__option-buttons',
-            center: true,
           },
           {
             content: questions && (
