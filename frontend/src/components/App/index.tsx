@@ -9,6 +9,8 @@ import {
   switchToEnteringQuestions,
   editCrosswordAndAbortFetch,
   generateQuestions,
+  switchToAnswer,
+  switchToPuzzle,
 } from 'store';
 import useAppDispatch from 'hooks/useAppDispatch';
 import useAppSelector from 'hooks/useAppSelector';
@@ -28,10 +30,12 @@ function App() {
   );
 
   const getTabByModeAndIsSelected = (
-    currentMode: Mode.Draw | Mode.Erase,
+    currentMode: Mode.Answer | Mode.Draw | Mode.Erase | Mode.Puzzle,
     isSelected: boolean,
   ) => {
-    const getLabel = (labelMode: Mode.Draw | Mode.Erase) => {
+    const getLabel = (
+      labelMode: Mode.Answer | Mode.Draw | Mode.Erase | Mode.Puzzle,
+    ) => {
       const labelByModeAndIsSelected = {
         [Mode.Draw]: {
           regular: 'Draw',
@@ -40,6 +44,14 @@ function App() {
         [Mode.Erase]: {
           regular: 'Erase',
           selected: 'Erasing',
+        },
+        [Mode.Puzzle]: {
+          regular: 'Puzzle',
+          selected: 'Puzzle',
+        },
+        [Mode.Answer]: {
+          regular: 'Answer',
+          selected: 'Answer',
         },
       };
 
@@ -62,7 +74,6 @@ function App() {
     () => grid.map((row) => row.map((cell) => !!cell)),
     [grid],
   );
-
   const puzzleGrid = useMemo(
     () =>
       grid.map((row) =>
@@ -76,6 +87,7 @@ function App() {
   }, [booleanGrid]);
 
   const isDrawOrEraseMode = mode === Mode.Draw || mode === Mode.Erase;
+  const isAnswerOrPuzzleMode = mode === Mode.Puzzle || mode === Mode.Answer;
 
   const getLoaderLabel = (): string | null => {
     if (fetchAbortController) {
@@ -125,7 +137,7 @@ function App() {
       <GridWrapper gridProps={getGridProps()} loaderLabel={getLoaderLabel()}>
         <Tabs
           onEditClick={
-            fetchAbortController
+            fetchAbortController || isAnswerOrPuzzleMode
               ? () => dispatch(editCrosswordAndAbortFetch())
               : undefined
           }
@@ -139,6 +151,19 @@ function App() {
               onClick: () =>
                 dispatch(
                   (mode === Mode.Draw ? switchToErasing : switchToDrawing)(),
+                ),
+            },
+          })}
+          {...(isAnswerOrPuzzleMode && {
+            selectedTab: getTabByModeAndIsSelected(mode, true),
+            secondaryTab: {
+              ...getTabByModeAndIsSelected(
+                mode === Mode.Answer ? Mode.Puzzle : Mode.Answer,
+                false,
+              ),
+              onClick: () =>
+                dispatch(
+                  (mode === Mode.Answer ? switchToPuzzle : switchToAnswer)(),
                 ),
             },
           })}
