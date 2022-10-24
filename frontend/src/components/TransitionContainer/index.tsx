@@ -44,6 +44,8 @@ export default function TransitionContainer({
     }
 
     const newItems = rawItems.map((item, index) => {
+      // Change only hide property of items that were hidden
+      // to prevent cutting off animation
       if (item.hide) {
         return {
           ...items[index],
@@ -55,6 +57,7 @@ export default function TransitionContainer({
     setItems(newItems);
 
     const timeout = setTimeout(() => {
+      // After animation is finished, change all items to new ones
       setItems(rawItems);
     }, getTransitionDuration());
     return () => clearTimeout(timeout);
