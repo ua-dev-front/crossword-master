@@ -51,6 +51,7 @@ export default function Tabs({
               hide: !tab || !!tab.hide,
             },
             {
+              // Adds an empty div to keep correct tab positions
               content: <div />,
               hide: !!tab,
             },
