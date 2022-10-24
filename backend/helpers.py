@@ -17,7 +17,7 @@ class Axes:
 
 
 def cell_exists(position: Position, table: Table):
-    return position.row in range(len(table)) and position.column in range(len(table[0]))
+    return 0 <= position.row < len(table) and 0 <= position.column < len(table)
 
 
 def get_axes(direction: Direction) -> Axes:
