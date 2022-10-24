@@ -4,6 +4,16 @@ export type IndexedQuestions<T extends string | number | symbol> = {
   [id in T]: Question;
 };
 
+const cellExists = (
+  cellRow: number,
+  cellColumn: number,
+  grid: State['grid'],
+): boolean =>
+  cellRow >= 0 &&
+  cellRow < grid.length &&
+  cellColumn >= 0 &&
+  cellColumn < grid[0].length;
+
 const getIndexedQuestions = <T extends string | number | symbol>(
   questions: Question[],
   getQuestionIndex: (question: Question) => T,
@@ -25,22 +35,15 @@ function getQuestionsFromGrid(grid: State['grid']): Questions {
   const downQuestions: Question[] = [];
 
   const hasNoAdjacentCells = (row: number, column: number): boolean => {
-    const shifts = [
+    return [
       [-1, 0],
       [0, -1],
       [1, 0],
       [0, 1],
-    ];
-    const cellExists = (cellRow: number, cellColumn: number): boolean =>
-      cellRow >= 0 &&
-      cellRow < grid.length &&
-      cellColumn >= 0 &&
-      cellColumn < grid[0].length;
-
-    return shifts.some(
-      (shift) =>
-        cellExists(row + shift[0], column + shift[1]) &&
-        grid[row + shift[0]][column + shift[1]] === null,
+    ].every(
+      ([rowShift, columnShift]) =>
+        !cellExists(row + rowShift, column + columnShift, grid) ||
+        grid[row + rowShift][column + columnShift] === null,
     );
   };
 
@@ -92,4 +95,4 @@ function getQuestionsFromGrid(grid: State['grid']): Questions {
   return { across: acrossQuestions, down: downQuestions };
 }
 
-export { getIndexedQuestions, getNumberGrid, getQuestionsFromGrid };
+export { cellExists, getIndexedQuestions, getNumberGrid, getQuestionsFromGrid };
