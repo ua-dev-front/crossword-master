@@ -40,10 +40,10 @@ def get_table(locations: list[WordLocation]) -> BackTrackTable:
 
 def backtrack(locations: list[WordLocation], table: BackTrackTable, load_options: LoadOptions,
               current_index: int = 0, answers: list[str] = None) -> list[str] | None:
-    if current_index == len(locations):
-        return answers
     if answers is None:
         answers = []
+    if current_index == len(locations):
+        return answers
 
     word = locations[current_index]
     direction = word.type
