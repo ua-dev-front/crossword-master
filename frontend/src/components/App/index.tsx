@@ -159,7 +159,7 @@ function App() {
         className='app__full-size-wrapper'
         items={[
           {
-            key: 'option-label',
+            key: 'label',
             content: (
               <Label
                 content='Let’s draw some squares first!'
@@ -170,7 +170,7 @@ function App() {
             center: true,
           },
           {
-            key: 'option-buttons',
+            key: 'buttons',
             content: (
               <>
                 <Button
