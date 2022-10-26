@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import Tab from 'components/Tab';
 import TransitionContainer from 'components/TransitionContainer';
 import LeftArrow from 'icons/LeftArrow';
+import Square from 'icons/Square';
 import './styles.scss';
 
 export type TabProps = {
@@ -40,22 +41,16 @@ export default function Tabs({
           items={[
             {
               key: 'tab',
-              content: tab && (
+              content: (
                 <Tab
-                  label={tab.label}
-                  isSelected={tab === selectedTab}
-                  onClick={tab.onClick}
-                  icon={tab.icon}
-                  alternativeLabel={tab.alternativeLabel}
+                  label={tab?.label ?? '&nbsp;'}
+                  isSelected={(tab && tab === selectedTab) || index === 1}
+                  onClick={tab?.onClick}
+                  icon={tab?.icon || <Square isFilled={false} />}
+                  alternativeLabel={tab?.alternativeLabel}
                 />
               ),
               hide: !tab || !!tab.hide,
-            },
-            {
-              // Adds an empty div to keep correct tab positions
-              key: 'spacer',
-              content: <div />,
-              hide: !!tab,
             },
           ]}
         />
