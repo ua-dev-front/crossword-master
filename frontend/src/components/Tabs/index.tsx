@@ -4,7 +4,7 @@ import TransitionContainer from 'components/TransitionContainer';
 import LeftArrow from 'icons/LeftArrow';
 import './styles.scss';
 
-type TabProps = {
+export type TabProps = {
   label: string;
   icon: ReactNode;
   alternativeLabel?: string;
@@ -12,7 +12,7 @@ type TabProps = {
   onClick?: () => void;
 };
 
-type Props = {
+export type Props = {
   selectedTab?: TabProps;
   secondaryTab?: TabProps;
   onEditClick?: () => void;
@@ -39,6 +39,7 @@ export default function Tabs({
           key={index}
           items={[
             {
+              key: 'tab',
               content: tab && (
                 <Tab
                   label={tab.label}
@@ -52,6 +53,7 @@ export default function Tabs({
             },
             {
               // Adds an empty div to keep correct tab positions
+              key: 'spacer',
               content: <div />,
               hide: !!tab,
             },

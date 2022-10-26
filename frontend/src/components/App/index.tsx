@@ -159,6 +159,7 @@ function App() {
         className='app__full-size-wrapper'
         items={[
           {
+            key: 'option-label',
             content: (
               <Label
                 content='Let’s draw some squares first!'
@@ -169,6 +170,7 @@ function App() {
             center: true,
           },
           {
+            key: 'option-buttons',
             content: (
               <>
                 <Button
@@ -185,11 +187,13 @@ function App() {
             className: 'app__option-buttons',
           },
           {
+            key: 'questions',
             content: questions && (
               <>
                 <TransitionContainer
                   items={[
                     {
+                      key: 'questions-label',
                       content: (
                         <Label
                           content='Please enter questions below:'
@@ -199,6 +203,7 @@ function App() {
                       hide: areQuestionsEntered,
                     },
                     {
+                      key: 'questions-panel',
                       content: (
                         <Button
                           label='Solve!'

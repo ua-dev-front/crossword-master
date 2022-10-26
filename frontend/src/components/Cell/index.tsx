@@ -109,6 +109,7 @@ export default function Cell({
           className={`cell__${key}`}
           items={[
             {
+              key,
               content: contentState && key in contentState && contentState[key],
               hide: editable || !content?.[key],
             },

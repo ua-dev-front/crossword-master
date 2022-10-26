@@ -1,9 +1,10 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, TransitionEvent, useEffect, useState } from 'react';
 import classnames from 'classnames';
 import './styles.scss';
 
 export type Props = {
   items: {
+    key: string;
     content: ReactNode;
     hide: boolean;
     className?: string;
@@ -17,70 +18,51 @@ export default function TransitionContainer({
   className,
 }: Props) {
   const [items, setItems] = useState(rawItems);
-
-  const getTransitionDuration = () => {
-    const transitionDuration = getComputedStyle(document.documentElement)
-      .getPropertyValue('--transition-duration')
-      .trim();
-    const unit = transitionDuration.replace(/[0-9.]/g, '');
-
-    switch (unit) {
-      case 's':
-        return parseFloat(transitionDuration) * 1000;
-      case 'ms':
-        return parseFloat(transitionDuration);
-      default:
-        return 0;
-    }
-  };
-
   useEffect(() => {
-    const wereItemsHidden = rawItems.some(
-      (item, index) =>
-        index < items.length && item.hide && item.hide !== items[index].hide,
+    setItems((currentItems) =>
+      rawItems.map((item) => {
+        const oldItem = currentItems.find(
+          (currentOldItem) => currentOldItem.key === item.key,
+        );
+        if (oldItem && item.hide && oldItem.hide !== item.hide) {
+          return {
+            ...oldItem,
+            hide: true,
+          };
+        }
+        return item;
+      }),
     );
-    if (!wereItemsHidden) {
-      setItems(rawItems);
-      return;
-    }
-
-    const newItems = rawItems.map((item, index) => {
-      // Change only hide property of items that were hidden
-      // to prevent cutting off animation
-      if (item.hide) {
-        return {
-          ...items[index],
-          hide: true,
-        };
-      }
-      return item;
-    });
-    setItems(newItems);
-
-    const timeout = setTimeout(() => {
-      // After animation is finished, change all items to new ones
-      setItems(rawItems);
-    }, getTransitionDuration());
-    return () => clearTimeout(timeout);
   }, [rawItems]);
 
   return (
     <div className={classnames('transition-container', className)}>
-      {items.map(
-        ({ content, hide, center, className: itemClassName }, index) => (
-          <div
-            key={index}
-            className={classnames(
-              'transition-container__item',
-              hide && 'transition-container__item_hidden',
-              center && 'transition-container__item_centered',
-              itemClassName,
-            )}
-          >
-            {content}
-          </div>
-        ),
-      )}
+      {items.map(({ key, content, hide, center, className: itemClassName }) => (
+        <div
+          key={key}
+          className={classnames(
+            'transition-container__item',
+            hide && 'transition-container__item_hidden',
+            center && 'transition-container__item_centered',
+            itemClassName,
+          )}
+          onTransitionEnd={(event: TransitionEvent) => {
+            if (event.propertyName === 'opacity') {
+              setItems((currentItems) =>
+                currentItems.map((currentItem) =>
+                  currentItem.key === key
+                    ? (rawItems.find(
+                        (rawItem) => rawItem.key === key,
+                      ) as Props['items'][number])
+                    : currentItem,
+                ),
+              );
+            }
+          }}
+        >
+          {content}
+        </div>
+      ))}
     </div>
   );
 }
