@@ -46,7 +46,7 @@ export default function Tabs({
                   label={tab?.label ?? '&nbsp;'}
                   isSelected={(tab && tab === selectedTab) || index === 1}
                   onClick={tab?.onClick}
-                  icon={tab?.icon || <Square isFilled={false} />}
+                  icon={tab?.icon || <Square />}
                   alternativeLabel={tab?.alternativeLabel}
                 />
               ),
