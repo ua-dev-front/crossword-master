@@ -98,7 +98,7 @@ export default function Cell({
           items={[
             {
               key,
-              content: content && key in content && content[key],
+              content: content?.[key],
               hide: editable || !content?.[key],
             },
           ]}
