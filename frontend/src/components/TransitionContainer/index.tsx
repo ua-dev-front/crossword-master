@@ -53,13 +53,17 @@ export default function TransitionContainer({
           )}
           onTransitionEnd={() => {
             setItems((currentItems) =>
-              currentItems.map((currentItem) =>
-                currentItem.key === key
-                  ? (rawItems.find(
-                      (rawItem) => rawItem.key === key,
-                    ) as Props['items'][number])
-                  : currentItem,
-              ),
+              currentItems.map((currentItem) => {
+                if (currentItem.key === key) {
+                  const newItem = rawItems.find(
+                    (rawItem) => rawItem.key === key,
+                  );
+                  if (newItem) {
+                    return newItem;
+                  }
+                }
+                return currentItem;
+              }),
             );
           }}
         >
