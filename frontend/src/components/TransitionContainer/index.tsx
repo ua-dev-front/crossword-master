@@ -1,4 +1,4 @@
-import React, { ReactNode, TransitionEvent, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import classnames from 'classnames';
 import './styles.scss';
 
@@ -51,18 +51,16 @@ export default function TransitionContainer({
             hide && 'transition-container__item_hidden',
             center && 'transition-container__item_centered',
           )}
-          onTransitionEnd={(event: TransitionEvent) => {
-            if (event.propertyName === 'opacity') {
-              setItems((currentItems) =>
-                currentItems.map((currentItem) =>
-                  currentItem.key === key
-                    ? (rawItems.find(
-                        (rawItem) => rawItem.key === key,
-                      ) as Props['items'][number])
-                    : currentItem,
-                ),
-              );
-            }
+          onTransitionEnd={() => {
+            setItems((currentItems) =>
+              currentItems.map((currentItem) =>
+                currentItem.key === key
+                  ? (rawItems.find(
+                      (rawItem) => rawItem.key === key,
+                    ) as Props['items'][number])
+                  : currentItem,
+              ),
+            );
           }}
         >
           {content}
