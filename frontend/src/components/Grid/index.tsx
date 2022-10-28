@@ -88,7 +88,6 @@ export default function Grid(props: Props) {
             roundedCorners={getRoundedCorners(rowIndex, columnIndex)}
             onEdited={() => handleEdited(rowIndex, columnIndex)}
             isPointerDown={isPointerDown}
-            hideLetter={mode === Mode.Puzzle}
           />
         )),
       )}

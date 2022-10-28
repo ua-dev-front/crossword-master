@@ -131,15 +131,10 @@ function App() {
         };
       case Mode.EnterQuestions:
       case Mode.Puzzle:
-        return {
-          matrix: grid as { letter: string; number: number | null }[][],
-          mode: GridMode.Puzzle,
-        };
-      // TODO:
       case Mode.Answer:
         return {
           matrix: grid as { letter: string; number: number | null }[][],
-          mode: GridMode.Answer,
+          mode: mode === Mode.Answer ? GridMode.Answer : GridMode.Puzzle,
         };
     }
   };
@@ -225,7 +220,7 @@ function App() {
                           size={LabelSize.Small}
                         />
                       ),
-                      hide: areQuestionsEntered,
+                      hide: areQuestionsEntered || mode !== Mode.EnterQuestions,
                     },
                     {
                       key: 'questions-panel',
@@ -235,7 +230,8 @@ function App() {
                           onClick={() => dispatch(solveQuestions())}
                         />
                       ),
-                      hide: !areQuestionsEntered,
+                      hide:
+                        !areQuestionsEntered || mode !== Mode.EnterQuestions,
                       center: true,
                     },
                   ]}
@@ -262,7 +258,7 @@ function App() {
                           <Label content={label} size={LabelSize.Medium} />
                           <QuestionPanel
                             questions={questions[direction]}
-                            isEditable={true}
+                            isEditable={mode === Mode.EnterQuestions}
                             color={color}
                             onChange={(question, index) =>
                               dispatch(
@@ -280,7 +276,7 @@ function App() {
                 </div>
               </div>
             ),
-            hide: mode !== Mode.EnterQuestions,
+            hide: mode !== Mode.EnterQuestions && !isAnswerOrPuzzleMode,
           },
         ]}
       />
