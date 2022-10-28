@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import classnames from 'classnames';
 import {
+  Direction,
   Mode,
   fillCell,
   eraseCell,
@@ -8,7 +8,9 @@ import {
   switchToDrawing,
   switchToEnteringQuestions,
   editCrosswordAndAbortFetch,
+  updateQuestion,
   generateQuestions,
+  solveQuestions,
   switchToAnswer,
   switchToPuzzle,
 } from 'store';
@@ -19,15 +21,16 @@ import Button from 'components/Button';
 import GridWrapper from 'components/GridWrapper';
 import Label, { LabelSize } from 'components/Label';
 import Layout from 'components/Layout';
+import QuestionPanel, { QuestionPanelColor } from 'components/QuestionPanel';
 import Tabs from 'components/Tabs';
+import TransitionContainer from 'components/TransitionContainer';
 import Square from 'icons/Square';
 import './styles.scss';
 
 function App() {
   const dispatch = useAppDispatch();
-  const { grid, mode, fetchAbortController, apiFailed } = useAppSelector(
-    (state) => state,
-  );
+  const { grid, mode, questions, fetchAbortController, apiFailed } =
+    useAppSelector((state) => state);
 
   const getTabByModeAndIsSelected = (
     currentMode: Mode.Answer | Mode.Draw | Mode.Erase | Mode.Puzzle,
@@ -84,6 +87,16 @@ function App() {
     return booleanGrid.every((row) => row.every((cell) => !cell));
   }, [booleanGrid]);
 
+  const areQuestionsEntered = useMemo(() => {
+    if (!questions) {
+      return false;
+    }
+
+    return [...questions[Direction.Across], ...questions[Direction.Down]].every(
+      ({ question }) => !!question.trim(),
+    );
+  }, [questions]);
+
   const isDrawOrEraseMode = mode === Mode.Draw || mode === Mode.Erase;
   const isAnswerOrPuzzleMode = mode === Mode.Puzzle || mode === Mode.Answer;
 
@@ -122,6 +135,7 @@ function App() {
           matrix: grid as { letter: string; number: number | null }[][],
           mode: GridMode.Puzzle,
         };
+      // TODO:
       case Mode.Answer:
         return {
           matrix: grid as { letter: string; number: number | null }[][],
@@ -135,7 +149,7 @@ function App() {
       <GridWrapper gridProps={getGridProps()} loaderLabel={getLoaderLabel()}>
         <Tabs
           onEditClick={
-            fetchAbortController || isAnswerOrPuzzleMode
+            !isDrawOrEraseMode || fetchAbortController
               ? () => dispatch(editCrosswordAndAbortFetch())
               : undefined
           }
@@ -167,37 +181,109 @@ function App() {
           })}
         />
       </GridWrapper>
-      <div className='app__option-button-wrapper'>
-        <div
-          className={classnames(
-            'app__option-button-wrapper-item',
-            (!isDrawOrEraseMode || fetchAbortController || !isGridEmpty) &&
-              'app__option-button-wrapper-item_hidden',
-          )}
-        >
-          <Label
-            content='Let’s draw some squares first!'
-            size={LabelSize.Large}
-          />
-        </div>
-        <div
-          className={classnames(
-            'app__option-button-wrapper-item',
-            (!isDrawOrEraseMode || fetchAbortController || isGridEmpty) &&
-              'app__option-button-wrapper-item_hidden',
-            'app__option-button-wrapper-buttons',
-          )}
-        >
-          <Button
-            label='Generate questions'
-            onClick={() => dispatch(generateQuestions())}
-          />
-          <Button
-            label='Enter questions & solve'
-            onClick={() => dispatch(switchToEnteringQuestions())}
-          />
-        </div>
-      </div>
+      <TransitionContainer
+        className='app__full-size-wrapper'
+        items={[
+          {
+            key: 'label',
+            content: (
+              <Label
+                content='Let’s draw some squares first!'
+                size={LabelSize.Large}
+              />
+            ),
+            hide: !isDrawOrEraseMode || !!fetchAbortController || !isGridEmpty,
+            center: true,
+          },
+          {
+            key: 'buttons',
+            content: (
+              <div className='app__option-buttons'>
+                <Button
+                  label='Generate questions'
+                  onClick={() => dispatch(generateQuestions())}
+                />
+                <Button
+                  label='Enter questions & solve'
+                  onClick={() => dispatch(switchToEnteringQuestions())}
+                />
+              </div>
+            ),
+            hide: !isDrawOrEraseMode || !!fetchAbortController || isGridEmpty,
+          },
+          {
+            key: 'questions',
+            content: questions && (
+              <div className='app__questions'>
+                <TransitionContainer
+                  items={[
+                    {
+                      key: 'questions-label',
+                      content: (
+                        <Label
+                          content='Please enter questions below:'
+                          size={LabelSize.Small}
+                        />
+                      ),
+                      hide: areQuestionsEntered,
+                    },
+                    {
+                      key: 'questions-panel',
+                      content: (
+                        <Button
+                          label='Solve!'
+                          onClick={() => dispatch(solveQuestions())}
+                        />
+                      ),
+                      hide: !areQuestionsEntered,
+                      center: true,
+                    },
+                  ]}
+                />
+                <div className='app__questions-list'>
+                  {[
+                    {
+                      direction: Direction.Across,
+                      label: 'Across',
+                      color: QuestionPanelColor.Pink,
+                    },
+                    {
+                      direction: Direction.Down,
+                      label: 'Down',
+                      color: QuestionPanelColor.Yellow,
+                    },
+                  ].map(
+                    ({ direction, label, color }) =>
+                      questions[direction].length > 0 && (
+                        <div
+                          key={direction}
+                          className='app__questions-list-item'
+                        >
+                          <Label content={label} size={LabelSize.Medium} />
+                          <QuestionPanel
+                            questions={questions[direction]}
+                            isEditable={true}
+                            color={color}
+                            onChange={(question, index) =>
+                              dispatch(
+                                updateQuestion({
+                                  direction,
+                                  id: questions[direction][index].id,
+                                  question,
+                                }),
+                              )
+                            }
+                          />
+                        </div>
+                      ),
+                  )}
+                </div>
+              </div>
+            ),
+            hide: mode !== Mode.EnterQuestions,
+          },
+        ]}
+      />
     </Layout>
   );
 }

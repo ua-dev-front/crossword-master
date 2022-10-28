@@ -17,13 +17,8 @@ export default function Tab({
   isSelected,
   onClick,
   alternativeLabel, // used to make width of tab consistent
-  hide,
 }: Props) {
-  const classes = classnames(
-    'tab',
-    isSelected && 'tab_selected',
-    hide && 'tab_hidden',
-  );
+  const classes = classnames('tab', isSelected && 'tab_selected');
 
   return (
     <button
