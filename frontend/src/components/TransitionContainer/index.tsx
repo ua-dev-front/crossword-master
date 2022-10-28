@@ -12,6 +12,13 @@ export type Props = {
   className?: string;
 };
 
+/**
+ * Component is used to create a transition effect on switching between `items`.
+ * On hiding an `item`, it will take the `item` from the saved state,
+ * so even if the `item` was changed during hiding, the transition will be smooth.
+ * After the transition is complete, `item` will be updated in the state.
+ * Hidden items still exist in the `DOM`, but they are not visible.
+ */
 export default function TransitionContainer({
   items: rawItems,
   className,
