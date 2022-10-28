@@ -172,7 +172,7 @@ function App() {
           {
             key: 'buttons',
             content: (
-              <>
+              <div className='app__option-buttons'>
                 <Button
                   label='Generate questions'
                   onClick={() => dispatch(generateQuestions())}
@@ -181,15 +181,14 @@ function App() {
                   label='Enter questions & solve'
                   onClick={() => dispatch(switchToEnteringQuestions())}
                 />
-              </>
+              </div>
             ),
             hide: !isDrawOrEraseMode || !!fetchAbortController || isGridEmpty,
-            className: 'app__option-buttons',
           },
           {
             key: 'questions',
             content: questions && (
-              <>
+              <div className='app__questions'>
                 <TransitionContainer
                   items={[
                     {
@@ -253,10 +252,9 @@ function App() {
                       ),
                   )}
                 </div>
-              </>
+              </div>
             ),
             hide: mode !== Mode.EnterQuestions,
-            className: 'app__questions',
           },
         ]}
       />

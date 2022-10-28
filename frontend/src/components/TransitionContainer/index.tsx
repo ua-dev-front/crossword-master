@@ -7,7 +7,6 @@ export type Props = {
     key: string;
     content: ReactNode;
     hide: boolean;
-    className?: string;
     center?: boolean;
   }[];
   className?: string;
@@ -37,14 +36,13 @@ export default function TransitionContainer({
 
   return (
     <div className={classnames('transition-container', className)}>
-      {items.map(({ key, content, hide, center, className: itemClassName }) => (
+      {items.map(({ key, content, hide, center }) => (
         <div
           key={key}
           className={classnames(
             'transition-container__item',
             hide && 'transition-container__item_hidden',
             center && 'transition-container__item_centered',
-            itemClassName,
           )}
           onTransitionEnd={(event: TransitionEvent) => {
             if (event.propertyName === 'opacity') {
