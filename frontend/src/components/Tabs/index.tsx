@@ -33,7 +33,7 @@ export default function Tabs({
           icon: <LeftArrow />,
           hide: !onEditClick,
         } as TabProps,
-        selectedTab,
+        selectedTab, // selectedTab index in the array has a dependency with the isSelected prop of the Tab component below
         secondaryTab,
       ].map((tab, index) => (
         <TransitionContainer
@@ -44,7 +44,7 @@ export default function Tabs({
               content: (
                 <Tab
                   label={tab?.label ?? '&nbsp;'}
-                  isSelected={(tab && tab === selectedTab) || index === 1}
+                  isSelected={index === 1}
                   onClick={tab?.onClick}
                   icon={tab?.icon || <Square />}
                   alternativeLabel={tab?.alternativeLabel}
