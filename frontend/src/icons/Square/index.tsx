@@ -1,6 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import './styles.scss';
+import TransitionContainer from 'components/TransitionContainer';
 
 export type Props = {
   isFilled: boolean;
@@ -14,7 +15,15 @@ export default function Square({ isFilled, content }: Props) {
     isFilled && 'icon-square_filled',
   );
 
-  return <span className={classes}>{content}</span>;
+  return (
+    <span className={classes}>
+      {
+        <TransitionContainer
+          items={[{ key: 'content', content, hide: !content }]}
+        />
+      }
+    </span>
+  );
 }
 
 Square.defaultProps = {
