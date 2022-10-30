@@ -22,7 +22,7 @@ import GridWrapper from 'components/GridWrapper';
 import Label, { LabelSize } from 'components/Label';
 import Layout from 'components/Layout';
 import QuestionPanel, { QuestionPanelColor } from 'components/QuestionPanel';
-import Tabs from 'components/Tabs';
+import Tabs, { TabProps } from 'components/Tabs';
 import TransitionContainer from 'components/TransitionContainer';
 import Square from 'icons/Square';
 import './styles.scss';
@@ -46,7 +46,7 @@ function App() {
   const getTabByModeAndIsSelected = (
     currentMode: TabMode,
     isSelected: boolean,
-  ) => {
+  ): TabProps => {
     const getLabel = (labelMode: TabMode) => {
       const labelByModeAndIsSelected = {
         [Mode.Draw]: {
@@ -74,7 +74,11 @@ function App() {
 
     return {
       label: getLabel(currentMode),
-      alternativeLabel: getLabel(otherMode[currentMode]),
+      alternativeLabels: Object.values(Mode).flatMap((tabMode) =>
+        tabMode !== currentMode && tabMode !== Mode.EnterQuestions
+          ? [getLabel(tabMode)]
+          : [],
+      ),
       icon: (
         <Square
           isFilled={currentMode === Mode.Erase}

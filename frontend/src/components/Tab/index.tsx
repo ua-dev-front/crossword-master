@@ -7,7 +7,7 @@ export type Props = {
   icon: ReactNode;
   isSelected: boolean;
   onClick?: () => void;
-  alternativeLabel?: string;
+  alternativeLabels?: string[];
   hide?: boolean;
 };
 
@@ -16,7 +16,7 @@ export default function Tab({
   icon,
   isSelected,
   onClick,
-  alternativeLabel, // used to make width of tab consistent
+  alternativeLabels, // used to make width of tab consistent
 }: Props) {
   const classes = classnames('tab', isSelected && 'tab_selected');
 
@@ -29,9 +29,14 @@ export default function Tab({
       <div className='tab__icon'>{icon}</div>
       <div className='tab__content'>
         <span className='tab__label'>{label}</span>
-        <span className={classnames('tab__label', 'tab__label-hidden')}>
-          {alternativeLabel}
-        </span>
+        {alternativeLabels?.map((alternativeLabel, index) => (
+          <span
+            key={`alternative-label-${index}`}
+            className={classnames('tab__label', 'tab__label-hidden')}
+          >
+            {alternativeLabel}
+          </span>
+        ))}
       </div>
     </button>
   );
