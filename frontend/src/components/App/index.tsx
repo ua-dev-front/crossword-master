@@ -27,18 +27,27 @@ import TransitionContainer from 'components/TransitionContainer';
 import Square from 'icons/Square';
 import './styles.scss';
 
+export type TabMode = Mode.Answer | Mode.Draw | Mode.Erase | Mode.Puzzle;
+
 function App() {
   const dispatch = useAppDispatch();
   const { grid, mode, questions, fetchAbortController, apiFailed } =
     useAppSelector((state) => state);
 
+  const otherMode: {
+    [currentMode in TabMode]: TabMode;
+  } = {
+    [Mode.Draw]: Mode.Erase,
+    [Mode.Erase]: Mode.Draw,
+    [Mode.Answer]: Mode.Puzzle,
+    [Mode.Puzzle]: Mode.Answer,
+  };
+
   const getTabByModeAndIsSelected = (
-    currentMode: Mode.Answer | Mode.Draw | Mode.Erase | Mode.Puzzle,
+    currentMode: TabMode,
     isSelected: boolean,
   ) => {
-    const getLabel = (
-      labelMode: Mode.Answer | Mode.Draw | Mode.Erase | Mode.Puzzle,
-    ) => {
+    const getLabel = (labelMode: TabMode) => {
       const labelByModeAndIsSelected = {
         [Mode.Draw]: {
           regular: 'Draw',
@@ -65,9 +74,7 @@ function App() {
 
     return {
       label: getLabel(currentMode),
-      alternativeLabel: getLabel(
-        currentMode === Mode.Draw ? Mode.Erase : Mode.Draw,
-      ),
+      alternativeLabel: getLabel(otherMode[currentMode]),
       icon: (
         <Square
           isFilled={currentMode === Mode.Erase}
@@ -162,10 +169,7 @@ function App() {
           {...(isDrawOrEraseMode && {
             selectedTab: getTabByModeAndIsSelected(mode, true),
             secondaryTab: {
-              ...getTabByModeAndIsSelected(
-                mode === Mode.Draw ? Mode.Erase : Mode.Draw,
-                false,
-              ),
+              ...getTabByModeAndIsSelected(otherMode[mode], false),
               onClick: () =>
                 dispatch(
                   (mode === Mode.Draw ? switchToErasing : switchToDrawing)(),
@@ -175,10 +179,7 @@ function App() {
           {...(isAnswerOrPuzzleMode && {
             selectedTab: getTabByModeAndIsSelected(mode, true),
             secondaryTab: {
-              ...getTabByModeAndIsSelected(
-                mode === Mode.Answer ? Mode.Puzzle : Mode.Answer,
-                false,
-              ),
+              ...getTabByModeAndIsSelected(otherMode[mode], false),
               onClick: () =>
                 dispatch(
                   (mode === Mode.Answer ? switchToPuzzle : switchToAnswer)(),
