@@ -209,7 +209,7 @@ function App() {
                           onClick={() => dispatch(solveQuestions())}
                         />
                       ),
-                      hide: !areQuestionsEntered,
+                      hide: !areQuestionsEntered || !!fetchAbortController,
                       center: true,
                     },
                   ]}
@@ -254,7 +254,7 @@ function App() {
                 </div>
               </div>
             ),
-            hide: mode !== Mode.EnterQuestions,
+            hide: mode !== Mode.EnterQuestions || !!fetchAbortController,
           },
         ]}
       />
