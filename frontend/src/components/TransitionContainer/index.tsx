@@ -1,14 +1,12 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import classnames from 'classnames';
+import TransitionContainerItem, {
+  Props as Item,
+} from './TransitionContainerItem';
 import './styles.scss';
 
 export type Props = {
-  items: {
-    key: string;
-    content: ReactNode;
-    hide: boolean;
-    center?: boolean;
-  }[];
+  items: (Omit<Item, 'onTransitionStateChange'> & { key: string })[];
   className?: string;
 };
 
@@ -24,51 +22,60 @@ export default function TransitionContainer({
   className,
 }: Props) {
   const [items, setItems] = useState(rawItems);
-  useEffect(() => {
-    setItems((currentItems) =>
-      rawItems.map((item) => {
-        const oldItem = currentItems.find(
-          (currentOldItem) => currentOldItem.key === item.key,
-        );
-        if (oldItem && item.hide && oldItem.hide !== item.hide) {
+  const [itemsTransitionState, setItemsTransitionState] = useState<
+    Record<string, boolean>
+  >(rawItems.reduce((acc, item) => ({ ...acc, [item.key]: false }), {}));
+
+  useLayoutEffect(() => {
+    setItems((prevItems) => {
+      const changedItems = rawItems.map((rawItem) => {
+        const oldItem = prevItems.find((item) => item.key === rawItem.key);
+        if (!oldItem) {
           return {
-            ...oldItem,
+            ...rawItem,
             hide: true,
           };
         }
-        return item;
-      }),
-    );
-  }, [rawItems]);
+        if (
+          itemsTransitionState[rawItem.key] ||
+          (!oldItem.hide && rawItem.hide)
+        ) {
+          return {
+            ...oldItem,
+            hide: rawItem.hide,
+          };
+        }
+        return rawItem;
+      });
+
+      const deletedItems = prevItems
+        .filter(
+          (item) =>
+            !rawItems.find((rawItem) => rawItem.key === item.key) &&
+            (!item.hide || itemsTransitionState[item.key]),
+        )
+        .map((item) => ({
+          ...item,
+          hide: true,
+        }));
+
+      return [...deletedItems, ...changedItems];
+    });
+  }, [rawItems, itemsTransitionState]);
 
   return (
     <div className={classnames('transition-container', className)}>
-      {items.map(({ key, content, hide, center }) => (
-        <div
+      {items.map(({ key, ...itemProps }) => (
+        <TransitionContainerItem
+          {...itemProps}
           key={key}
-          className={classnames(
-            'transition-container__item',
-            hide && 'transition-container__item_hidden',
-            center && 'transition-container__item_centered',
-          )}
-          onTransitionEnd={() => {
-            setItems((currentItems) =>
-              currentItems.map((currentItem) => {
-                if (currentItem.key === key) {
-                  const newItem = rawItems.find(
-                    (rawItem) => rawItem.key === key,
-                  );
-                  if (newItem) {
-                    return newItem;
-                  }
-                }
-                return currentItem;
-              }),
-            );
-          }}
-        >
-          {content}
-        </div>
+          onTransitionStateChange={(isTransitioning) =>
+            setItemsTransitionState((prevState) => ({
+              ...prevState,
+              [key]: isTransitioning,
+            }))
+          }
+        />
       ))}
     </div>
   );
