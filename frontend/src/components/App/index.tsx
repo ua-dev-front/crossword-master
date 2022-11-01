@@ -31,8 +31,14 @@ export type TabMode = Mode.Answer | Mode.Draw | Mode.Erase | Mode.Puzzle;
 
 function App() {
   const dispatch = useAppDispatch();
-  const { grid, mode, questions, fetchAbortController, apiFailed } =
-    useAppSelector((state) => state);
+  const {
+    grid,
+    mode,
+    questions,
+    fetchAbortController,
+    requestMode,
+    requestFailed,
+  } = useAppSelector((state) => state);
 
   const otherMode: {
     [currentMode in TabMode]: TabMode;
@@ -120,12 +126,14 @@ function App() {
 
   const getLoaderLabel = (): string | null => {
     if (fetchAbortController) {
-      return mode === Mode.EnterQuestions ? 'Solving...' : 'Generating...';
+      return requestMode === Mode.EnterQuestions
+        ? 'Solving...'
+        : 'Generating...';
     }
-    if (apiFailed === Mode.Draw) {
+    if (requestMode === Mode.Draw && requestFailed) {
       return 'We were unable to generate the questions :(';
     }
-    if (apiFailed === Mode.EnterQuestions) {
+    if (requestMode === Mode.EnterQuestions && requestFailed) {
       return 'We couldn’t solve the crossword :(';
     }
 
