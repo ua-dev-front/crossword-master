@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-const useGlobalPointerStateToggle = (
+const useEventListener = (
   eventName: string,
   callback: (event: Event) => void,
   element: HTMLElement | Document | null = document,
@@ -23,4 +23,4 @@ const useGlobalPointerStateToggle = (
   }, [element]);
 };
 
-export default useGlobalPointerStateToggle;
+export default useEventListener;
