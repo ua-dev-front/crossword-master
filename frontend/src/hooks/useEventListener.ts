@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 
 const useEventListener = (
-  eventName: string,
+  eventName: 'pointerdown' | 'pointerup' | 'transitionstart' | 'transitionend',
   callback: (event: Event) => void,
   element: HTMLElement | Document | null = document,
 ) => {
