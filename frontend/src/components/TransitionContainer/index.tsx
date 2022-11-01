@@ -1,12 +1,12 @@
 import React, { useLayoutEffect, useState } from 'react';
 import classnames from 'classnames';
 import TransitionContainerItem, {
-  Props as Item,
+  Props as ItemProps,
 } from './TransitionContainerItem';
 import './styles.scss';
 
 export type Props = {
-  items: (Omit<Item, 'onTransitionStateChange'> & { key: string })[];
+  items: (Omit<ItemProps, 'onTransitionStateChange'> & { key: string })[];
   className?: string;
 };
 
