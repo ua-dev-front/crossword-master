@@ -17,9 +17,7 @@ const useEventListener = (
 
     const handleEvent = (event: Event) => callbackRef.current(event);
     element.addEventListener(eventName, handleEvent);
-    return () => {
-      element.removeEventListener(eventName, handleEvent);
-    };
+    return () => element.removeEventListener(eventName, handleEvent);
   }, [element]);
 };
 
