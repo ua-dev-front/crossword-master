@@ -13,6 +13,7 @@ import {
   solveQuestions,
   switchToAnswer,
   switchToPuzzle,
+  editQuestionsAndAbortFetch,
 } from 'store';
 import useAppDispatch from 'hooks/useAppDispatch';
 import useAppSelector from 'hooks/useAppSelector';
@@ -190,13 +191,15 @@ function App() {
           })}
           {...(isAnswerOrPuzzleMode && {
             selectedTab: getTabByModeAndIsSelected(mode, true),
-            secondaryTab: {
-              ...getTabByModeAndIsSelected(otherMode[mode], false),
-              onClick: () =>
-                dispatch(
-                  (mode === Mode.Answer ? switchToPuzzle : switchToAnswer)(),
-                ),
-            },
+            ...(requestMode === Mode.Draw && {
+              secondaryTab: {
+                ...getTabByModeAndIsSelected(otherMode[mode], false),
+                onClick: () =>
+                  dispatch(
+                    (mode === Mode.Answer ? switchToPuzzle : switchToAnswer)(),
+                  ),
+              },
+            }),
           })}
         />
       </GridWrapper>
@@ -255,7 +258,21 @@ function App() {
                         />
                       ),
                       hide:
-                        !areQuestionsEntered || mode !== Mode.EnterQuestions,
+                        !areQuestionsEntered ||
+                        mode !== Mode.EnterQuestions ||
+                        !!fetchAbortController,
+                      center: true,
+                    },
+                    {
+                      key: 'replace-questions',
+                      content: (
+                        <Button
+                          label='Replace questions'
+                          onClick={() => dispatch(editQuestionsAndAbortFetch())}
+                        />
+                      ),
+                      hide:
+                        !fetchAbortController && mode === Mode.EnterQuestions,
                       center: true,
                     },
                   ]}
