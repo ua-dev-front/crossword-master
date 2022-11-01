@@ -336,7 +336,7 @@ const generalSlice = createSlice({
           });
         });
       });
-      state.mode = Mode.Puzzle;
+      state.mode = Mode.Answer;
     });
   },
 });
