@@ -24,7 +24,7 @@ export default function TransitionContainer({
   const [items, setItems] = useState(rawItems);
   const [itemsTransitionState, setItemsTransitionState] = useState<
     Record<string, boolean>
-  >(rawItems.reduce((acc, item) => ({ ...acc, [item.key]: false }), {}));
+  >(Object.fromEntries(rawItems.map((item) => [item.key, false])));
 
   useLayoutEffect(() => {
     setItems((prevItems) => {
