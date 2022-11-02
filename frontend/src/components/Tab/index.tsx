@@ -31,7 +31,7 @@ export default function Tab({
         <span className='tab__label'>{label}</span>
         {alternativeLabels?.map((alternativeLabel, index) => (
           <span
-            key={`alternative-label-${index}`}
+            key={index}
             className={classnames('tab__label', 'tab__label-hidden')}
           >
             {alternativeLabel}
