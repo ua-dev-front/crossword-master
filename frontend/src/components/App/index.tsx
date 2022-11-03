@@ -197,10 +197,14 @@ function App() {
           }
           {...((isDrawOrEraseMode || isAnswerOrPuzzleMode) && {
             selectedTab: getTabByModeAndIsSelected(mode, true),
-            secondaryTab: getTabByModeAndIsSelected(
-              modeToTabMapping[mode].otherMode,
-              false,
-            ),
+            ...(!(
+              isAnswerOrPuzzleMode && requestMode === Mode.EnterQuestions
+            ) && {
+              secondaryTab: getTabByModeAndIsSelected(
+                modeToTabMapping[mode].otherMode,
+                false,
+              ),
+            }),
           })}
         />
       </GridWrapper>
@@ -272,8 +276,10 @@ function App() {
                           onClick={() => dispatch(editQuestionsAndAbortFetch())}
                         />
                       ),
-                      hide:
-                        !fetchAbortController && mode === Mode.EnterQuestions,
+                      hide: !(
+                        requestMode === Mode.EnterQuestions &&
+                        (isAnswerOrPuzzleMode || !!fetchAbortController)
+                      ),
                       center: true,
                     },
                   ]}
