@@ -195,16 +195,13 @@ function App() {
               ? () => dispatch(editCrosswordAndAbortFetch())
               : undefined
           }
-          {...((isDrawOrEraseMode || isAnswerOrPuzzleMode) && {
+          {...((isDrawOrEraseMode ||
+            (isAnswerOrPuzzleMode && requestMode !== Mode.EnterQuestions)) && {
             selectedTab: getTabByModeAndIsSelected(mode, true),
-            ...(!(
-              isAnswerOrPuzzleMode && requestMode === Mode.EnterQuestions
-            ) && {
-              secondaryTab: getTabByModeAndIsSelected(
-                modeToTabMapping[mode].otherMode,
-                false,
-              ),
-            }),
+            secondaryTab: getTabByModeAndIsSelected(
+              modeToTabMapping[mode].otherMode,
+              false,
+            ),
           })}
         />
       </GridWrapper>
