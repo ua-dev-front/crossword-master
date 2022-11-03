@@ -25,7 +25,7 @@ export default function TransitionContainerItem({
   const ref = useRef<HTMLElement>(null);
 
   const eventHandler = (event: Event, callback: () => void) => {
-    if (ref.current && ref.current === event.target) {
+    if (ref.current && event.target === ref.current) {
       callback();
     }
   };
