@@ -306,7 +306,10 @@ function App() {
                           <Label content={label} size={LabelSize.Medium} />
                           <QuestionPanel
                             questions={questions[direction]}
-                            isEditable={mode === Mode.EnterQuestions}
+                            isEditable={
+                              mode === Mode.EnterQuestions &&
+                              !fetchAbortController
+                            }
                             color={color}
                             onChange={(question, index) =>
                               dispatch(
