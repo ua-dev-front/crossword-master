@@ -23,14 +23,21 @@ export default function TransitionContainerItem({
   onTransitionStateChange,
 }: Props) {
   const ref = useRef<HTMLElement>(null);
+
+  const eventHandler = (event: Event, callback: () => void) => {
+    if (ref.current && ref.current === event.target) {
+      callback();
+    }
+  };
+
   useEventListener(
     'transitionstart',
-    () => onTransitionStateChange(true),
+    (event) => eventHandler(event, () => onTransitionStateChange(true)),
     ref.current,
   );
   useEventListener(
     'transitionend',
-    () => onTransitionStateChange(false),
+    (event) => eventHandler(event, () => onTransitionStateChange(false)),
     ref.current,
   );
 
