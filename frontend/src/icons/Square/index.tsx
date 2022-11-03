@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
-import './styles.scss';
 import TransitionContainer from 'components/TransitionContainer';
+import './styles.scss';
 
 export type Props = {
   isFilled: boolean;

@@ -35,7 +35,8 @@
 
   &__label {
     grid-area: tab;
-    text-align: center;
+    width: fit-content;
+    text-align: left;
     transition-duration: var(--transition-duration);
     transition-timing-function: var(--transition-function);
     transition-property: color, font-size, border-color;

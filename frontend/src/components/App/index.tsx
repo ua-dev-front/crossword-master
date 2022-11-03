@@ -41,43 +41,56 @@ function App() {
     requestFailed,
   } = useAppSelector((state) => state);
 
-  const otherMode: {
-    [currentMode in TabMode]: TabMode;
+  const modeToTabMapping: {
+    [mode in TabMode]: {
+      otherMode: TabMode;
+      label: {
+        regular: string;
+        selected: string;
+      };
+      onClick: CallableFunction;
+    };
   } = {
-    [Mode.Draw]: Mode.Erase,
-    [Mode.Erase]: Mode.Draw,
-    [Mode.Answer]: Mode.Puzzle,
-    [Mode.Puzzle]: Mode.Answer,
+    [Mode.Draw]: {
+      otherMode: Mode.Erase,
+      label: {
+        regular: 'Draw',
+        selected: 'Drawing',
+      },
+      onClick: switchToDrawing,
+    },
+    [Mode.Erase]: {
+      otherMode: Mode.Draw,
+      label: {
+        regular: 'Erase',
+        selected: 'Erasing',
+      },
+      onClick: switchToErasing,
+    },
+    [Mode.Answer]: {
+      otherMode: Mode.Puzzle,
+      label: {
+        regular: 'Answer',
+        selected: 'Answer',
+      },
+      onClick: switchToAnswer,
+    },
+    [Mode.Puzzle]: {
+      otherMode: Mode.Answer,
+      label: {
+        regular: 'Puzzle',
+        selected: 'Puzzle',
+      },
+      onClick: switchToPuzzle,
+    },
   };
 
   const getTabByModeAndIsSelected = (
     currentMode: TabMode,
     isSelected: boolean,
   ): TabProps => {
-    const getLabel = (labelMode: TabMode) => {
-      const labelByModeAndIsSelected = {
-        [Mode.Draw]: {
-          regular: 'Draw',
-          selected: 'Drawing',
-        },
-        [Mode.Erase]: {
-          regular: 'Erase',
-          selected: 'Erasing',
-        },
-        [Mode.Puzzle]: {
-          regular: 'Puzzle',
-          selected: 'Puzzle',
-        },
-        [Mode.Answer]: {
-          regular: 'Answer',
-          selected: 'Answer',
-        },
-      };
-
-      return labelByModeAndIsSelected[labelMode][
-        isSelected ? 'selected' : 'regular'
-      ];
-    };
+    const getLabel = (labelMode: TabMode): string =>
+      modeToTabMapping[labelMode].label[isSelected ? 'selected' : 'regular'];
 
     return {
       label: getLabel(currentMode),
@@ -92,6 +105,9 @@ function App() {
           content={currentMode === Mode.Answer ? 'A' : undefined}
         />
       ),
+      ...(!isSelected && {
+        onClick: () => dispatch(modeToTabMapping[currentMode].onClick()),
+      }),
       hide: !!fetchAbortController,
     };
   };
@@ -179,27 +195,12 @@ function App() {
               ? () => dispatch(editCrosswordAndAbortFetch())
               : undefined
           }
-          {...(isDrawOrEraseMode && {
+          {...((isDrawOrEraseMode || isAnswerOrPuzzleMode) && {
             selectedTab: getTabByModeAndIsSelected(mode, true),
-            secondaryTab: {
-              ...getTabByModeAndIsSelected(otherMode[mode], false),
-              onClick: () =>
-                dispatch(
-                  (mode === Mode.Draw ? switchToErasing : switchToDrawing)(),
-                ),
-            },
-          })}
-          {...(isAnswerOrPuzzleMode && {
-            selectedTab: getTabByModeAndIsSelected(mode, true),
-            ...(requestMode === Mode.Draw && {
-              secondaryTab: {
-                ...getTabByModeAndIsSelected(otherMode[mode], false),
-                onClick: () =>
-                  dispatch(
-                    (mode === Mode.Answer ? switchToPuzzle : switchToAnswer)(),
-                  ),
-              },
-            }),
+            secondaryTab: getTabByModeAndIsSelected(
+              modeToTabMapping[mode].otherMode,
+              false,
+            ),
           })}
         />
       </GridWrapper>
