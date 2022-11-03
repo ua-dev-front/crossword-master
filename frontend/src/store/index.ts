@@ -35,6 +35,11 @@ export enum Mode {
   Puzzle = 'puzzle',
 }
 
+export enum RequestMode {
+  Generate = 'generate',
+  Solve = 'solve',
+}
+
 export type UpdateQuestionPayload = {
   direction: Direction;
   id: number;
@@ -57,7 +62,7 @@ export type State = {
   grid: ({ letter: string | null; number: number | null } | null)[][];
   questions: Questions | null;
   fetchAbortController: AbortController | null;
-  requestMode: Mode.Draw | Mode.EnterQuestions | null;
+  requestMode: RequestMode | null;
   requestFailed: boolean;
   showConfirmation: boolean;
 };
@@ -246,7 +251,7 @@ const generalSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(generateQuestions.pending, (state) => {
       state.fetchAbortController = new AbortController();
-      state.requestMode = Mode.Draw;
+      state.requestMode = RequestMode.Generate;
     });
     builder.addCase(generateQuestions.fulfilled, (state: State, action) => {
       state.fetchAbortController = null;
@@ -299,7 +304,7 @@ const generalSlice = createSlice({
     });
     builder.addCase(solveQuestions.pending, (state) => {
       state.fetchAbortController = new AbortController();
-      state.requestMode = Mode.EnterQuestions;
+      state.requestMode = RequestMode.Solve;
     });
     builder.addCase(solveQuestions.fulfilled, (state, action) => {
       state.fetchAbortController = null;

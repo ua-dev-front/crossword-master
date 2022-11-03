@@ -14,6 +14,7 @@ import {
   switchToAnswer,
   switchToPuzzle,
   editQuestionsAndAbortFetch,
+  RequestMode,
 } from 'store';
 import useAppDispatch from 'hooks/useAppDispatch';
 import useAppSelector from 'hooks/useAppSelector';
@@ -143,10 +144,12 @@ function App() {
 
   const getLoaderLabel = (): string | null => {
     if (fetchAbortController) {
-      return requestMode === Mode.Draw ? 'Generating...' : 'Solving...';
+      return requestMode === RequestMode.Generate
+        ? 'Generating...'
+        : 'Solving...';
     }
     if (requestFailed) {
-      return requestMode === Mode.Draw
+      return requestMode === RequestMode.Generate
         ? 'We were unable to generate the questions :('
         : 'We couldn’t solve the crossword :(';
     }
@@ -193,7 +196,7 @@ function App() {
               : undefined
           }
           {...((isDrawOrEraseMode ||
-            (isAnswerOrPuzzleMode && requestMode !== Mode.EnterQuestions)) && {
+            (isAnswerOrPuzzleMode && requestMode !== RequestMode.Solve)) && {
             selectedTab: getTabByModeAndIsSelected(mode, true),
             secondaryTab: getTabByModeAndIsSelected(
               modeToTabMapping[mode].otherMode,
@@ -271,7 +274,7 @@ function App() {
                         />
                       ),
                       hide: !(
-                        requestMode === Mode.EnterQuestions &&
+                        requestMode === RequestMode.Solve &&
                         (isAnswerOrPuzzleMode || !!fetchAbortController)
                       ),
                       center: true,
