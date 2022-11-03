@@ -38,8 +38,9 @@ export default function TransitionContainer({
             ...oldItem,
             hide: rawItem.hide,
           };
+        } else {
+          return rawItem;
         }
-        return rawItem;
       });
 
       const deletedItems = prevItems
@@ -66,9 +67,7 @@ export default function TransitionContainer({
           onTransitionStateChange={(isTransitioning) =>
             setItemsTransitionState((prevState) => ({
               ...Object.fromEntries(
-                Object.entries(prevState).filter(([transitionKey]) =>
-                  items.find((item) => item.key === transitionKey),
-                ),
+                items.map((item) => [item.key, prevState?.[item.key] ?? false]),
               ),
               [key]: isTransitioning,
             }))
