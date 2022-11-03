@@ -143,15 +143,12 @@ function App() {
 
   const getLoaderLabel = (): string | null => {
     if (fetchAbortController) {
-      return requestMode === Mode.EnterQuestions
-        ? 'Solving...'
-        : 'Generating...';
+      return requestMode === Mode.Draw ? 'Generating...' : 'Solving...';
     }
-    if (requestMode === Mode.Draw && requestFailed) {
-      return 'We were unable to generate the questions :(';
-    }
-    if (requestMode === Mode.EnterQuestions && requestFailed) {
-      return 'We couldn’t solve the crossword :(';
+    if (requestFailed) {
+      return requestMode === Mode.Draw
+        ? 'We were unable to generate the questions :('
+        : 'We couldn’t solve the crossword :(';
     }
 
     return null;
