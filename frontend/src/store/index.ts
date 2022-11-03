@@ -233,6 +233,7 @@ const generalSlice = createSlice({
     editCrossword: (state: State) => {
       state.fetchAbortController = null;
       state.requestFailed = false;
+      state.requestMode = null;
       state.showConfirmation = false;
       state.mode = Mode.Draw;
       state.questions = null;
@@ -245,6 +246,7 @@ const generalSlice = createSlice({
     editQuestions: (state: State) => {
       state.fetchAbortController = null;
       state.requestFailed = false;
+      state.requestMode = null;
       state.mode = Mode.EnterQuestions;
     },
   },
