@@ -28,7 +28,7 @@ export default function TransitionContainer({
 
   useLayoutEffect(() => {
     setItems((prevItems) => {
-      const changedItems = rawItems.map((rawItem) => {
+      const presentItems = rawItems.map((rawItem) => {
         const oldItem = prevItems.find((item) => item.key === rawItem.key);
         if (
           oldItem &&
@@ -53,7 +53,7 @@ export default function TransitionContainer({
           hide: true,
         }));
 
-      return [...deletedItems, ...changedItems];
+      return [...deletedItems, ...presentItems];
     });
   }, [rawItems, itemsTransitionState]);
 
