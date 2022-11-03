@@ -1,4 +1,10 @@
-import React, { ReactNode, RefObject, useRef } from 'react';
+import React, {
+  ReactNode,
+  RefObject,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import classnames from 'classnames';
 import useEventListener from 'hooks/useEventListener';
 import './styles.scss';
@@ -28,12 +34,17 @@ export default function TransitionContainerItem({
     ref.current,
   );
 
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   return (
     <div
       ref={ref as RefObject<HTMLDivElement>}
       className={classnames(
         'transition-container__item',
-        hide && 'transition-container__item_hidden',
+        (!isMounted || hide) && 'transition-container__item_hidden',
         center && 'transition-container__item_centered',
       )}
     >

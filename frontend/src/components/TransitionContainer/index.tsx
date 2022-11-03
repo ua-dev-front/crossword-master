@@ -30,15 +30,9 @@ export default function TransitionContainer({
     setItems((prevItems) => {
       const changedItems = rawItems.map((rawItem) => {
         const oldItem = prevItems.find((item) => item.key === rawItem.key);
-        if (!oldItem) {
-          return {
-            ...rawItem,
-            hide: true,
-          };
-        }
         if (
-          itemsTransitionState[rawItem.key] ||
-          (!oldItem.hide && rawItem.hide)
+          oldItem &&
+          (itemsTransitionState[rawItem.key] || (!oldItem.hide && rawItem.hide))
         ) {
           return {
             ...oldItem,
