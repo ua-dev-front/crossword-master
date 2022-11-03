@@ -65,7 +65,11 @@ export default function TransitionContainer({
           key={key}
           onTransitionStateChange={(isTransitioning) =>
             setItemsTransitionState((prevState) => ({
-              ...prevState,
+              ...Object.fromEntries(
+                Object.entries(prevState).filter(([transitionKey]) =>
+                  items.find((item) => item.key === transitionKey),
+                ),
+              ),
               [key]: isTransitioning,
             }))
           }
