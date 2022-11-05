@@ -82,7 +82,7 @@ export default function TransitionContainer({
                   item.key,
                   key === item.key
                     ? isTransitioning
-                    : prevState[item.key] || false,
+                    : prevState[item.key] ?? false,
                 ]),
               ),
             )
