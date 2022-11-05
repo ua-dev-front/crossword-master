@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import {
   Direction,
   Mode,
+  RequestMode,
   fillCell,
   eraseCell,
   switchToErasing,
@@ -14,7 +15,6 @@ import {
   switchToAnswer,
   switchToPuzzle,
   editQuestionsAndAbortFetch,
-  RequestMode,
 } from 'store';
 import useAppDispatch from 'hooks/useAppDispatch';
 import useAppSelector from 'hooks/useAppSelector';
