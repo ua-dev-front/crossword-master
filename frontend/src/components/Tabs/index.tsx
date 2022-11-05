@@ -43,14 +43,14 @@ export default function Tabs({
               key: 'tab',
               content: (
                 <Tab
-                  label={tab?.label ?? '&nbsp;'}
+                  label={tab?.label ?? ' '}
                   isSelected={index === 1}
                   onClick={tab?.onClick}
                   icon={tab?.icon || <Square />}
                   alternativeLabel={tab?.alternativeLabel}
                 />
               ),
-              hide: !tab || !!tab.hide,
+              display: !!tab && !tab.hide,
             },
           ]}
         />

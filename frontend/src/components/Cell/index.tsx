@@ -111,7 +111,7 @@ export default function Cell({
             {
               key,
               content: contentState && key in contentState && contentState[key],
-              hide: editable || !content?.[key],
+              display: !editable && !!content?.[key],
             },
           ]}
         />

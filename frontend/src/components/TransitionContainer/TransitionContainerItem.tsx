@@ -11,14 +11,14 @@ import './styles.scss';
 
 export type Props = {
   content: ReactNode;
-  hide: boolean;
+  display: boolean;
   center?: boolean;
   onTransitionStateChange: (isTransitioning: boolean) => void;
 };
 
 export default function TransitionContainerItem({
   content,
-  hide,
+  display,
   center,
   onTransitionStateChange,
 }: Props) {
@@ -51,7 +51,7 @@ export default function TransitionContainerItem({
       ref={ref as RefObject<HTMLDivElement>}
       className={classnames(
         'transition-container__item',
-        (!isMounted || hide) && 'transition-container__item_hidden',
+        (!isMounted || !display) && 'transition-container__item_hidden',
         center && 'transition-container__item_centered',
       )}
     >

@@ -32,11 +32,12 @@ export default function TransitionContainer({
         const oldItem = prevItems.find((item) => item.key === rawItem.key);
         if (
           oldItem &&
-          (itemsTransitionState[rawItem.key] || (!oldItem.hide && rawItem.hide))
+          (itemsTransitionState[rawItem.key] ||
+            (oldItem.display && !rawItem.display))
         ) {
           return {
             ...oldItem,
-            hide: rawItem.hide,
+            display: rawItem.display,
           };
         } else {
           return rawItem;
@@ -47,11 +48,11 @@ export default function TransitionContainer({
         .filter(
           (item) =>
             !rawItems.find((rawItem) => rawItem.key === item.key) &&
-            (!item.hide || itemsTransitionState[item.key]),
+            (item.display || itemsTransitionState[item.key]),
         )
         .map((item) => ({
           ...item,
-          hide: true,
+          display: false,
         }));
 
       return [...deletedItems, ...presentItems];
