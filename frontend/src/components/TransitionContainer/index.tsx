@@ -32,6 +32,12 @@ export default function TransitionContainer({
         const oldItem = prevItems.find((item) => item.key === rawItem.key);
         if (
           oldItem &&
+          /**
+           * In case the item exist in a state and transition is running or
+           * `display` has been changed to `false`, only `display` will be updated,
+           * `content` will remain the same to avoid breaking the animation
+           * by changing the `content` during the animation.
+           */
           (itemsTransitionState[rawItem.key] ||
             (oldItem.display && !rawItem.display))
         ) {
@@ -47,6 +53,10 @@ export default function TransitionContainer({
       const deletedItems = prevItems
         .filter(
           (item) =>
+            /**
+             * Items that have been removed from `rawItems` and
+             * are displayed or in the middle of transition will be smoothly hidden.
+             */
             !rawItems.find((rawItem) => rawItem.key === item.key) &&
             (item.display || itemsTransitionState[item.key]),
         )
