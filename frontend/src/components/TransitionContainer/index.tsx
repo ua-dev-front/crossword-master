@@ -76,12 +76,16 @@ export default function TransitionContainer({
           {...itemProps}
           key={key}
           onTransitionStateChange={(isTransitioning) =>
-            setItemsTransitionState((prevState) => ({
-              ...Object.fromEntries(
-                items.map((item) => [item.key, prevState?.[item.key] ?? false]),
+            setItemsTransitionState((prevState) =>
+              Object.fromEntries(
+                items.map((item) => [
+                  item.key,
+                  key === item.key
+                    ? isTransitioning
+                    : prevState[item.key] || false,
+                ]),
               ),
-              [key]: isTransitioning,
-            }))
+            )
           }
         />
       ))}
