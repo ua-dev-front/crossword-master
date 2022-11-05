@@ -25,8 +25,8 @@ def determine_locations(table: Table) -> list[WordLocation]:
                        for row_shift, column_shift in [[-1, 0], [0, -1], [1, 0], [0, 1]])
 
         return (getattr(position, axes.changeable) == 0 or table[previous_row][previous_column] == 0) and \
-               (getattr(position, axes.changeable) == len(
-                   table) - 1 or table[next_row][next_column] == 1) or has_no_filled_neighbours()
+               (getattr(position, axes.changeable) < len(
+                   table) - 1 and table[next_row][next_column] == 1) or has_no_filled_neighbours()
 
     locations = []
 
