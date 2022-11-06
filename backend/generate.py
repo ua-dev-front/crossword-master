@@ -24,7 +24,7 @@ def determine_locations(table: Table) -> list[WordLocation]:
                        for row_shift, column_shift in [[-1, 0], [0, -1], [1, 0], [0, 1]])
 
         return ((not is_cell_filled(Position(previous_row, previous_column), table)) and
-                (is_cell_filled(Position(next_row, next_column), table))) and not has_no_filled_neighbours()
+                (is_cell_filled(Position(next_row, next_column), table))) or has_no_filled_neighbours()
 
     locations = []
 
