@@ -1,0 +1,25 @@
+.transition-container {
+    display: grid;
+    grid-template-areas: 'transitionContainerItem';
+
+    &__item {
+        grid-area: transitionContainerItem;
+        transition-duration: var(--transition-duration);
+        transition-timing-function: var(--transition-function);
+        transition-property: opacity, visibility;
+
+        &_hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        &:not(&_hidden) {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        &_centered {
+            place-self: center;
+        }
+    }
+}

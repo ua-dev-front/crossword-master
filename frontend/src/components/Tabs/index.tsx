@@ -1,20 +1,21 @@
 import React, { ReactNode } from 'react';
 import Tab from 'components/Tab';
+import TransitionContainer from 'components/TransitionContainer';
 import LeftArrow from 'icons/LeftArrow';
+import Square from 'icons/Square';
 import './styles.scss';
 
-type TabProps = {
+export type TabProps = {
   label: string;
   icon: ReactNode;
   alternativeLabel?: string;
   hide?: boolean;
+  onClick?: () => void;
 };
 
-type Props = {
+export type Props = {
   selectedTab?: TabProps;
-  secondaryTab?: TabProps & {
-    onClick: () => void;
-  };
+  secondaryTab?: TabProps;
   onEditClick?: () => void;
 };
 
@@ -25,29 +26,35 @@ export default function Tabs({
 }: Props) {
   return (
     <div className='tabs'>
-      <Tab
-        label='Edit'
-        isSelected={false}
-        onClick={() => onEditClick?.()}
-        icon={<LeftArrow />}
-        hide={!onEditClick}
-      />
-      {[selectedTab, secondaryTab].map((tab, index) =>
-        tab ? (
-          <Tab
-            key={index}
-            label={tab.label}
-            isSelected={tab === selectedTab}
-            onClick={tab === secondaryTab ? secondaryTab.onClick : undefined}
-            icon={tab.icon}
-            alternativeLabel={tab.alternativeLabel}
-            hide={tab.hide}
-          />
-        ) : (
-          // Adds an empty div to keep correct tab positions
-          <div key={index} />
-        ),
-      )}
+      {[
+        {
+          label: 'Edit',
+          onClick: onEditClick,
+          icon: <LeftArrow />,
+          hide: !onEditClick,
+        } as TabProps,
+        selectedTab, // selectedTab index in the array has a dependency with the isSelected prop of the Tab component below
+        secondaryTab,
+      ].map((tab, index) => (
+        <TransitionContainer
+          key={index}
+          items={[
+            {
+              key: 'tab',
+              content: (
+                <Tab
+                  label={tab?.label ?? ' '}
+                  isSelected={index === 1}
+                  onClick={tab?.onClick}
+                  icon={tab?.icon || <Square />}
+                  alternativeLabel={tab?.alternativeLabel}
+                />
+              ),
+              display: !!tab && !tab.hide,
+            },
+          ]}
+        />
+      ))}
     </div>
   );
 }

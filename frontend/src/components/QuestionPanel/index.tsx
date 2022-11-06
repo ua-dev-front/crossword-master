@@ -32,7 +32,7 @@ export default function QuestionPanel({
   const classes = classnames(
     className,
     isEditable && `${className}_editable`,
-    `${className}_${color}`
+    `${className}_${color}`,
   );
 
   return (
@@ -43,7 +43,7 @@ export default function QuestionPanel({
           itemIdClassName,
           `${itemIdClassName}_${
             id.toString().length === 1 ? 'single' : 'multiple'
-          }-digit`
+          }-digit`,
         );
         const inputId = `${panelId}-${id}`;
 
