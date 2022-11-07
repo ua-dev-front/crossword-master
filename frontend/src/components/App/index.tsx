@@ -206,7 +206,7 @@ function App() {
                 size={LabelSize.Large}
               />
             ),
-            hide: !isDrawOrEraseMode || !!fetchAbortController || !isGridEmpty,
+            display: isDrawOrEraseMode && !fetchAbortController && isGridEmpty,
             center: true,
           },
           {
@@ -223,7 +223,7 @@ function App() {
                 />
               </div>
             ),
-            hide: !isDrawOrEraseMode || !!fetchAbortController || isGridEmpty,
+            display: isDrawOrEraseMode && !fetchAbortController && !isGridEmpty,
           },
           {
             key: 'questions',
@@ -239,7 +239,8 @@ function App() {
                           size={LabelSize.Small}
                         />
                       ),
-                      hide: areQuestionsEntered || mode !== Mode.EnterQuestions,
+                      display:
+                        !areQuestionsEntered && mode === Mode.EnterQuestions,
                     },
                     {
                       key: 'questions-panel',
@@ -249,8 +250,10 @@ function App() {
                           onClick={() => dispatch(solveQuestions())}
                         />
                       ),
-                      hide:
-                        !areQuestionsEntered || mode !== Mode.EnterQuestions,
+                      display:
+                        areQuestionsEntered &&
+                        !fetchAbortController &&
+                        mode === Mode.EnterQuestions,
                       center: true,
                     },
                   ]}
@@ -295,7 +298,7 @@ function App() {
                 </div>
               </div>
             ),
-            hide: mode !== Mode.EnterQuestions && !isAnswerOrPuzzleMode,
+            display: mode === Mode.EnterQuestions || isAnswerOrPuzzleMode,
           },
         ]}
       />
