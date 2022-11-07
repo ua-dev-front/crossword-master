@@ -11,6 +11,8 @@ import {
   updateQuestion,
   generateQuestions,
   solveQuestions,
+  switchToAnswer,
+  switchToPuzzle,
 } from 'store';
 import useAppDispatch from 'hooks/useAppDispatch';
 import useAppSelector from 'hooks/useAppSelector';
@@ -20,49 +22,98 @@ import GridWrapper from 'components/GridWrapper';
 import Label, { LabelSize } from 'components/Label';
 import Layout from 'components/Layout';
 import QuestionPanel, { QuestionPanelColor } from 'components/QuestionPanel';
-import Tabs from 'components/Tabs';
+import Tabs, { TabProps } from 'components/Tabs';
 import TransitionContainer from 'components/TransitionContainer';
 import Square from 'icons/Square';
 import './styles.scss';
+
+export type TabMode = Mode.Answer | Mode.Draw | Mode.Erase | Mode.Puzzle;
 
 function App() {
   const dispatch = useAppDispatch();
   const { grid, mode, questions, fetchAbortController, apiFailed } =
     useAppSelector((state) => state);
 
-  const getTabByModeAndIsSelected = (
-    currentMode: Mode.Draw | Mode.Erase,
-    isSelected: boolean,
-  ) => {
-    const getLabel = (labelMode: Mode.Draw | Mode.Erase) => {
-      const labelByModeAndIsSelected = {
-        [Mode.Draw]: {
-          regular: 'Draw',
-          selected: 'Drawing',
-        },
-        [Mode.Erase]: {
-          regular: 'Erase',
-          selected: 'Erasing',
-        },
+  const modeToTabMapping: {
+    [mode in TabMode]: {
+      otherMode: TabMode;
+      label: {
+        regular: string;
+        selected: string;
       };
-
-      return labelByModeAndIsSelected[labelMode][
-        isSelected ? 'selected' : 'regular'
-      ];
+      onClick: CallableFunction;
     };
+  } = {
+    [Mode.Draw]: {
+      otherMode: Mode.Erase,
+      label: {
+        regular: 'Draw',
+        selected: 'Drawing',
+      },
+      onClick: switchToDrawing,
+    },
+    [Mode.Erase]: {
+      otherMode: Mode.Draw,
+      label: {
+        regular: 'Erase',
+        selected: 'Erasing',
+      },
+      onClick: switchToErasing,
+    },
+    [Mode.Answer]: {
+      otherMode: Mode.Puzzle,
+      label: {
+        regular: 'Answer',
+        selected: 'Answer',
+      },
+      onClick: switchToAnswer,
+    },
+    [Mode.Puzzle]: {
+      otherMode: Mode.Answer,
+      label: {
+        regular: 'Puzzle',
+        selected: 'Puzzle',
+      },
+      onClick: switchToPuzzle,
+    },
+  };
+
+  const getTabByModeAndIsSelected = (
+    currentMode: TabMode,
+    isSelected: boolean,
+  ): TabProps => {
+    const getLabel = (labelMode: TabMode): string =>
+      modeToTabMapping[labelMode].label[isSelected ? 'selected' : 'regular'];
 
     return {
       label: getLabel(currentMode),
-      alternativeLabel: getLabel(
-        currentMode === Mode.Draw ? Mode.Erase : Mode.Draw,
+      alternativeLabels: Object.values(Mode).flatMap((tabMode) =>
+        tabMode !== currentMode && tabMode !== Mode.EnterQuestions
+          ? [getLabel(tabMode)]
+          : [],
       ),
-      icon: <Square isFilled={currentMode === Mode.Erase} />,
+      icon: (
+        <Square
+          isFilled={currentMode === Mode.Erase}
+          content={currentMode === Mode.Answer ? 'A' : undefined}
+        />
+      ),
+      ...(!isSelected && {
+        onClick: () => dispatch(modeToTabMapping[currentMode].onClick()),
+      }),
       hide: !!fetchAbortController,
     };
   };
 
   const booleanGrid = useMemo(
     () => grid.map((row) => row.map((cell) => !!cell)),
+    [grid],
+  );
+  const puzzleGrid = useMemo(
+    () =>
+      grid.map((row) =>
+        row.map((cell) => (cell ? { number: cell.number } : null)),
+      ),
     [grid],
   );
 
@@ -81,6 +132,7 @@ function App() {
   }, [questions]);
 
   const isDrawOrEraseMode = mode === Mode.Draw || mode === Mode.Erase;
+  const isAnswerOrPuzzleMode = mode === Mode.Puzzle || mode === Mode.Answer;
 
   const getLoaderLabel = (): string | null => {
     if (fetchAbortController) {
@@ -112,17 +164,11 @@ function App() {
             ),
         };
       case Mode.EnterQuestions:
-        return {
-          matrix: grid,
-          mode: GridMode.Puzzle,
-        };
-      // TODO:
       case Mode.Puzzle:
         return {
-          matrix: grid,
+          matrix: puzzleGrid,
           mode: GridMode.Puzzle,
         };
-      // TODO:
       case Mode.Answer:
         return {
           matrix: grid as { letter: string; number: number | null }[][],
@@ -140,18 +186,12 @@ function App() {
               ? () => dispatch(editCrosswordAndAbortFetch())
               : undefined
           }
-          {...(isDrawOrEraseMode && {
+          {...((isDrawOrEraseMode || isAnswerOrPuzzleMode) && {
             selectedTab: getTabByModeAndIsSelected(mode, true),
-            secondaryTab: {
-              ...getTabByModeAndIsSelected(
-                mode === Mode.Draw ? Mode.Erase : Mode.Draw,
-                false,
-              ),
-              onClick: () =>
-                dispatch(
-                  (mode === Mode.Draw ? switchToErasing : switchToDrawing)(),
-                ),
-            },
+            secondaryTab: getTabByModeAndIsSelected(
+              modeToTabMapping[mode].otherMode,
+              false,
+            ),
           })}
         />
       </GridWrapper>
@@ -199,7 +239,8 @@ function App() {
                           size={LabelSize.Small}
                         />
                       ),
-                      display: !areQuestionsEntered,
+                      display:
+                        !areQuestionsEntered && mode === Mode.EnterQuestions,
                     },
                     {
                       key: 'questions-panel',
@@ -209,7 +250,10 @@ function App() {
                           onClick={() => dispatch(solveQuestions())}
                         />
                       ),
-                      display: areQuestionsEntered && !fetchAbortController,
+                      display:
+                        areQuestionsEntered &&
+                        !fetchAbortController &&
+                        mode === Mode.EnterQuestions,
                       center: true,
                     },
                   ]}
@@ -236,7 +280,7 @@ function App() {
                           <Label content={label} size={LabelSize.Medium} />
                           <QuestionPanel
                             questions={questions[direction]}
-                            isEditable={true}
+                            isEditable={mode === Mode.EnterQuestions}
                             color={color}
                             onChange={(question, index) =>
                               dispatch(
@@ -254,7 +298,7 @@ function App() {
                 </div>
               </div>
             ),
-            display: mode === Mode.EnterQuestions && !fetchAbortController,
+            display: mode === Mode.EnterQuestions || isAnswerOrPuzzleMode,
           },
         ]}
       />

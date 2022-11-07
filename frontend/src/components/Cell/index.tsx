@@ -1,9 +1,4 @@
-import React, {
-  KeyboardEvent,
-  PointerEvent,
-  useLayoutEffect,
-  useState,
-} from 'react';
+import React, { KeyboardEvent, PointerEvent } from 'react';
 import classnames from 'classnames';
 import TransitionContainer from 'components/TransitionContainer';
 import './styles.scss';
@@ -45,13 +40,6 @@ export default function Cell({
   onEdited,
   isPointerDown,
 }: Props) {
-  const [contentState, setContentState] = useState<CellContent>(null);
-  useLayoutEffect(() => {
-    if ('content' in data && data.content) {
-      setContentState(data.content);
-    }
-  }, [data]);
-
   const { editable } = data;
   const content =
     ('content' in data && data.content) ||
@@ -110,7 +98,7 @@ export default function Cell({
           items={[
             {
               key,
-              content: contentState && key in contentState && contentState[key],
+              content: content?.[key],
               display: !editable && !!content?.[key],
             },
           ]}

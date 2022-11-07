@@ -19,6 +19,17 @@
         font-size: 21px;
         font-family: var(--font-cursive);
         color: cl(dark);
+        visibility: visible;
+        opacity: 1;
+
+        transition-duration: var(--transition-duration);
+        transition-timing-function: var(--transition-function);
+        transition-property: opacity, visibility;
+
+        &_hidden {
+            visibility: hidden;
+            opacity: 0;
+        }
     }
 
     &__number {

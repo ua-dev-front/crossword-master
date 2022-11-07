@@ -8,7 +8,7 @@ import './styles.scss';
 export type TabProps = {
   label: string;
   icon: ReactNode;
-  alternativeLabel?: string;
+  alternativeLabels?: string[];
   hide?: boolean;
   onClick?: () => void;
 };
@@ -47,7 +47,7 @@ export default function Tabs({
                   isSelected={index === 1}
                   onClick={tab?.onClick}
                   icon={tab?.icon || <Square />}
-                  alternativeLabel={tab?.alternativeLabel}
+                  alternativeLabels={tab?.alternativeLabels}
                 />
               ),
               display: !!tab && !tab.hide,
