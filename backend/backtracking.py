@@ -1,5 +1,5 @@
 from app_types import Direction, LoadOptions, Pattern, Position, WordLocation
-from helpers import get_other_direction, shift_position
+from helpers import shift_position
 
 __all__ = ['solve']
 

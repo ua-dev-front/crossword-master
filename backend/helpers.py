@@ -2,7 +2,7 @@ from app_types import Direction, Position, Table
 from dataclasses import dataclass
 from enum import Enum
 
-__all__ = ['Axes', 'cell_exists', 'get_axes', 'get_other_direction', 'is_cell_filled', 'shift_position']
+__all__ = ['Axes', 'cell_exists', 'get_axes', 'is_cell_filled', 'shift_position']
 
 
 class Axis(Enum):
@@ -27,10 +27,6 @@ def get_axes(direction: Direction) -> Axes:
         return Axes(Axis.ROW.value, Axis.COLUMN.value)
     else:
         raise ValueError('Unknown direction')
-
-
-def get_other_direction(direction: Direction) -> Direction:
-    return Direction.DOWN if direction == Direction.ACROSS else Direction.ACROSS
 
 
 def is_cell_filled(position: Position, table: Table) -> bool:
