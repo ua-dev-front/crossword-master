@@ -30,10 +30,10 @@ def get_word_pattern(table: BackTrackTable, direction: Direction, start_position
 
 def get_table(locations: list[WordLocation]) -> BackTrackTable:
     def get_last_position(location: WordLocation) -> Position:
-        return shift_position(location.first_letter, location.type, location.length)
+        return shift_position(location.first_letter, location.type, location.length - 1)
 
     def get_table_size() -> int:
-        return max((coord for location in locations for coord in get_last_position(location)), default=0)
+        return max((coord + 1 for location in locations for coord in get_last_position(location)), default=0)
 
     return [[None for _ in range(get_table_size())] for _ in range(get_table_size())]
 

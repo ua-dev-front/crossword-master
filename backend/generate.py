@@ -16,7 +16,6 @@ def determine_locations(table: Table) -> list[WordLocation]:
                      and getattr(current_location.first_letter, axes.fixed) == getattr(position, axes.fixed)), None)
 
     def is_new_location(position: Position, location_direction: Direction) -> bool:
-        axes = get_axes(location_direction)
         previous_row, previous_column = shift_position(position, location_direction, -1)
         next_row, next_column = shift_position(position, location_direction)
 
@@ -24,9 +23,8 @@ def determine_locations(table: Table) -> list[WordLocation]:
             return all(not is_cell_filled(Position(position.row + row_shift, position.column + column_shift), table)
                        for row_shift, column_shift in [[-1, 0], [0, -1], [1, 0], [0, 1]])
 
-        return (getattr(position, axes.changeable) == 0 or table[previous_row][previous_column] == 0) and \
-               (getattr(position, axes.changeable) == len(
-                   table) - 1 or table[next_row][next_column] == 1) or has_no_filled_neighbours()
+        return (not is_cell_filled(Position(previous_row, previous_column), table) and
+                is_cell_filled(Position(next_row, next_column), table)) or has_no_filled_neighbours()
 
     locations = []
 
