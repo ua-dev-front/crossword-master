@@ -19,7 +19,7 @@ export default function Square({ isFilled, content }: Props) {
     <span className={classes}>
       {
         <TransitionContainer
-          items={[{ key: 'content', content, hide: !content }]}
+          items={[{ key: 'content', content, display: !!content }]}
         />
       }
     </span>

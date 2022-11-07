@@ -99,7 +99,7 @@ export default function Cell({
             {
               key,
               content: content?.[key],
-              hide: editable || !content?.[key],
+              display: !editable && !!content?.[key],
             },
           ]}
         />

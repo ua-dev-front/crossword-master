@@ -10,13 +10,13 @@ export type Props = {
 export default function Layout({ children, title }: Props) {
   return (
     <div className='layout'>
-      <TitleLabel
-        content={title}
-        size={TitleLabelSize.Large}
-        tag='h1'
-        className='layout__title'
-      />
       <div className='layout__wrapper'>
+        <TitleLabel
+          content={title}
+          size={TitleLabelSize.Large}
+          tag='h1'
+          className='layout__title'
+        />
         <div className='layout__content-wrapper'>
           <main className='layout__content'>{children}</main>
         </div>
