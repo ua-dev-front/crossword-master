@@ -23,8 +23,8 @@ def determine_locations(table: Table) -> list[WordLocation]:
             return all(not is_cell_filled(Position(position.row + row_shift, position.column + column_shift), table)
                        for row_shift, column_shift in [[-1, 0], [0, -1], [1, 0], [0, 1]])
 
-        return ((not is_cell_filled(Position(previous_row, previous_column), table)) and
-                (is_cell_filled(Position(next_row, next_column), table))) or has_no_filled_neighbours()
+        return (not is_cell_filled(Position(previous_row, previous_column), table) and
+                is_cell_filled(Position(next_row, next_column), table)) or has_no_filled_neighbours()
 
     locations = []
 
