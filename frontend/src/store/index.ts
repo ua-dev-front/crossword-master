@@ -35,6 +35,11 @@ export enum Mode {
   Puzzle = 'puzzle',
 }
 
+export enum RequestMode {
+  Generate = 'generate',
+  Solve = 'solve',
+}
+
 export type UpdateQuestionPayload = {
   direction: Direction;
   id: number;
@@ -57,7 +62,8 @@ export type State = {
   grid: ({ letter: string | null; number: number | null } | null)[][];
   questions: Questions | null;
   fetchAbortController: AbortController | null;
-  apiFailed: Mode.Draw | Mode.EnterQuestions | null;
+  requestMode: RequestMode | null;
+  requestFailed: boolean;
   showConfirmation: boolean;
 };
 
@@ -163,7 +169,8 @@ const initialState: State = {
   grid: [...Array(ROWS)].map(() => [...Array(COLUMNS)].map(() => null)),
   questions: null,
   fetchAbortController: null,
-  apiFailed: null,
+  requestMode: null,
+  requestFailed: false,
   showConfirmation: false,
 };
 
@@ -225,7 +232,8 @@ const generalSlice = createSlice({
     },
     editCrossword: (state: State) => {
       state.fetchAbortController = null;
-      state.apiFailed = null;
+      state.requestFailed = false;
+      state.requestMode = null;
       state.showConfirmation = false;
       state.mode = Mode.Draw;
       state.questions = null;
@@ -237,18 +245,20 @@ const generalSlice = createSlice({
     },
     editQuestions: (state: State) => {
       state.fetchAbortController = null;
-      state.apiFailed = null;
+      state.requestFailed = false;
+      state.requestMode = null;
       state.mode = Mode.EnterQuestions;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(generateQuestions.pending, (state) => {
       state.fetchAbortController = new AbortController();
+      state.requestMode = RequestMode.Generate;
     });
     builder.addCase(generateQuestions.fulfilled, (state: State, action) => {
       state.fetchAbortController = null;
       if (action.payload.words === null) {
-        state.apiFailed = Mode.Draw;
+        state.requestFailed = true;
         return;
       }
 
@@ -296,11 +306,12 @@ const generalSlice = createSlice({
     });
     builder.addCase(solveQuestions.pending, (state) => {
       state.fetchAbortController = new AbortController();
+      state.requestMode = RequestMode.Solve;
     });
     builder.addCase(solveQuestions.fulfilled, (state, action) => {
       state.fetchAbortController = null;
       if (action.payload.answers === null) {
-        state.apiFailed = Mode.EnterQuestions;
+        state.requestFailed = true;
         return;
       }
 
@@ -332,7 +343,7 @@ const generalSlice = createSlice({
           });
         });
       });
-      state.mode = Mode.Puzzle;
+      state.mode = Mode.Answer;
     });
   },
 });
