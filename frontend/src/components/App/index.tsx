@@ -200,7 +200,12 @@ function App() {
         <Tabs
           onEditClick={
             !isDrawOrEraseMode || fetchAbortController
-              ? () => dispatch(showConfirmation())
+              ? () =>
+                  dispatch(
+                    (requestMode !== RequestMode.Generate
+                      ? showConfirmation
+                      : editCrosswordAndAbortFetch)(),
+                  )
               : undefined
           }
           {...((isDrawOrEraseMode ||
