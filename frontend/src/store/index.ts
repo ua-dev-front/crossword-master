@@ -58,7 +58,7 @@ export type State = {
   questions: Questions | null;
   fetchAbortController: AbortController | null;
   apiFailed: Mode.Draw | Mode.EnterQuestions | null;
-  showConfirmation: boolean;
+  showConfirmationState: boolean;
 };
 
 export type GenerateResponseWord = {
@@ -164,7 +164,7 @@ const initialState: State = {
   questions: null,
   fetchAbortController: null,
   apiFailed: null,
-  showConfirmation: false,
+  showConfirmationState: false,
 };
 
 const generalSlice = createSlice({
@@ -218,15 +218,15 @@ const generalSlice = createSlice({
       );
     },
     showConfirmation: (state: State) => {
-      state.showConfirmation = true;
+      state.showConfirmationState = true;
     },
     dismissConfirmation: (state: State) => {
-      state.showConfirmation = false;
+      state.showConfirmationState = false;
     },
     editCrossword: (state: State) => {
       state.fetchAbortController = null;
       state.apiFailed = null;
-      state.showConfirmation = false;
+      state.showConfirmationState = false;
       state.mode = Mode.Draw;
       state.questions = null;
       state.grid = state.grid.map((row) =>
@@ -249,6 +249,7 @@ const generalSlice = createSlice({
       state.fetchAbortController = null;
       if (action.payload.words === null) {
         state.apiFailed = Mode.Draw;
+        state.showConfirmationState = false;
         return;
       }
 
@@ -301,6 +302,7 @@ const generalSlice = createSlice({
       state.fetchAbortController = null;
       if (action.payload.answers === null) {
         state.apiFailed = Mode.EnterQuestions;
+        state.showConfirmationState = false;
         return;
       }
 
