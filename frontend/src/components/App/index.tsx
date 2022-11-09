@@ -133,6 +133,10 @@ function App() {
     return booleanGrid.every((row) => row.every((cell) => !cell));
   }, [booleanGrid]);
 
+  const isGridContainsAnswers = useMemo(() => {
+    return grid.some((row) => row.some((cell) => cell?.letter));
+  }, [booleanGrid]);
+
   const areQuestionsEntered = useMemo(() => {
     if (!questions) {
       return false;
@@ -336,7 +340,9 @@ function App() {
             key: 'confirmation',
             content: (
               <Dialog
-                label={'Questions & answers will be lost.\nContinue?'}
+                label={`Questions${
+                  isGridContainsAnswers ? ' & answers' : ''
+                } will be lost.\nContinue?`}
                 buttons={[
                   {
                     label: 'Yes',
