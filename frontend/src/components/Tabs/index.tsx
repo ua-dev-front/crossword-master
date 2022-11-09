@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import Tab from 'components/Tab';
+import Tab, { TabIconAlign } from 'components/Tab';
 import TransitionContainer from 'components/TransitionContainer';
 import LeftArrow from 'icons/LeftArrow';
 import Square from 'icons/Square';
@@ -33,8 +33,8 @@ export default function Tabs({
           icon: <LeftArrow />,
           hide: !onEditClick,
         } as TabProps,
-        selectedTab, // selectedTab index in the array has a dependency with the isSelected prop of the Tab component below
-        secondaryTab,
+        selectedTab,
+        secondaryTab, // isSelected and alignIcon props of the Tab component below depend on the order of tabs in the array
       ].map((tab, index) => (
         <TransitionContainer
           key={index}
@@ -48,6 +48,9 @@ export default function Tabs({
                   onClick={tab?.onClick}
                   icon={tab?.icon || <Square />}
                   alternativeLabels={tab?.alternativeLabels}
+                  alignIcon={
+                    index === 2 ? TabIconAlign.Right : TabIconAlign.Left
+                  }
                 />
               ),
               display: !!tab && !tab.hide,

@@ -51,6 +51,14 @@
     }
   }
 
+  &_reverse-direction {
+    flex-direction: row-reverse;
+
+    .tab__label {
+      justify-self: end;
+    }
+  }
+
   &_selected {
     gap: 7px;
 
