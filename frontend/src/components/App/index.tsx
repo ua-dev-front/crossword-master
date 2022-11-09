@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import {
   Direction,
   Mode,
+  RequestMode,
   fillCell,
   eraseCell,
   switchToErasing,
@@ -10,6 +11,7 @@ import {
   switchToPuzzle,
   switchToEnteringQuestions,
   editCrosswordAndAbortFetch,
+  editQuestionsAndAbortFetch,
   updateQuestion,
   generateQuestions,
   solveQuestions,
@@ -39,8 +41,9 @@ function App() {
     mode,
     questions,
     fetchAbortController,
-    apiFailed,
     showConfirmationState,
+    requestMode,
+    requestFailed,
   } = useAppSelector((state) => state);
 
   const modeToTabMapping: {
@@ -145,13 +148,14 @@ function App() {
 
   const getLoaderLabel = (): string | null => {
     if (fetchAbortController) {
-      return mode === Mode.EnterQuestions ? 'Solving...' : 'Generating...';
+      return requestMode === RequestMode.Generate
+        ? 'Generating...'
+        : 'Solving...';
     }
-    if (apiFailed === Mode.Draw) {
-      return 'We were unable to generate the questions :(';
-    }
-    if (apiFailed === Mode.EnterQuestions) {
-      return 'We couldn’t solve the crossword :(';
+    if (requestFailed) {
+      return requestMode === RequestMode.Generate
+        ? 'We were unable to generate the questions :('
+        : 'We couldn’t solve the crossword :(';
     }
 
     return null;
@@ -195,7 +199,8 @@ function App() {
               ? () => dispatch(showConfirmation())
               : undefined
           }
-          {...((isDrawOrEraseMode || isAnswerOrPuzzleMode) && {
+          {...((isDrawOrEraseMode ||
+            (isAnswerOrPuzzleMode && requestMode !== RequestMode.Solve)) && {
             selectedTab: getTabByModeAndIsSelected(mode, true),
             secondaryTab: getTabByModeAndIsSelected(
               modeToTabMapping[mode].otherMode,
@@ -265,6 +270,19 @@ function App() {
                         mode === Mode.EnterQuestions,
                       center: true,
                     },
+                    {
+                      key: 'replace-questions',
+                      content: (
+                        <Button
+                          label='Replace questions'
+                          onClick={() => dispatch(editQuestionsAndAbortFetch())}
+                        />
+                      ),
+                      display:
+                        requestMode === RequestMode.Solve &&
+                        (isAnswerOrPuzzleMode || !!fetchAbortController),
+                      center: true,
+                    },
                   ]}
                 />
                 <div className='app__questions-list'>
@@ -289,7 +307,10 @@ function App() {
                           <Label content={label} size={LabelSize.Medium} />
                           <QuestionPanel
                             questions={questions[direction]}
-                            isEditable={mode === Mode.EnterQuestions}
+                            isEditable={
+                              mode === Mode.EnterQuestions &&
+                              !fetchAbortController
+                            }
                             color={color}
                             onChange={(question, index) =>
                               dispatch(
