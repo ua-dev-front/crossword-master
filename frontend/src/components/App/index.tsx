@@ -202,9 +202,9 @@ function App() {
             !isDrawOrEraseMode || fetchAbortController
               ? () =>
                   dispatch(
-                    (requestMode !== RequestMode.Generate
-                      ? showConfirmation
-                      : editCrosswordAndAbortFetch)(),
+                    (requestMode === RequestMode.Generate
+                      ? editCrosswordAndAbortFetch
+                      : showConfirmation)(),
                   )
               : undefined
           }
