@@ -8,6 +8,7 @@ import './styles.scss';
 export type TabProps = {
   label: string;
   icon: ReactNode;
+  iconAlignment?: TabIconAlignment;
   alternativeLabels?: string[];
   hide?: boolean;
   onClick?: () => void;
@@ -28,14 +29,16 @@ export default function Tabs({
     <div className='tabs'>
       {[
         {
-          label: 'Edit',
-          onClick: onEditClick,
-          icon: <LeftArrow />,
-          hide: !onEditClick,
-        } as TabProps,
-        selectedTab,
-        secondaryTab, // isSelected and alignIcon props of the Tab component below depend on the order of tabs in the array
-      ].map((tab, index) => (
+          tab: {
+            label: 'Edit',
+            onClick: onEditClick,
+            icon: <LeftArrow />,
+            hide: !onEditClick,
+          } as TabProps,
+        },
+        { tab: selectedTab, isSelected: true },
+        { tab: secondaryTab },
+      ].map(({ tab, isSelected }, index) => (
         <TransitionContainer
           key={index}
           items={[
@@ -44,13 +47,11 @@ export default function Tabs({
               content: (
                 <Tab
                   label={tab?.label ?? ' '}
-                  isSelected={index === 1}
+                  isSelected={!!isSelected}
                   onClick={tab?.onClick}
                   icon={tab?.icon || <Square />}
                   alternativeLabels={tab?.alternativeLabels}
-                  iconAlignment={
-                    index === 2 ? TabIconAlignment.Right : TabIconAlignment.Left
-                  }
+                  iconAlignment={tab?.iconAlignment ?? TabIconAlignment.Left}
                 />
               ),
               display: !!tab && !tab.hide,
