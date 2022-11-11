@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import Tab, { TabIconAlign } from 'components/Tab';
+import Tab, { TabIconAlignment } from 'components/Tab';
 import TransitionContainer from 'components/TransitionContainer';
 import LeftArrow from 'icons/LeftArrow';
 import Square from 'icons/Square';
@@ -48,8 +48,8 @@ export default function Tabs({
                   onClick={tab?.onClick}
                   icon={tab?.icon || <Square />}
                   alternativeLabels={tab?.alternativeLabels}
-                  alignIcon={
-                    index === 2 ? TabIconAlign.Right : TabIconAlign.Left
+                  iconAlignment={
+                    index === 2 ? TabIconAlignment.Right : TabIconAlignment.Left
                   }
                 />
               ),

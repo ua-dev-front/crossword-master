@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import classnames from 'classnames';
 import './styles.scss';
 
-export enum TabIconAlign {
+export enum TabIconAlignment {
   Left = 'left',
   Right = 'right',
 }
@@ -11,7 +11,7 @@ export type Props = {
   label: string;
   icon: ReactNode;
   isSelected: boolean;
-  alignIcon: TabIconAlign;
+  iconAlignment: TabIconAlignment;
   onClick?: () => void;
   alternativeLabels?: string[];
 };
@@ -20,14 +20,14 @@ export default function Tab({
   label,
   icon,
   isSelected,
-  alignIcon,
+  iconAlignment,
   onClick,
   alternativeLabels, // used to make width of tab consistent
 }: Props) {
   const classes = classnames(
     'tab',
     isSelected && 'tab_selected',
-    alignIcon === TabIconAlign.Right && 'tab_reverse-direction',
+    iconAlignment === TabIconAlignment.Right && 'tab_reverse-direction',
   );
 
   return (
@@ -53,5 +53,5 @@ export default function Tab({
 }
 
 Tab.defaultProps = {
-  alignIcon: TabIconAlign.Left,
+  alignIcon: TabIconAlignment.Left,
 };
