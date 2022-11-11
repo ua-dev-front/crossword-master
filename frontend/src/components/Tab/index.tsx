@@ -27,7 +27,9 @@ export default function Tab({
   const classes = classnames(
     'tab',
     isSelected && 'tab_selected',
-    iconAlignment === TabIconAlignment.Right && 'tab_reverse-direction',
+    iconAlignment === TabIconAlignment.Right
+      ? 'tab_icon-right-alignment'
+      : 'tab_icon-left-alignment',
   );
 
   return (

@@ -2,7 +2,6 @@
 
 .tab {
   display: flex;
-  flex-direction: row;
   align-items: center;
 
   width: fit-content;
@@ -51,7 +50,15 @@
     }
   }
 
-  &_reverse-direction {
+  &_icon-left-alignment {
+    flex-direction: row;
+
+    .tab__label {
+      justify-self: start;
+    }
+  }
+
+  &_icon-right-alignment {
     flex-direction: row-reverse;
 
     .tab__label {
