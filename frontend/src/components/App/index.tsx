@@ -342,7 +342,9 @@ function App() {
             content: (
               <Dialog
                 label={`Questions${
-                  requestMode && !requestFailed ? ' & answers' : ''
+                  requestMode && !requestFailed && !fetchAbortController
+                    ? ' & answers'
+                    : ''
                 } will be lost.\nContinue?`}
                 buttons={[
                   {
