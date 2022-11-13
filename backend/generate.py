@@ -44,7 +44,7 @@ def determine_locations(table: Table) -> list[WordLocation]:
 
 
 def normalize_question(question: str) -> str:
-    return question.capitalize() + ('.' if question[-1] != '.' else '')
+    return question.capitalize() + ('' if question.endswith('.') else '.')
 
 
 def get_parsed_response(raw_response: list[str] | None, words: list[WordLocation],
