@@ -50,19 +50,21 @@
     }
   }
 
-  &_icon-alignment-left {
-    flex-direction: row;
+  &_icon-alignment {
+    &-left {
+      flex-direction: row;
 
-    .tab__label {
-      justify-self: start;
+      .tab__label {
+        justify-self: start;
+      }
     }
-  }
 
-  &_icon-alignment-right {
-    flex-direction: row-reverse;
+    &-right {
+      flex-direction: row-reverse;
 
-    .tab__label {
-      justify-self: end;
+      .tab__label {
+        justify-self: end;
+      }
     }
   }
 
