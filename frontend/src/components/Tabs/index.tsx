@@ -37,8 +37,8 @@ export default function Tabs({
           } as TabProps,
         },
         { tab: selectedTab, isSelected: true },
-        { tab: secondaryTab },
-      ].map(({ tab, isSelected }, index) => (
+        { tab: secondaryTab, iconAlignment: TabIconAlignment.Right },
+      ].map(({ tab, isSelected, iconAlignment }, index) => (
         <TransitionContainer
           key={index}
           items={[
@@ -51,7 +51,7 @@ export default function Tabs({
                   onClick={tab?.onClick}
                   icon={tab?.icon || <Square />}
                   alternativeLabels={tab?.alternativeLabels}
-                  iconAlignment={tab?.iconAlignment ?? TabIconAlignment.Left}
+                  iconAlignment={iconAlignment ?? TabIconAlignment.Left}
                 />
               ),
               display: !!tab && !tab.hide,

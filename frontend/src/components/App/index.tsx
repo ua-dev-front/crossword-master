@@ -24,7 +24,6 @@ import GridWrapper from 'components/GridWrapper';
 import Label, { LabelSize } from 'components/Label';
 import Layout from 'components/Layout';
 import QuestionPanel, { QuestionPanelColor } from 'components/QuestionPanel';
-import { TabIconAlignment } from 'components/Tab';
 import Tabs, { TabProps } from 'components/Tabs';
 import TransitionContainer from 'components/TransitionContainer';
 import Square from 'icons/Square';
@@ -109,7 +108,6 @@ function App() {
       ),
       ...(!isSelected && {
         onClick: () => dispatch(modeToTabMapping[currentMode].onClick()),
-        iconAlignment: TabIconAlignment.Right,
       }),
       hide: !!fetchAbortController,
     };
