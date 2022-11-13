@@ -51,7 +51,12 @@ def backtrack(locations: list[WordLocation], table: BackTrackTable, load_options
     word_length = word.length
 
     pattern = get_word_pattern(table, direction, start_position, word_length)
-    possible_answers = load_options(pattern, current_index)
+    loaded_options = load_options(pattern, current_index)
+    possible_answers = (
+        list(filter(lambda answer: answer not in answers, loaded_options))
+        if word_length > 1
+        else loaded_options
+    )
 
     if len(possible_answers):
         answers.append(possible_answers[0])
