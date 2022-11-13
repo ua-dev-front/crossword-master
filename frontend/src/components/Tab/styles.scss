@@ -1,7 +1,7 @@
 @import 'styles/functions.scss';
 
 .tab {
-  --tab-horizontal-margin: -3px;
+  --tab-horizontal-padding: 3px;
 
   display: flex;
   align-items: center;
@@ -10,8 +10,8 @@
   height: fit-content;
   gap: 4px;
   box-sizing: border-box;
-  padding: 2px 3px;
-  margin: 0 var(--tab-horizontal-margin);
+  padding: 2px var(--tab-horizontal-padding);
+  margin: 0 calc(var(--tab-horizontal-padding) * -1);
 
   background: none;
   outline: none;
