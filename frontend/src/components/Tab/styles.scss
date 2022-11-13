@@ -50,7 +50,7 @@
     }
   }
 
-  &_icon-left-alignment {
+  &_icon-alignment-left {
     flex-direction: row;
 
     .tab__label {
@@ -58,7 +58,7 @@
     }
   }
 
-  &_icon-right-alignment {
+  &_icon-alignment-right {
     flex-direction: row-reverse;
 
     .tab__label {
