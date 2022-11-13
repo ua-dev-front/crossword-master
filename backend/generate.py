@@ -43,6 +43,10 @@ def determine_locations(table: Table) -> list[WordLocation]:
     return locations
 
 
+def normalize_question(question: str) -> str:
+    return question.capitalize() + ('.' if question[-1] != '.' else '')
+
+
 def get_parsed_response(raw_response: list[str] | None, words: list[WordLocation],
                         cache: dict[str, str]) -> GenerateWords | None:
     if raw_response is None:
@@ -55,7 +59,7 @@ def get_parsed_response(raw_response: list[str] | None, words: list[WordLocation
 
         parsed_response[word_direction].append(GenerateWord(
             answer,
-            cache[answer],
+            normalize_question(cache[answer]),
             words[index].first_letter,
         ))
 
