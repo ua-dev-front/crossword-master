@@ -8,7 +8,6 @@ import './styles.scss';
 export type TabProps = {
   label: string;
   icon: ReactNode;
-  iconAlignment?: TabIconAlignment;
   alternativeLabels?: string[];
   hide?: boolean;
   onClick?: () => void;
