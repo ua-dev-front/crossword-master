@@ -6,9 +6,6 @@ from helpers import is_cell_filled, get_axes, shift_position
 __all__ = ['generate_words_and_questions']
 
 
-FULL_STOP = '.'
-
-
 def determine_locations(table: Table) -> list[WordLocation]:
     def extract_location(position: Position, location_direction: Direction, all_locations: list[WordLocation]) -> \
             WordLocation | None:
@@ -46,10 +43,6 @@ def determine_locations(table: Table) -> list[WordLocation]:
     return locations
 
 
-def normalize_question(question: str) -> str:
-    return question.capitalize() + ('' if question.endswith(FULL_STOP) else FULL_STOP)
-
-
 def get_parsed_response(raw_response: list[str] | None, words: list[WordLocation],
                         cache: dict[str, str]) -> GenerateWords | None:
     if raw_response is None:
@@ -62,7 +55,7 @@ def get_parsed_response(raw_response: list[str] | None, words: list[WordLocation
 
         parsed_response[word_direction].append(GenerateWord(
             answer,
-            normalize_question(cache[answer]),
+            cache[answer],
             words[index].first_letter,
         ))
 
