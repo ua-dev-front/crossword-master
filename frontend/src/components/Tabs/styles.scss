@@ -1,15 +1,9 @@
 .tabs {
-    --tab-horizontal-margin: -3px;
-
     width: 100%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     justify-items: center;
     margin: 15px 0;
-
-    & > * {
-        margin: 0 var(--tab-horizontal-margin);
-    }
 
     & > *:first-child {
         justify-self: left;
