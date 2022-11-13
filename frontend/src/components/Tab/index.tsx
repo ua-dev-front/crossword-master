@@ -55,5 +55,5 @@ export default function Tab({
 }
 
 Tab.defaultProps = {
-  alignIcon: TabIconAlignment.Left,
+  iconAlignment: TabIconAlignment.Left,
 };

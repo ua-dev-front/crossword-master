@@ -51,7 +51,7 @@ export default function Tabs({
                   onClick={tab?.onClick}
                   icon={tab?.icon || <Square />}
                   alternativeLabels={tab?.alternativeLabels}
-                  iconAlignment={iconAlignment ?? TabIconAlignment.Left}
+                  iconAlignment={iconAlignment}
                 />
               ),
               display: !!tab && !tab.hide,
