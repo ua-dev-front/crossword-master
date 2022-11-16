@@ -7,19 +7,22 @@ import {
   eraseCell,
   switchToErasing,
   switchToDrawing,
+  switchToAnswer,
+  switchToPuzzle,
   switchToEnteringQuestions,
   editCrosswordAndAbortFetch,
+  editQuestionsAndAbortFetch,
   updateQuestion,
   generateQuestions,
   solveQuestions,
-  switchToAnswer,
-  switchToPuzzle,
-  editQuestionsAndAbortFetch,
+  showConfirmation,
+  dismissConfirmation,
 } from 'store';
 import useAppDispatch from 'hooks/useAppDispatch';
 import useAppSelector from 'hooks/useAppSelector';
 import { Mode as GridMode, Props as GridProps } from 'components/Grid';
 import Button from 'components/Button';
+import Dialog from 'components/Dialog';
 import GridWrapper from 'components/GridWrapper';
 import Label, { LabelSize } from 'components/Label';
 import Layout from 'components/Layout';
@@ -38,6 +41,7 @@ function App() {
     mode,
     questions,
     fetchAbortController,
+    showConfirmationState,
     requestMode,
     requestFailed,
   } = useAppSelector((state) => state);
@@ -192,7 +196,12 @@ function App() {
         <Tabs
           onEditClick={
             !isDrawOrEraseMode || fetchAbortController
-              ? () => dispatch(editCrosswordAndAbortFetch())
+              ? () =>
+                  dispatch(
+                    (requestMode === RequestMode.Generate
+                      ? editCrosswordAndAbortFetch
+                      : showConfirmation)(),
+                  )
               : undefined
           }
           {...((isDrawOrEraseMode ||
@@ -324,7 +333,32 @@ function App() {
                 </div>
               </div>
             ),
-            display: mode === Mode.EnterQuestions || isAnswerOrPuzzleMode,
+            display:
+              (mode === Mode.EnterQuestions || isAnswerOrPuzzleMode) &&
+              !showConfirmationState,
+          },
+          {
+            key: 'confirmation',
+            content: (
+              <Dialog
+                label={`Questions${
+                  requestMode && !requestFailed && !fetchAbortController
+                    ? ' & answers'
+                    : ''
+                } will be lost.\nContinue?`}
+                buttons={[
+                  {
+                    label: 'Yes',
+                    onClick: () => dispatch(editCrosswordAndAbortFetch()),
+                  },
+                  {
+                    label: 'No',
+                    onClick: () => dispatch(dismissConfirmation()),
+                  },
+                ]}
+              />
+            ),
+            display: showConfirmationState,
           },
         ]}
       />

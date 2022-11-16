@@ -64,7 +64,7 @@ export type State = {
   fetchAbortController: AbortController | null;
   requestMode: RequestMode | null;
   requestFailed: boolean;
-  showConfirmation: boolean;
+  showConfirmationState: boolean;
 };
 
 export type GenerateResponseWord = {
@@ -171,7 +171,7 @@ const initialState: State = {
   fetchAbortController: null,
   requestMode: null,
   requestFailed: false,
-  showConfirmation: false,
+  showConfirmationState: false,
 };
 
 const generalSlice = createSlice({
@@ -225,16 +225,16 @@ const generalSlice = createSlice({
       );
     },
     showConfirmation: (state: State) => {
-      state.showConfirmation = true;
+      state.showConfirmationState = true;
     },
     dismissConfirmation: (state: State) => {
-      state.showConfirmation = false;
+      state.showConfirmationState = false;
     },
     editCrossword: (state: State) => {
       state.fetchAbortController = null;
       state.requestFailed = false;
       state.requestMode = null;
-      state.showConfirmation = false;
+      state.showConfirmationState = false;
       state.mode = Mode.Draw;
       state.questions = null;
       state.grid = state.grid.map((row) =>
