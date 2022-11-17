@@ -35,7 +35,7 @@ def get_possible_word_answers_and_questions(pattern: Pattern) -> dict[str, str]:
         return question.capitalize() + ('' if question.endswith(FULL_STOP) else FULL_STOP)
 
     def is_valid_question(question: str) -> bool:
-        return question[:1].isalnum()
+        return question[:1].isalpha()
 
     def filter_questions(questions: list[str] | None) -> list[str]:
         return list(filter(is_valid_question, questions))
