@@ -35,11 +35,13 @@ def get_possible_word_answers_and_questions(pattern: Pattern) -> dict[str, str]:
         return question.capitalize() + ('' if question.endswith(FULL_STOP) else FULL_STOP)
 
     def is_valid_question(question: str) -> bool:
-        return question[0].isalnum()
+        return question[:1].isalnum()
+
+    def filter_questions(questions: list[str]) -> list[str]:
+        return list(filter(lambda question: is_valid_question(question), questions))
 
     api_pattern = get_api_pattern(pattern)
     generate_path = f'{API_PATH}?sp={api_pattern}&md=d'
-    response = filter(lambda item: item.get('defs') is not None and is_valid_question(item['defs'][0]),
-                      api_request(generate_path))
+    response = filter(lambda item: item.get('defs') is not None, api_request(generate_path))
 
-    return {item['word']: normalize_question(item['defs'][0]) for item in response}
+    return {item['word']: normalize_question(filter_questions(item['defs'])[0]) for item in response}
