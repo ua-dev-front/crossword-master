@@ -4,13 +4,7 @@ import {
   createSlice,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import {
-  API_URL,
-  COLUMNS,
-  GENERATE_ENDPOINT,
-  ROWS,
-  SOLVE_ENDPOINT,
-} from 'appConstants';
+import { COLUMNS, GENERATE_ENDPOINT, ROWS, SOLVE_ENDPOINT } from 'appConstants';
 import {
   getIndexedQuestions,
   getNumberGrid,
@@ -103,14 +97,17 @@ const makeApiRequest = async <
   reject: (value: unknown) => RejectedType,
 ): Promise<FullfilledType | RejectedType> => {
   try {
-    const response = await fetch(`${API_URL}${endpoint}`, {
-      headers: {
-        'Content-type': 'application/json',
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}${endpoint}`,
+      {
+        headers: {
+          'Content-type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify(body),
+        signal: abortSignal,
       },
-      method: 'POST',
-      body: JSON.stringify(body),
-      signal: abortSignal,
-    });
+    );
 
     if (response.status !== 200) {
       throw new Error(await response.json());
