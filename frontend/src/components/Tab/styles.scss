@@ -1,15 +1,17 @@
 @import 'styles/functions.scss';
 
 .tab {
+  --tab-horizontal-padding: 3px;
+
   display: flex;
-  flex-direction: row;
   align-items: center;
 
   width: fit-content;
   height: fit-content;
   gap: 4px;
   box-sizing: border-box;
-  padding: 2px 3px;
+  padding: 2px var(--tab-horizontal-padding);
+  margin: 0 calc(var(--tab-horizontal-padding) * -1);
 
   background: none;
   outline: none;
@@ -48,6 +50,24 @@
 
     &-hidden {
       visibility: hidden;
+    }
+  }
+
+  &_icon-alignment {
+    &-left {
+      flex-direction: row;
+
+      .tab__label {
+        justify-self: start;
+      }
+    }
+
+    &-right {
+      flex-direction: row-reverse;
+
+      .tab__label {
+        justify-self: end;
+      }
     }
   }
 
