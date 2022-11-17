@@ -37,7 +37,7 @@ def get_possible_word_answers_and_questions(pattern: Pattern) -> dict[str, str]:
     def is_valid_question(question: str) -> bool:
         return question[:1].isalpha()
 
-    def filter_questions(questions: list[str] | None) -> list[str]:
+    def filter_questions(questions: list[str]) -> list[str]:
         return list(filter(is_valid_question, questions))
 
     api_pattern = get_api_pattern(pattern)
