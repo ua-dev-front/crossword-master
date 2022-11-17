@@ -5,7 +5,7 @@ from app_types import Pattern, Question
 __all__ = ['get_possible_word_answers', 'get_possible_word_answers_and_questions']
 
 API_PATH = 'https://api.datamuse.com/words'
-FULL_STOP = '.'
+END_OF_SENTENCE = '.'
 WILDCARD_CHARACTER = '?'
 
 
@@ -32,7 +32,7 @@ def get_possible_word_answers(question: Question, pattern: Pattern) -> list[str]
 def get_possible_word_answers_and_questions(pattern: Pattern) -> dict[str, str]:
     def normalize_question(question: str) -> str:
         part_of_speech, question = question.split('\t', 1)
-        return question.capitalize() + ('' if question.endswith(FULL_STOP) else FULL_STOP)
+        return question.capitalize() + ('' if question.endswith(END_OF_SENTENCE) else END_OF_SENTENCE)
 
     def is_valid_question(question: str) -> bool:
         return question[:1].isalpha()
