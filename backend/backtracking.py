@@ -6,7 +6,7 @@ __all__ = ['solve']
 BackTrackTable = list[list[str | None]]
 
 
-def update_table(answer: str, table: BackTrackTable, direction: Direction, start_position: Position) -> None:
+def update_table(answer: str | None, table: BackTrackTable, direction: Direction, start_position: Position) -> None:
     position = Position(start_position.row, start_position.column)
 
     for letter in answer:
@@ -76,6 +76,7 @@ def backtrack(locations: list[WordLocation], table: BackTrackTable, load_options
             return answers
         else:
             answers.pop()
+            update_table(None, table, direction, start_position)
 
 
 def solve(locations: list[WordLocation], load_options: LoadOptions) -> list[str] | None:
