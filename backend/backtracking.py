@@ -53,6 +53,9 @@ def backtrack(locations: list[WordLocation], table: BackTrackTable, load_options
     pattern = get_word_pattern(table, direction, start_position, word_length)
     possible_answers = load_options(pattern, current_index)
 
+    if len(possible_answers) == 0:
+        return None
+
     for possible_answer in possible_answers:
         if possible_answer in answers:
             continue
