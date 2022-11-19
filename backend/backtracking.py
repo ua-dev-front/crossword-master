@@ -57,17 +57,21 @@ def backtrack(locations: list[WordLocation], table: BackTrackTable, load_options
         if possible_answer in answers and word_length > 1:
             continue
 
-        if len(answers) == current_index:
-            answers.append(possible_answer)
-        else:
-            answers[current_index] = possible_answer
-
+        answers.append(possible_answer)
         update_table(possible_answer, table, direction, start_position)
-        answers = backtrack(locations, table, load_options,
-                            current_index=current_index + 1,
-                            answers=answers)
-        if answers is not None:
+        if (
+            backtrack(
+                locations,
+                table,
+                load_options,
+                current_index=current_index + 1,
+                answers=answers,
+            )
+            is not None
+        ):
             return answers
+        else:
+            answers.pop()
 
 
 def solve(locations: list[WordLocation], load_options: LoadOptions) -> list[str] | None:
