@@ -39,7 +39,7 @@ def get_table(locations: list[WordLocation]) -> BackTrackTable:
 
 
 def backtrack(locations: list[WordLocation], table: BackTrackTable, load_options: LoadOptions,
-              current_index: int = 0, answers: list[str] = None) -> list[str] | None:
+              current_index: int = 0, answers: list[str] | None = None) -> list[str] | None:
     if answers is None:
         answers = []
     if current_index == len(locations):
