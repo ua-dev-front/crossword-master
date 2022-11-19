@@ -8,6 +8,16 @@ API_PATH = 'https://api.datamuse.com/words'
 WILDCARD_CHARACTER = '?'
 
 
+def filter_by_part_of_speech(response: list[dict]) -> list[dict]:
+    part_of_speech_order = ['n', 'adj', 'v', 'adv', 'u']
+    return sorted(
+        response,
+        key=lambda item: part_of_speech_order.index(item['tags'][0])
+        if item.get('tags')
+        else len(part_of_speech_order),
+    )
+
+
 def get_api_pattern(raw_pattern: Pattern) -> str:
     return ''.join(letter if isinstance(letter, str) else WILDCARD_CHARACTER for letter in raw_pattern)
 
