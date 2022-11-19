@@ -54,7 +54,7 @@ def backtrack(locations: list[WordLocation], table: BackTrackTable, load_options
     possible_answers = load_options(pattern, current_index)
 
     for possible_answer in possible_answers:
-        if possible_answer in answers and word_length > 1:
+        if possible_answer in answers:
             continue
 
         answers.append(possible_answer)
