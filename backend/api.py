@@ -32,8 +32,8 @@ def api_request(path: str) -> list[dict]:
 
 def get_possible_word_answers(question: Question, pattern: Pattern) -> list[str]:
     api_pattern = get_api_pattern(pattern)
-    answers_path = f'{API_PATH}?ml={question}&sp={api_pattern}'
-    response = api_request(answers_path)
+    answers_path = f'{API_PATH}?ml={question}&sp={api_pattern}&md=p'
+    response = filter_by_part_of_speech(api_request(answers_path))
 
     return [answer['word'] for answer in response]
 
@@ -44,7 +44,7 @@ def get_possible_word_answers_and_questions(pattern: Pattern) -> dict[str, str]:
         return question
 
     api_pattern = get_api_pattern(pattern)
-    generate_path = f'{API_PATH}?sp={api_pattern}&md=d'
-    response = filter(lambda item: item.get('defs') is not None, api_request(generate_path))
+    generate_path = f'{API_PATH}?sp={api_pattern}&md=dp'
+    response = filter(lambda item: item.get('defs') is not None, filter_by_part_of_speech(api_request(generate_path)))
 
     return {item['word']: normalize_question(item['defs'][0]) for item in response}
