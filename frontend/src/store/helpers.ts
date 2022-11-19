@@ -72,7 +72,7 @@ function getQuestionsFromGrid(grid: State['grid']): Questions {
           if (
             (!grid[row - rowShift]?.[column - columnShift] &&
               grid[row + rowShift]?.[column + columnShift]) ||
-            hasNoAdjacentCells(row, column)
+            (hasNoAdjacentCells(row, column) && array === acrossQuestions)
           ) {
             arrays.push(array);
           }
