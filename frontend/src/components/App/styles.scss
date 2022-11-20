@@ -24,13 +24,23 @@
     }
 
     &__questions {
+        display: flex;
+        flex-direction: column;
+        gap: 21px;
+
         &-list {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
 
-            &-item:only-of-type {
-                margin: 0 auto;
+            &-item {
+                display: flex;
+                flex-direction: column;
+                gap: 7px;
+
+                &:only-of-type {
+                    margin: 0 auto;
+                }
             }
         }
     }

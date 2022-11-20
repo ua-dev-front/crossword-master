@@ -1,5 +1,7 @@
 .dialog {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
 
     &__buttons-wrapper {
         display: flex;
