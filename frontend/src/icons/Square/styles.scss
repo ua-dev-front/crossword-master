@@ -6,8 +6,8 @@
   height: var(--icon-size);
   box-sizing: border-box;
 
-  --icon-stroke: #{cl(dark, 0.67)};
-  --icon-fill: #{cl(dark, 0.67)};
+  --icon-stroke: #{cl(near-black, 0.67)};
+  --icon-fill: #{cl(light-dark, 0.67)};
   border: solid 1px var(--icon-stroke);
   border-radius: 2px;
 
