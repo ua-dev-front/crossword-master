@@ -37,12 +37,8 @@ def get_possible_word_answers_and_questions(pattern: Pattern) -> dict[str, str]:
     def is_valid_question(question: str) -> bool:
         return question[:1].isalpha()
 
-    def filter_questions(questions: list[str]) -> list[str]:
-        return list(filter(is_valid_question, questions))
-
     api_pattern = get_api_pattern(pattern)
     generate_path = f'{API_PATH}?sp={api_pattern}&md=d'
-    response = filter(lambda item: item.get('defs') is not None and len(filter_questions(item['defs'])),
-                      api_request(generate_path))
 
-    return {item['word']: normalize_question(filter_questions(item['defs'])[0]) for item in response}
+    return {item['word']: normalize_question(question) for item in api_request(generate_path)
+            if (question := next(filter(is_valid_question, item.get('defs', [])), None))}
