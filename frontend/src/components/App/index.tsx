@@ -195,7 +195,7 @@ function App() {
       <GridWrapper gridProps={getGridProps()} loaderLabel={getLoaderLabel()}>
         <Tabs
           onEditClick={
-            !isDrawOrEraseMode || fetchAbortController
+            (!isDrawOrEraseMode || fetchAbortController) && !showConfirmationState
               ? () =>
                   dispatch(
                     (requestMode === RequestMode.Generate
