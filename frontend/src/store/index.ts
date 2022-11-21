@@ -229,7 +229,6 @@ const generalSlice = createSlice({
     },
     editCrossword: (state: State) => {
       state.fetchAbortController = null;
-      state.requestFailed = false;
       state.requestMode = null;
       state.showConfirmationState = false;
       state.mode = Mode.Draw;
@@ -242,7 +241,6 @@ const generalSlice = createSlice({
     },
     editQuestions: (state: State) => {
       state.fetchAbortController = null;
-      state.requestFailed = false;
       state.requestMode = null;
       state.mode = Mode.EnterQuestions;
     },
@@ -251,6 +249,7 @@ const generalSlice = createSlice({
     builder.addCase(generateQuestions.pending, (state) => {
       state.fetchAbortController = new AbortController();
       state.requestMode = RequestMode.Generate;
+      state.requestFailed = false;
     });
     builder.addCase(generateQuestions.fulfilled, (state: State, action) => {
       state.fetchAbortController = null;
@@ -304,6 +303,7 @@ const generalSlice = createSlice({
     builder.addCase(solveQuestions.pending, (state) => {
       state.fetchAbortController = new AbortController();
       state.requestMode = RequestMode.Solve;
+      state.requestFailed = false;
     });
     builder.addCase(solveQuestions.fulfilled, (state, action) => {
       state.fetchAbortController = null;
