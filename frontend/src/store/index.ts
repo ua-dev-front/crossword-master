@@ -229,6 +229,7 @@ const generalSlice = createSlice({
     },
     editCrossword: (state: State) => {
       state.fetchAbortController = null;
+      state.requestFailed = false;
       state.requestMode = null;
       state.showConfirmationState = false;
       state.mode = Mode.Draw;
@@ -241,6 +242,7 @@ const generalSlice = createSlice({
     },
     editQuestions: (state: State) => {
       state.fetchAbortController = null;
+      state.requestFailed = false;
       state.requestMode = null;
       state.mode = Mode.EnterQuestions;
     },
