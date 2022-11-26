@@ -259,7 +259,7 @@ function App() {
                         />
                       ),
                       display:
-                        !areQuestionsEntered && mode === Mode.EnterQuestions,
+                        !areQuestionsEntered && mode === Mode.EnterQuestions && !showConfirmationState,
                     },
                     {
                       key: 'questions-panel',
@@ -272,7 +272,7 @@ function App() {
                       display:
                         areQuestionsEntered &&
                         !fetchAbortController &&
-                        mode === Mode.EnterQuestions,
+                        mode === Mode.EnterQuestions && !showConfirmationState,
                       center: true,
                     },
                     {
