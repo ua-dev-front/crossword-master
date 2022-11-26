@@ -273,8 +273,8 @@ function App() {
                         />
                       ),
                       display:
-                        questionsMode !== QuestionsMode.Entered &&
-                        mode === Mode.EnterQuestions,
+                        mode === Mode.EnterQuestions &&
+                        questionsMode !== QuestionsMode.Entered,
                     },
                     {
                       key: 'questions-panel',
@@ -285,9 +285,9 @@ function App() {
                         />
                       ),
                       display:
+                        mode === Mode.EnterQuestions &&
                         questionsMode === QuestionsMode.Entered &&
-                        !fetchAbortController &&
-                        mode === Mode.EnterQuestions,
+                        !fetchAbortController,
                       center: true,
                     },
                     {
