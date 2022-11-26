@@ -75,8 +75,8 @@ function App() {
     [Mode.Answer]: {
       otherMode: Mode.Puzzle,
       label: {
-        regular: 'Answer',
-        selected: 'Answer',
+        regular: 'Answers',
+        selected: 'Answers',
       },
       onClick: switchToAnswer,
     },
