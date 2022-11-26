@@ -13,7 +13,8 @@ PART_OF_SPEECH_ORDER = ['n', 'adj', 'v', 'adv', 'u']
 def sort_by_part_of_speech(response: list[dict]) -> list[dict]:
     return sorted(
         response,
-        key=lambda item: PART_OF_SPEECH_ORDER.index(item['tags'][0]) if 'tags' in item else len(PART_OF_SPEECH_ORDER),
+        key=lambda item: next((index for index, tag in enumerate(PART_OF_SPEECH_ORDER) if tag in item.get('tags', [])),
+                              len(PART_OF_SPEECH_ORDER))
     )
 
 
