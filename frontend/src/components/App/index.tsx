@@ -32,6 +32,12 @@ import TransitionContainer from 'components/TransitionContainer';
 import Square from 'icons/Square';
 import './styles.scss';
 
+export enum QuestionsMode {
+  Empty = 'empty',
+  Entering = 'entering',
+  Entered = 'entered',
+}
+
 export type TabMode = Mode.Answer | Mode.Draw | Mode.Erase | Mode.Puzzle;
 
 function App() {
@@ -133,14 +139,20 @@ function App() {
     return booleanGrid.every((row) => row.every((cell) => !cell));
   }, [booleanGrid]);
 
-  const areQuestionsEntered = useMemo(() => {
+  const questionsMode = useMemo<QuestionsMode>(() => {
     if (!questions) {
-      return false;
+      return QuestionsMode.Empty;
     }
 
-    return [...questions[Direction.Across], ...questions[Direction.Down]].every(
-      ({ question }) => !!question.trim(),
-    );
+    const flatQuestions = Object.values(questions).flat();
+    if (flatQuestions.every(({ question }) => !question.trim())) {
+      return QuestionsMode.Empty;
+    }
+    if (flatQuestions.every(({ question }) => !!question.trim())) {
+      return QuestionsMode.Entered;
+    }
+
+    return QuestionsMode.Entering;
   }, [questions]);
 
   const isDrawOrEraseMode = mode === Mode.Draw || mode === Mode.Erase;
@@ -195,10 +207,12 @@ function App() {
       <GridWrapper gridProps={getGridProps()} loaderLabel={getLoaderLabel()}>
         <Tabs
           onEditClick={
-            (!isDrawOrEraseMode || fetchAbortController) && !showConfirmationState
+            (!isDrawOrEraseMode || fetchAbortController) &&
+            !showConfirmationState
               ? () =>
                   dispatch(
-                    (requestMode === RequestMode.Generate
+                    (requestMode === RequestMode.Generate ||
+                      questionsMode === QuestionsMode.Empty
                       ? editCrosswordAndAbortFetch
                       : showConfirmation)(),
                   )
@@ -259,7 +273,8 @@ function App() {
                         />
                       ),
                       display:
-                        !areQuestionsEntered && mode === Mode.EnterQuestions,
+                        mode === Mode.EnterQuestions &&
+                        questionsMode !== QuestionsMode.Entered,
                     },
                     {
                       key: 'questions-panel',
@@ -270,9 +285,9 @@ function App() {
                         />
                       ),
                       display:
-                        areQuestionsEntered &&
-                        !fetchAbortController &&
-                        mode === Mode.EnterQuestions,
+                        mode === Mode.EnterQuestions &&
+                        questionsMode === QuestionsMode.Entered &&
+                        !fetchAbortController,
                       center: true,
                     },
                     {
