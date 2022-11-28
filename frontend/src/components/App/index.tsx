@@ -100,7 +100,7 @@ function App() {
     return {
       label: getLabel(currentMode),
       alternativeLabels: Object.values(Mode).flatMap((tabMode) =>
-        tabMode !== currentMode && tabMode !== Mode.EnterQuestions
+        tabMode !== currentMode && tabMode !== Mode.EnterQuestions && isSelected
           ? [getLabel(tabMode)]
           : [],
       ),
