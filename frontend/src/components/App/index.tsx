@@ -302,7 +302,8 @@ function App() {
                       ),
                       display:
                         requestMode === RequestMode.Solve &&
-                        (isAnswerOrPuzzleMode || !!fetchAbortController),
+                        (isAnswerOrPuzzleMode || !!fetchAbortController) &&
+                        !showConfirmationState,
                       center: true,
                     },
                   ]}
