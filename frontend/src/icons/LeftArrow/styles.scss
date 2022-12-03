@@ -5,7 +5,7 @@
   height: var(--icon-size);
   width: var(--icon-size);
 
-  --icon-stroke: #{cl(dark, 0.67)};
+  --icon-stroke: #{cl(near-black, 0.67)};
   .icon-path {
     fill: var(--icon-stroke);
   }

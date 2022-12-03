@@ -87,7 +87,7 @@
       transform: scale(1.125);
 
       --icon-stroke: #{cl(near-black)};
-      --icon-fill: #{cl(dark)};
+      --icon-fill: #{cl(light-dark)};
     }
   }
 
@@ -104,7 +104,7 @@
 
       .icon {
         --icon-stroke: #{cl(near-black)};
-        --icon-fill: #{cl(dark)};
+        --icon-fill: #{cl(light-dark)};
       }
     }
 
