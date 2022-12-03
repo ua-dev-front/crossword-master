@@ -274,7 +274,8 @@ function App() {
                       ),
                       display:
                         mode === Mode.EnterQuestions &&
-                        questionsMode !== QuestionsMode.Entered,
+                        questionsMode !== QuestionsMode.Entered &&
+                        !showConfirmationState,
                     },
                     {
                       key: 'questions-panel',
@@ -287,7 +288,8 @@ function App() {
                       display:
                         mode === Mode.EnterQuestions &&
                         questionsMode === QuestionsMode.Entered &&
-                        !fetchAbortController,
+                        !fetchAbortController &&
+                        !showConfirmationState,
                       center: true,
                     },
                     {
@@ -300,7 +302,8 @@ function App() {
                       ),
                       display:
                         requestMode === RequestMode.Solve &&
-                        (isAnswerOrPuzzleMode || !!fetchAbortController),
+                        (isAnswerOrPuzzleMode || !!fetchAbortController) &&
+                        !showConfirmationState,
                       center: true,
                     },
                   ]}
