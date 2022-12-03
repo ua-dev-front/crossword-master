@@ -40,6 +40,7 @@ export default function Tabs({
       ].map(({ tab, isSelected, iconAlignment }, index) => (
         <TransitionContainer
           key={index}
+          className='tab-container'
           items={[
             {
               key: 'tab',

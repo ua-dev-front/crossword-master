@@ -5,6 +5,10 @@
     justify-items: center;
     margin: 15px 0;
 
+    .tab-container {
+        align-items: flex-end;
+    }
+
     & > *:first-child {
         justify-self: left;
     }
