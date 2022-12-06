@@ -335,7 +335,8 @@ function App() {
                             questions={questions[direction]}
                             isEditable={
                               mode === Mode.EnterQuestions &&
-                              !fetchAbortController
+                              !fetchAbortController &&
+                              !requestFailed
                             }
                             color={color}
                             onChange={(question, index) =>
