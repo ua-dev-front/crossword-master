@@ -49,5 +49,6 @@ def get_possible_word_answers_and_questions(pattern: Pattern) -> dict[str, str]:
     api_pattern = get_api_pattern(pattern)
     generate_path = f'{API_PATH}?sp={api_pattern}&md=dp'
 
-    return {item['word']: normalize_question(question) for item in sort_by_part_of_speech(api_request(generate_path))
-            if (question := next(filter(is_valid_question, item.get('defs', [])), None))}
+    return {item['word']: question for item in sort_by_part_of_speech(api_request(generate_path))
+            if (question := next(filter(is_valid_question,
+                                        {normalize_question(question) for question in item.get('defs', [])}), None))}
