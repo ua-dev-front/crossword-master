@@ -1,4 +1,5 @@
 import requests
+import re
 
 from app_types import Pattern, Question
 
@@ -8,6 +9,11 @@ API_PATH = 'https://api.datamuse.com/words'
 END_OF_SENTENCE = '.'
 WILDCARD_CHARACTER = '?'
 PART_OF_SPEECH_ORDER = ['n', 'adj', 'v', 'adv', 'u']
+
+
+# Normalizes questions for use in the api.
+def normalize_user_question(question: Question) -> str:
+    return re.sub(r'[^a-zA-Z\d\n ]', '', question)
 
 
 def sort_by_part_of_speech(response: list[dict]) -> list[dict]:
@@ -32,7 +38,7 @@ def api_request(path: str) -> list[dict]:
 
 def get_possible_word_answers(question: Question, pattern: Pattern) -> list[str]:
     api_pattern = get_api_pattern(pattern)
-    answers_path = f'{API_PATH}?ml={question}&sp={api_pattern}&md=p'
+    answers_path = f'{API_PATH}?ml={normalize_user_question(question)}&sp={api_pattern}&md=p'
     response = sort_by_part_of_speech(api_request(answers_path))
 
     return [answer['word'] for answer in response]
