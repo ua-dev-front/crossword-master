@@ -9,7 +9,7 @@ __all__ = ['solve_questions']
 
 
 # Normalizes questions for use in the api.
-def normalize_user_question(question: Question):
+def normalize_user_question(question: Question) -> str:
     return re.sub(r'[^a-zA-Z\d\n ]', '', question)
 
 
