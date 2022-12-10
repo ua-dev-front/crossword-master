@@ -11,7 +11,7 @@ WILDCARD_CHARACTER = '?'
 PART_OF_SPEECH_ORDER = ['n', 'adj', 'v', 'adv', 'u']
 
 
-# Normalizes questions for use in the api.
+# Normalizes questions for use in the api, as it doesn't support special characters
 def normalize_user_question(question: Question) -> str:
     return re.sub(r'[^a-zA-Z\d\n ]', '', question)
 
