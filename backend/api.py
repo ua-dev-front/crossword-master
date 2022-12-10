@@ -51,4 +51,4 @@ def get_possible_word_answers_and_questions(pattern: Pattern) -> dict[str, str]:
 
     return {item['word']: question for item in sort_by_part_of_speech(api_request(generate_path))
             if (question := next(filter(is_valid_question,
-                                        {normalize_question(question) for question in item.get('defs', [])}), None))}
+                                        (normalize_question(question) for question in item.get('defs', []))), None))}
