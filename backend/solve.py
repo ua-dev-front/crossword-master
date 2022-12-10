@@ -1,9 +1,16 @@
+import re
+
 from api import get_possible_word_answers
-from app_types import Direction, Pattern, Position, SolveAnswers, SolveWords, Table, WordLocation
+from app_types import Direction, Pattern, Position, Question, SolveAnswers, SolveWords, Table, WordLocation
 from backtracking import solve
 from helpers import is_cell_filled, shift_position
 
 __all__ = ['solve_questions']
+
+
+# Normalizes questions for use in the api.
+def normalize_user_question(question: Question):
+    return re.sub(r'[^a-zA-Z\d\n ]', '', question)
 
 
 def get_word_length(start_position: Position, table: Table, direction: Direction) -> int:
@@ -41,7 +48,7 @@ def get_parsed_answers(raw_answers: list[str] | None, words: SolveWords) -> Solv
 
 def solve_questions(table: Table, words: SolveWords) -> SolveAnswers | None:
     def load_word_answers(pattern: Pattern, word_index: int) -> list[str]:
-        return get_possible_word_answers(words[word_index].question, pattern)
+        return get_possible_word_answers(normalize_user_question(words[word_index].question), pattern)
 
     locations = get_locations(words, table)
     answers = solve(locations, load_word_answers)
