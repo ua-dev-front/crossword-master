@@ -18,6 +18,10 @@ def sort_by_part_of_speech(response: list[dict]) -> list[dict]:
     )
 
 
+def leave_only_alpha_words(response: list[dict]) -> list[dict]:
+    return [item for item in response if item['word'].isalpha()]
+
+
 def get_api_pattern(raw_pattern: Pattern) -> str:
     return ''.join(letter if isinstance(letter, str) else WILDCARD_CHARACTER for letter in raw_pattern)
 
@@ -33,7 +37,7 @@ def api_request(path: str) -> list[dict]:
 def get_possible_word_answers(question: Question, pattern: Pattern) -> list[str]:
     api_pattern = get_api_pattern(pattern)
     answers_path = f'{API_PATH}?ml={question}&sp={api_pattern}&md=p'
-    response = sort_by_part_of_speech(api_request(answers_path))
+    response = sort_by_part_of_speech(leave_only_alpha_words(api_request(answers_path)))
 
     return [answer['word'] for answer in response]
 
@@ -49,5 +53,9 @@ def get_possible_word_answers_and_questions(pattern: Pattern) -> dict[str, str]:
     api_pattern = get_api_pattern(pattern)
     generate_path = f'{API_PATH}?sp={api_pattern}&md=dp'
 
-    return {item['word']: normalize_question(question) for item in sort_by_part_of_speech(api_request(generate_path))
-            if (question := next(filter(is_valid_question, item.get('defs', [])), None))}
+    return {
+        item['word']: normalize_question(question) for item in sort_by_part_of_speech(
+            leave_only_alpha_words(api_request(generate_path))
+        )
+        if (question := next(filter(is_valid_question, item.get('defs', [])), None))
+    }
