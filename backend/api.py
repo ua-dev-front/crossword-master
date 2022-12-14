@@ -29,7 +29,7 @@ def get_api_pattern(raw_pattern: Pattern) -> str:
 def api_request(path: str) -> list[dict]:
     res = requests.get(path)
     if res.status_code == 200:
-        return res.json()
+        return sort_by_part_of_speech(leave_only_alpha_words(res.json()))
     else:
         raise Exception(f'API responded with code: {res.status_code} \nPath: {res.url}')
 
@@ -37,9 +37,8 @@ def api_request(path: str) -> list[dict]:
 def get_possible_word_answers(question: Question, pattern: Pattern) -> list[str]:
     api_pattern = get_api_pattern(pattern)
     answers_path = f'{API_PATH}?ml={question}&sp={api_pattern}&md=p'
-    response = sort_by_part_of_speech(leave_only_alpha_words(api_request(answers_path)))
 
-    return [answer['word'] for answer in response]
+    return [answer['word'] for answer in api_request(answers_path)]
 
 
 def get_possible_word_answers_and_questions(pattern: Pattern) -> dict[str, str]:
@@ -53,6 +52,6 @@ def get_possible_word_answers_and_questions(pattern: Pattern) -> dict[str, str]:
     api_pattern = get_api_pattern(pattern)
     generate_path = f'{API_PATH}?sp={api_pattern}&md=dp'
 
-    return {item['word']: question for item in sort_by_part_of_speech(leave_only_alpha_words(api_request(generate_path)))
+    return {item['word']: question for item in api_request(generate_path)
             if (question := next(filter(is_valid_question,
                                         (normalize_question(question) for question in item.get('defs', []))), None))}
