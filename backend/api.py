@@ -4,7 +4,7 @@ from app_types import Pattern, Question
 
 __all__ = ['get_possible_word_answers', 'get_possible_word_answers_and_questions']
 
-API_PATH = 'https://api.datamuse.com/words'
+API_PATH = 'https://api.onelook.com/words'
 END_OF_SENTENCE = '.'
 WILDCARD_CHARACTER = '?'
 PART_OF_SPEECH_ORDER = ['n', 'adj', 'v', 'adv', 'u']
