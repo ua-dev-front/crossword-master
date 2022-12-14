@@ -42,10 +42,4 @@ def shift_position(previous_position: Position, direction: Direction, delta: int
 
 
 def word_fits_pattern(string: str, pattern: Pattern) -> bool:
-    if len(string) != len(pattern):
-        return False
-    for index, character in enumerate(pattern):
-        if character != '?' and character != string[index]:
-            return False
-
-    return True
+    return all(character[0] == character[1] for character in zip(string, pattern))
