@@ -289,6 +289,7 @@ function App() {
                         mode === Mode.EnterQuestions &&
                         questionsMode === QuestionsMode.Entered &&
                         !fetchAbortController &&
+                        !requestFailed &&
                         !showConfirmationState,
                       center: true,
                     },
@@ -302,7 +303,9 @@ function App() {
                       ),
                       display:
                         requestMode === RequestMode.Solve &&
-                        (isAnswerOrPuzzleMode || !!fetchAbortController) &&
+                        (isAnswerOrPuzzleMode ||
+                          !!fetchAbortController ||
+                          requestFailed) &&
                         !showConfirmationState,
                       center: true,
                     },
@@ -332,7 +335,8 @@ function App() {
                             questions={questions[direction]}
                             isEditable={
                               mode === Mode.EnterQuestions &&
-                              !fetchAbortController
+                              !fetchAbortController &&
+                              !requestFailed
                             }
                             color={color}
                             onChange={(question, index) =>
