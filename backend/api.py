@@ -1,5 +1,5 @@
-import requests
 import re
+import requests
 
 from app_types import Pattern, Question
 
