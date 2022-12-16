@@ -42,4 +42,5 @@ def shift_position(previous_position: Position, direction: Direction, delta: int
 
 
 def word_fits_pattern(string: str, pattern: Pattern) -> bool:
-    return all(character[0] == character[1] for character in zip(string, pattern))
+    return all(not expected_character or actual_character == expected_character
+               for actual_character, expected_character in zip(string, pattern))
