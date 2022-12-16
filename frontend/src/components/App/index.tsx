@@ -207,7 +207,7 @@ function App() {
       <GridWrapper gridProps={getGridProps()} loaderLabel={getLoaderLabel()}>
         <Tabs
           onEditClick={
-            (!isDrawOrEraseMode || fetchAbortController) &&
+            (!isDrawOrEraseMode || fetchAbortController || requestFailed) &&
             !showConfirmationState
               ? () =>
                   dispatch(
@@ -219,13 +219,14 @@ function App() {
               : undefined
           }
           {...((isDrawOrEraseMode ||
-            (isAnswerOrPuzzleMode && requestMode !== RequestMode.Solve)) && {
-            selectedTab: getTabByModeAndIsSelected(mode, true),
-            secondaryTab: getTabByModeAndIsSelected(
-              modeToTabMapping[mode].otherMode,
-              false,
-            ),
-          })}
+            (isAnswerOrPuzzleMode && requestMode !== RequestMode.Solve)) &&
+            !requestFailed && {
+              selectedTab: getTabByModeAndIsSelected(mode, true),
+              secondaryTab: getTabByModeAndIsSelected(
+                modeToTabMapping[mode].otherMode,
+                false,
+              ),
+            })}
         />
       </GridWrapper>
       <TransitionContainer
@@ -256,7 +257,11 @@ function App() {
                 />
               </div>
             ),
-            display: isDrawOrEraseMode && !fetchAbortController && !isGridEmpty,
+            display:
+              isDrawOrEraseMode &&
+              !fetchAbortController &&
+              !isGridEmpty &&
+              !requestFailed,
           },
           {
             key: 'questions',
