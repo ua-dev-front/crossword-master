@@ -3,8 +3,7 @@ import requests
 from app_types import Pattern, Question
 from helpers import word_fits_pattern
 
-__all__ = ['get_possible_word_answers',
-           'get_possible_word_answers_and_questions']
+__all__ = ['get_possible_word_answers', 'get_possible_word_answers_and_questions']
 
 API_PATH = 'https://api.onelook.com/words'
 END_OF_SENTENCE = '.'
