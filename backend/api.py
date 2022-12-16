@@ -52,4 +52,5 @@ def get_possible_word_answers_and_questions(pattern: Pattern) -> dict[str, str]:
 
     return {item['word']: normalize_question(question) for item in sort_by_part_of_speech(api_request(generate_path))
             if (question := next(filter(is_valid_question, item.get('defs', [])), None))
-            and word_fits_pattern(item['word'], pattern)}  # Api can return word not fitting pattern (with extra space)
+            # API can return words not actually fitting the pattern (e.g., with extra spaces)
+            and word_fits_pattern(item['word'], pattern)}
