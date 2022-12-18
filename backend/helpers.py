@@ -1,8 +1,8 @@
-from app_types import Direction, Position, Table
+from app_types import Direction, Pattern, Position, Table
 from dataclasses import dataclass
 from enum import Enum
 
-__all__ = ['Axes', 'cell_exists', 'get_axes', 'is_cell_filled', 'shift_position']
+__all__ = ['Axes', 'cell_exists', 'get_axes', 'is_cell_filled', 'shift_position', 'word_fits_pattern']
 
 
 class Axis(Enum):
@@ -39,3 +39,8 @@ def shift_position(previous_position: Position, direction: Direction, delta: int
     setattr(new_position, get_axes(direction).changeable, new_axes_position)
 
     return new_position
+
+
+def word_fits_pattern(string: str, pattern: Pattern) -> bool:
+    return len(string) == len(pattern) and all(not expected_character or actual_character == expected_character
+                                               for actual_character, expected_character in zip(string, pattern))
