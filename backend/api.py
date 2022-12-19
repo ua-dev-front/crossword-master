@@ -1,3 +1,4 @@
+import re
 import requests
 
 from app_types import Pattern, Question
@@ -9,6 +10,11 @@ API_PATH = 'https://api.onelook.com/words'
 END_OF_SENTENCE = '.'
 WILDCARD_CHARACTER = '?'
 PART_OF_SPEECH_ORDER = ['n', 'adj', 'v', 'adv', 'u']
+
+
+# Normalizes questions for use in the api, as it doesn't support special characters
+def normalize_user_question(question: Question) -> str:
+    return re.sub(r"[^\w\s\-']", '', re.sub(r'\s+', ' ', re.sub(r"[ʼʻ’]", "'", question.strip())))
 
 
 def sort_by_part_of_speech(response: list[dict]) -> list[dict]:
@@ -44,7 +50,7 @@ def get_api_response(path: str, pattern: Pattern) -> list[dict]:
 
 def get_possible_word_answers(question: Question, pattern: Pattern) -> list[str]:
     api_pattern = get_api_pattern(pattern)
-    answers_path = f'{API_PATH}?ml={question}&sp={api_pattern}&md=p'
+    answers_path = f'{API_PATH}?ml={normalize_user_question(question)}&sp={api_pattern}&md=p'
 
     return [answer['word'] for answer in get_api_response(answers_path, pattern)]
 
