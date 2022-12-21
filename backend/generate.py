@@ -11,7 +11,8 @@ def determine_locations(table: Table) -> list[WordLocation]:
             WordLocation | None:
         axes = get_axes(location_direction)
         return next((current_location for current_location in all_locations
-                     if getattr(current_location.first_letter, axes.changeable) + current_location.length ==
+                     if location_direction == current_location.type
+                     and getattr(current_location.first_letter, axes.changeable) + current_location.length ==
                      getattr(position, axes.changeable)
                      and getattr(current_location.first_letter, axes.fixed) == getattr(position, axes.fixed)), None)
 
