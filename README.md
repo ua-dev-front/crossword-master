@@ -13,4 +13,4 @@ The app is written in TypeScript/Python and makes use of the following technolog
  - [`Flask`](https://palletsprojects.com/p/flask) - for setting up the backend API.
  - [`ESlint`](https://eslint.org) - for keeping code clean.
 
-Crossword generation and solving are implemented with the [backtracking algorithm](https://en.wikipedia.org/wiki/Backtracking), getting word definitions from [Datamuse API](https://www.datamuse.com/api).
+Crossword generation and solving are implemented with the [backtracking algorithm](https://en.wikipedia.org/wiki/Backtracking). Linguistic data comes from [Datamuse API](https://www.datamuse.com/api).
