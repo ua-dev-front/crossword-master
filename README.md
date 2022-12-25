@@ -3,14 +3,14 @@
 
 # What it can do
 
-https://user-images.githubusercontent.com/46112160/209452638-acf2a2db-278c-4ada-a312-7c8cdbf92daa.mp4
+https://user-images.githubusercontent.com/53875005/209468785-38f21cc5-4b63-4277-b6cb-310e31b9f406.mp4
 
 # Technologies used
 
-This project uses `typescript` on frontend, `python` on backend and:
+The app is written in TypeScript/Python and makes use of the following technologies:
  - [`React`](https://reactjs.org) - for building UI.
  - [`Redux`](https://redux.js.org) - for state management.
- - [`Flask`](https://flask.palletsprojects.com/en/2.2.x) - for setting up a backend API.
+ - [`Flask`](https://palletsprojects.com/p/flask) - for setting up the backend API.
  - [`ESlint`](https://eslint.org) - for keeping code clean.
 
-The generating and solving of crossword is implemented using the [backtracking algorithm](https://en.wikipedia.org/wiki/Backtracking).
+Crossword generation and solving are implemented with the [backtracking algorithm](https://en.wikipedia.org/wiki/Backtracking), getting word definitions from [Datamuse API](https://www.datamuse.com/api).
